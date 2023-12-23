@@ -41,10 +41,20 @@ CREATE TABLE Upazila (
                          CONSTRAINT UPAZILA_DISTRICT_FK FOREIGN KEY (districtId) REFERENCES District(districtId)
 );
 
+-- Create Subject table
+CREATE TABLE Subject (
+                         subjectId INT AUTO_INCREMENT,
+                         subjectName VARCHAR(255) NOT NULL,
+
+                         CONSTRAINT SUBJECT_ID_PK PRIMARY KEY (subjectId),
+                         CONSTRAINT SUBJECT_NAME_UQ UNIQUE (subjectName)
+);
+
 -- Insert data into Division
 INSERT INTO Division (name, nameLocal, active) VALUES
                                                    ('Dhaka', 'ঢাকা', true),
                                                    ('Rajshahi', 'রাজশাহী', true);
+
 -- Insert data into District
 INSERT INTO District (name, nameLocal, active, divisionId) VALUES
                                                                ('Dhaka', 'ঢাকা', true, 1),
@@ -62,6 +72,16 @@ INSERT INTO Upazila (name, nameLocal, active, districtId) VALUES
                                                               ('Rajshahi City', 'রাজশাহী সিটি', true, 4),
                                                               ('Bogra City', 'বগুড়া সিটি', true, 5),
                                                               ('Naogaon City', 'নওগাঁ সিটি', true, 6);
+
+-- Insert data into subject
+INSERT INTO Subject (subjectName) VALUES
+                                      ('Bangla'),
+                                      ('English'),
+                                      ('General Math'),
+                                      ('Higher Math'),
+                                      ('ICT'),
+                                      ('Social Science'),
+                                      ('General Science');
 
 
 
