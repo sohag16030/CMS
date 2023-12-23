@@ -1,26 +1,68 @@
 -- Create Division table
-CREATE TABLE division (
-                          division_id INT AUTO_INCREMENT,
-                          name VARCHAR(255) NOT NULL,
-                          name_local VARCHAR(255) NOT NULL,
-                          active BOOLEAN,
-                          CONSTRAINT division_id_pk PRIMARY KEY (division_id),
-                          CONSTRAINT division_name_uq UNIQUE (name),
-                          CONSTRAINT division_name_local_uq UNIQUE (name_local),
-                          CONSTRAINT division_active_chk CHECK (active IN (TRUE, FALSE))
+CREATE TABLE Division (
+                          divisionId INT AUTO_INCREMENT,
+                          name VARCHAR(255) UNIQUE NOT NULL,
+                          nameLocal VARCHAR(255) UNIQUE NOT NULL,
+                          active BOOLEAN NOT NULL,
+
+                          CONSTRAINT DIVISION_ID_PK PRIMARY KEY (divisionId),
+                          CONSTRAINT DIVISION_NAME_UQ UNIQUE (name),
+                          CONSTRAINT DIVISION_NAME_LOCAL_UQ UNIQUE (nameLocal),
+                          CONSTRAINT DIVISION_ACTIVE_CHK CHECK (active IN (TRUE, FALSE))
 );
 
+-- Create District table
+CREATE TABLE District (
+                          districtId INT AUTO_INCREMENT,
+                          name VARCHAR(255) UNIQUE NOT NULL,
+                          nameLocal VARCHAR(255) UNIQUE NOT NULL,
+                          active BOOLEAN NOT NULL,
+                          divisionId INT,
+
+                          CONSTRAINT DISTRICT_ID_PK PRIMARY KEY (districtId),
+                          CONSTRAINT DISTRICT_NAME_UQ UNIQUE (name),
+                          CONSTRAINT DISTRICT_NAME_LOCAL_UQ UNIQUE (nameLocal),
+                          CONSTRAINT DISTRICT_ACTIVE_CHK CHECK (active IN (TRUE, FALSE)),
+                          CONSTRAINT DISTRICT_DIVISION_FK FOREIGN KEY (divisionId) REFERENCES Division(divisionId)
+);
+
+-- Create Upazila table
+CREATE TABLE Upazila (
+                         upazilaId INT AUTO_INCREMENT,
+                         name VARCHAR(255) UNIQUE NOT NULL,
+                         nameLocal VARCHAR(255) UNIQUE NOT NULL,
+                         active BOOLEAN NOT NULL,
+                         districtId INT,
+
+                         CONSTRAINT UPAZILA_ID_PK PRIMARY KEY (upozillaId),
+                         CONSTRAINT UPAZILA_NAME_UQ UNIQUE (name),
+                         CONSTRAINT UPAZILA_NAME_LOCAL_UQ UNIQUE (nameLocal),
+                         CONSTRAINT UPAZILA_ACTIVE_CHK CHECK (active IN (TRUE, FALSE)),
+                         CONSTRAINT UPAZILA_DISTRICT_FK FOREIGN KEY (districtId) REFERENCES District(districtId)
+);
 
 -- Insert data into Division
-INSERT INTO division (name, name_local, active) VALUES
-                                                    ('Dhaka', 'ঢাকা', true),
-                                                    ('Chittagong', 'চট্টগ্রাম', true),
-                                                    ('Khulna', 'খুলনা', true),
-                                                    ('Rajshahi', 'রাজশাহী', true),
-                                                    ('Barisal', 'বরিশাল', true),
-                                                    ('Sylhet', 'সিলেট', true),
-                                                    ('Rangpur', 'রংপুর', true),
-                                                    ('Mymensingh', 'ময়মনসিংহ', true);
+INSERT INTO Division (name, nameLocal, active) VALUES
+                                                   ('Dhaka', 'ঢাকা', true),
+                                                   ('Rajshahi', 'রাজশাহী', true);
+-- Insert data into District
+INSERT INTO District (name, nameLocal, active, divisionId) VALUES
+                                                               ('Dhaka', 'ঢাকা', true, 1),
+                                                               ('Gazipur', 'গাজীপুর', true, 1),
+                                                               ('Narayanganj', 'নারায়ণগঞ্জ', true, 1),
+                                                               ('Rajshahi', 'রাজশাহী', true, 2),
+                                                               ('Bogra', 'বগুড়া', true, 2),
+                                                               ('Naogaon', 'নওগাঁ', true, 2);
+
+-- Insert data into Upazila
+INSERT INTO Upazila (name, nameLocal, active, districtId) VALUES
+                                                              ('Dhaka City', 'ঢাকা সিটি', true, 1),
+                                                              ('Gazipur City', 'গাজীপুর সিটি', true, 2),
+                                                              ('Narayanganj City', 'নারায়ণগঞ্জ সিটি', true, 3),
+                                                              ('Rajshahi City', 'রাজশাহী সিটি', true, 4),
+                                                              ('Bogra City', 'বগুড়া সিটি', true, 5),
+                                                              ('Naogaon City', 'নওগাঁ সিটি', true, 6);
+
 
 
 
