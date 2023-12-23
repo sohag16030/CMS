@@ -1,6 +1,6 @@
 -- Create Division table
-CREATE TABLE Division (
-                          divisionId INT AUTO_INCREMENT,
+CREATE TABLE DIVISION (
+                          divisionId SERIAL,
                           name VARCHAR(255) UNIQUE NOT NULL,
                           nameLocal VARCHAR(255) UNIQUE NOT NULL,
                           active BOOLEAN NOT NULL,
@@ -12,8 +12,8 @@ CREATE TABLE Division (
 );
 
 -- Create District table
-CREATE TABLE District (
-                          districtId INT AUTO_INCREMENT,
+CREATE TABLE DISTRICT (
+                          districtId SERIAL,
                           name VARCHAR(255) UNIQUE NOT NULL,
                           nameLocal VARCHAR(255) UNIQUE NOT NULL,
                           active BOOLEAN NOT NULL,
@@ -27,8 +27,8 @@ CREATE TABLE District (
 );
 
 -- Create Upazila table
-CREATE TABLE Upazila (
-                         upazilaId INT AUTO_INCREMENT,
+CREATE TABLE UPAZILA (
+                         upazilaId SERIAL,
                          name VARCHAR(255) UNIQUE NOT NULL,
                          nameLocal VARCHAR(255) UNIQUE NOT NULL,
                          active BOOLEAN NOT NULL,
@@ -42,8 +42,8 @@ CREATE TABLE Upazila (
 );
 
 -- Create Subject table
-CREATE TABLE Subject (
-                         subjectId INT AUTO_INCREMENT,
+CREATE TABLE SUBJECT (
+                         subjectId SERIAL,
                          subjectName VARCHAR(255) NOT NULL,
 
                          CONSTRAINT SUBJECT_ID_PK PRIMARY KEY (subjectId),
@@ -51,12 +51,12 @@ CREATE TABLE Subject (
 );
 
 -- Insert data into Division
-INSERT INTO Division (name, nameLocal, active) VALUES
+INSERT INTO DIVISION (name, nameLocal, active) VALUES
                                                    ('Dhaka', 'ঢাকা', true),
                                                    ('Rajshahi', 'রাজশাহী', true);
 
 -- Insert data into District
-INSERT INTO District (name, nameLocal, active, divisionId) VALUES
+INSERT INTO DISTRICT (name, nameLocal, active, divisionId) VALUES
                                                                ('Dhaka', 'ঢাকা', true, 1),
                                                                ('Gazipur', 'গাজীপুর', true, 1),
                                                                ('Narayanganj', 'নারায়ণগঞ্জ', true, 1),
@@ -65,7 +65,7 @@ INSERT INTO District (name, nameLocal, active, divisionId) VALUES
                                                                ('Naogaon', 'নওগাঁ', true, 2);
 
 -- Insert data into Upazila
-INSERT INTO Upazila (name, nameLocal, active, districtId) VALUES
+INSERT INTO UPAZILA (name, nameLocal, active, districtId) VALUES
                                                               ('Dhaka City', 'ঢাকা সিটি', true, 1),
                                                               ('Gazipur City', 'গাজীপুর সিটি', true, 2),
                                                               ('Narayanganj City', 'নারায়ণগঞ্জ সিটি', true, 3),
@@ -74,7 +74,7 @@ INSERT INTO Upazila (name, nameLocal, active, districtId) VALUES
                                                               ('Naogaon City', 'নওগাঁ সিটি', true, 6);
 
 -- Insert data into subject
-INSERT INTO Subject (subjectName) VALUES
+INSERT INTO SUBJECT (subjectName) VALUES
                                       ('Bangla'),
                                       ('English'),
                                       ('General Math'),
