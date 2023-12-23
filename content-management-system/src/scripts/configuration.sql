@@ -5,7 +5,7 @@ CREATE TABLE DIVISION (
                           nameLocal VARCHAR(255) UNIQUE NOT NULL,
                           active BOOLEAN NOT NULL,
 
-                          CONSTRAINT DIVISION_ID_PK PRIMARY KEY (divisionId),
+                          CONSTRAINT DIVISION_DIVISION_ID_PK PRIMARY KEY (divisionId),
                           CONSTRAINT DIVISION_NAME_UQ UNIQUE (name),
                           CONSTRAINT DIVISION_NAME_LOCAL_UQ UNIQUE (nameLocal),
                           CONSTRAINT DIVISION_ACTIVE_CHK CHECK (active IN (TRUE, FALSE))
@@ -19,7 +19,7 @@ CREATE TABLE DISTRICT (
                           active BOOLEAN NOT NULL,
                           divisionId INT,
 
-                          CONSTRAINT DISTRICT_ID_PK PRIMARY KEY (districtId),
+                          CONSTRAINT DISTRICT_DISTRICT_ID_PK PRIMARY KEY (districtId),
                           CONSTRAINT DISTRICT_NAME_UQ UNIQUE (name),
                           CONSTRAINT DISTRICT_NAME_LOCAL_UQ UNIQUE (nameLocal),
                           CONSTRAINT DISTRICT_ACTIVE_CHK CHECK (active IN (TRUE, FALSE)),
@@ -34,7 +34,7 @@ CREATE TABLE UPAZILA (
                          active BOOLEAN NOT NULL,
                          districtId INT,
 
-                         CONSTRAINT UPAZILA_ID_PK PRIMARY KEY (upozillaId),
+                         CONSTRAINT UPAZILA_UPAZILA_ID_PK PRIMARY KEY (upozillaId),
                          CONSTRAINT UPAZILA_NAME_UQ UNIQUE (name),
                          CONSTRAINT UPAZILA_NAME_LOCAL_UQ UNIQUE (nameLocal),
                          CONSTRAINT UPAZILA_ACTIVE_CHK CHECK (active IN (TRUE, FALSE)),
@@ -46,7 +46,7 @@ CREATE TABLE SUBJECT (
                          subjectId SERIAL,
                          subjectName VARCHAR(255) NOT NULL,
 
-                         CONSTRAINT SUBJECT_ID_PK PRIMARY KEY (subjectId),
+                         CONSTRAINT SUBJECT_SUBJECT_ID_PK PRIMARY KEY (subjectId),
                          CONSTRAINT SUBJECT_NAME_UQ UNIQUE (subjectName)
 );
 
