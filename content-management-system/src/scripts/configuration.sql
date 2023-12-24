@@ -34,14 +34,13 @@ CREATE TABLE UPAZILA (
                          active BOOLEAN NOT NULL,
                          districtId INT,
 
-                         CONSTRAINT UPAZILA_UPAZILA_ID_PK PRIMARY KEY (upozillaId),
+                         CONSTRAINT UPAZILA_UPAZILA_ID_PK PRIMARY KEY (upazilaId),
                          CONSTRAINT UPAZILA_NAME_UQ UNIQUE (name),
                          CONSTRAINT UPAZILA_NAME_LOCAL_UQ UNIQUE (nameLocal),
                          CONSTRAINT UPAZILA_ACTIVE_CHK CHECK (active IN (TRUE, FALSE)),
                          CONSTRAINT UPAZILA_DISTRICT_FK FOREIGN KEY (districtId) REFERENCES District(districtId)
 );
 
--- Create Subject table
 -- Create Subject table
 CREATE TABLE SUBJECT (
                          subjectId SERIAL,
@@ -86,8 +85,3 @@ INSERT INTO SUBJECT (name, nameLocal) VALUES
                                           ('ICT', 'তথ্য ও যোগাযোগ প্রযুক্তি'),
                                           ('Social Science', 'সামাজিক বিজ্ঞান'),
                                           ('General Science', 'সাধারিত বিজ্ঞান');
-
-
-
-
-
