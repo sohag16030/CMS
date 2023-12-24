@@ -135,13 +135,6 @@ CREATE TABLE ACADEMIC_INFO (
                                CONSTRAINT ACADEMIC_INFO_ACADEMIC_INFO_ID_PK PRIMARY KEY (ACADEMIC_INFO_ID)
 );
 
--- INSERT DATA INTO ACADEMIC_INFO TABLE
-INSERT INTO ACADEMIC_INFO (ACADEMIC_LEVEL, GRADE, CLASS, CREATED_AT, UPDATED_AT) VALUES
-                                                                            ('PSC', 5.0, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('JSC', 4.5, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('SSC', 4.0, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('HSC', 4.5, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
 -- Create join table ACADEMIC_INFO_SUBJECT for Many-to-Many relationship
 CREATE TABLE ACADEMIC_INFO_SUBJECT (
                                        ACADEMIC_INFO_ID BIGINT,  -- Assuming ACADEMIC_INFO_ID in ACADEMIC_INFO table is of type BIGINT
@@ -150,22 +143,6 @@ CREATE TABLE ACADEMIC_INFO_SUBJECT (
                                        FOREIGN KEY (ACADEMIC_INFO_ID) REFERENCES ACADEMIC_INFO(ACADEMIC_INFO_ID),
                                        FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
 );
-
-
--- INSERT DATA INTO ACADEMIC_INFO_SUBJECT TABLE
-INSERT INTO ACADEMIC_INFO_SUBJECT (ACADEMIC_INFO_ID, SUBJECT_ID) VALUES
-                                                                     (1, 1), -- PSC - Bangla
-                                                                     (1, 2), -- PSC - English
-                                                                     (2, 2), -- JSC - English
-                                                                     (2, 3), -- JSC - General Math
-                                                                     (3, 3), -- SSC - General Math
-                                                                     (3, 4), -- SSC - Higher Math
-                                                                     (4, 4), -- HSC - Higher Math
-                                                                     (4, 5), -- HSC - ICT
-                                                                     (3, 5), -- SSC - ICT
-                                                                     (2, 6), -- JSC - Social Science
-                                                                     (3, 6), -- SSC - Social Science
-                                                                     (3, 7); -- SSC - General Science
 
 -- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 CREATE TABLE CMS_USER (
@@ -186,8 +163,3 @@ CREATE TABLE CMS_USER (
                           CONSTRAINT CMS_USER_STATUS_CHK CHECK (USER_STATUS IN ('ACTIVE', 'INACTIVE')),
                           CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE))
 );
-
--- INSERT DATA INTO CMS_USER TABLE
-INSERT INTO CMS_USER (MOBILE_NUMBER, EMAIL, NAME, GENDER, USER_STATUS, IS_ACTIVE, CREATED_AT, UPDATED_AT) VALUES
-                                                                                                         ('01712345670', 'nafis@example.com', 'Nafis Iqbal', 'MALE', 'ACTIVE', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                         ('01987654321', 'jamil@example.com', 'Jamil Ul Islam', 'FEMALE', 'ACTIVE', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
