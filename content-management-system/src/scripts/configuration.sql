@@ -93,12 +93,6 @@ CREATE TABLE ADDRESS (
                          CONSTRAINT ADDRESS_UPAZILA_FK FOREIGN KEY (UPAZILA_ID) REFERENCES UPAZILA(UPAZILA_ID)
 );
 
--- INSERT DATA INTO ADDRESS TABLE
-INSERT INTO ADDRESS (ADDRESS_TYPE, DIVISION_ID, DISTRICT_ID, UPAZILA_ID, IS_ACTIVE, CREATED_AT, UPDATED_AT) VALUES
-                                                                                                                  ('PRESENT', 1, 1, 1, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                  ('PERMANENT', 1, 2, 2, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                  ('PRESENT', 2, 3, 4, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
 -- Create Subject table
 CREATE TABLE SUBJECT (
                          SUBJECT_ID BIGSERIAL,
