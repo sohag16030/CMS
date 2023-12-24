@@ -6,7 +6,7 @@ CREATE TABLE DIVISION (
                           active BOOLEAN NOT NULL,
 
                           CONSTRAINT DIVISION_DIVISION_ID_PK PRIMARY KEY (divisionId),
-                          CONSTRAINT DIVISION_NAME_UQ UNIQUE (name),
+                          CONSTRAINT DIVISION_NAME_UK UNIQUE (name),
                           CONSTRAINT DIVISION_NAME_LOCAL_UQ UNIQUE (nameLocal),
                           CONSTRAINT DIVISION_ACTIVE_CHK CHECK (active IN (TRUE, FALSE))
 );
