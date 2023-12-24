@@ -126,7 +126,7 @@ INSERT INTO SUBJECT (SUBJECT_NAME, NAME_LOCAL, CREATED_AT, UPDATED_AT) VALUES
 -- Create ACADEMIC_INFO table
 CREATE TABLE ACADEMIC_INFO (
                                ACADEMIC_INFO_ID BIGSERIAL,
-                               LEVEL VARCHAR(255) NOT NULL,
+                               ACADEMIC_LEVEL VARCHAR(255) NOT NULL,
                                GRADE DOUBLE PRECISION NOT NULL,
                                CLASS VARCHAR(255) NOT NULL,
                                CREATED_AT TIMESTAMPTZ NOT NULL,
@@ -136,7 +136,7 @@ CREATE TABLE ACADEMIC_INFO (
 );
 
 -- INSERT DATA INTO ACADEMIC_INFO TABLE
-INSERT INTO ACADEMIC_INFO (LEVEL, GRADE, CLASS, CREATED_AT, UPDATED_AT) VALUES
+INSERT INTO ACADEMIC_INFO (ACADEMIC_LEVEL, GRADE, CLASS, CREATED_AT, UPDATED_AT) VALUES
                                                                             ('PSC', 5.0, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
                                                                             ('JSC', 4.5, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
                                                                             ('SSC', 4.0, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -174,7 +174,7 @@ CREATE TABLE CMS_USER (
                           EMAIL VARCHAR(255) UNIQUE,
                           NAME VARCHAR(255) NOT NULL,
                           GENDER VARCHAR(255) NOT NULL,
-                          STATUS VARCHAR(10) NOT NULL,
+                          USER_STATUS VARCHAR(10) NOT NULL,
                           IS_ACTIVE BOOLEAN NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
                           UPDATED_AT TIMESTAMPTZ NOT NULL,
@@ -183,11 +183,11 @@ CREATE TABLE CMS_USER (
                           CONSTRAINT CMS_USER_MOBILE_NUMBER_UQ UNIQUE (MOBILE_NUMBER),
                           CONSTRAINT CMS_USER_EMAIL_UQ UNIQUE (EMAIL),
                           CONSTRAINT CMS_USER_GENDER_CHK CHECK (GENDER IN ('MALE', 'FEMALE', 'OTHER')),
-                          CONSTRAINT CMS_USER_STATUS_CHK CHECK (STATUS IN ('ACTIVE', 'INACTIVE')),
+                          CONSTRAINT CMS_USER_STATUS_CHK CHECK (USER_STATUS IN ('ACTIVE', 'INACTIVE')),
                           CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE))
 );
 
 -- INSERT DATA INTO CMS_USER TABLE
-INSERT INTO CMS_USER (MOBILE_NUMBER, EMAIL, NAME, GENDER, STATUS, IS_ACTIVE, CREATED_AT, UPDATED_AT) VALUES
+INSERT INTO CMS_USER (MOBILE_NUMBER, EMAIL, NAME, GENDER, USER_STATUS, IS_ACTIVE, CREATED_AT, UPDATED_AT) VALUES
                                                                                                          ('01712345670', 'nafis@example.com', 'Nafis Iqbal', 'MALE', 'ACTIVE', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
                                                                                                          ('01987654321', 'jamil@example.com', 'Jamil Ul Islam', 'FEMALE', 'ACTIVE', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
