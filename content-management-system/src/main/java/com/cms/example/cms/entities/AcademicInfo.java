@@ -35,8 +35,8 @@ public class AcademicInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CMS_USER_ACADEMIC_INFO_ID")
-    private Long cmsUserAcademicInfoId;
+    @Column(name = "ACADEMIC_INFO_ID")
+    private Long academicInfoId;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -52,7 +52,7 @@ public class AcademicInfo {
     @Column(name = "CLASS", nullable = false)
     private AcademicClass academicClass;
 
-    @OneToMany(mappedBy = "cmsUserAcademicInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "academicInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Subject> subjects;
 
     @Column(name = "CREATED_AT", nullable = false)

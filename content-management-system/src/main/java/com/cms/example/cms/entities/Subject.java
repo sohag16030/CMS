@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +16,7 @@ import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import java.util.Date;
 
 @Builder
@@ -38,6 +41,10 @@ public class Subject {
     @Column(name = "NAME_LOCAL", unique = true, nullable = false)
     private String nameLocal;
 
+    @ManyToOne
+    @JoinColumn(name = "ACADEMIC_INFO_ID", nullable = false)
+    private AcademicInfo academicInfo;
+
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
     private Date createdAt;
@@ -46,4 +53,3 @@ public class Subject {
     @UpdateTimestamp
     private Date updatedAt;
 }
-
