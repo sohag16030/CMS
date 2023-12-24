@@ -25,7 +25,7 @@ import java.util.Date;
 
 @Builder
 @Entity
-@Table(name = "CMS_USER_ADDRESS")
+@Table(name = "ADDRESS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -34,8 +34,8 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CMS_USER_ADDRESS_ID")
-    private Long cmsUserAddressId;
+    @Column(name = "ADDRESS_ID")
+    private Long addressId;
 
     @NotNull
     @Column(name = "ADDRESS_TYPE", nullable = false, length = 50)

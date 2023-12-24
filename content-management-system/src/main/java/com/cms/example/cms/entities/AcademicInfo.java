@@ -26,7 +26,7 @@ import java.util.List;
 
 @Builder
 @Entity
-@Table(name = "CMS_USER_ACADEMIC_INFO")
+@Table(name = "ACADEMIC_INFO")
 @Getter
 @Setter
 @NoArgsConstructor
