@@ -1,8 +1,8 @@
 -- Create Division table
 CREATE TABLE DIVISION (
                           divisionId SERIAL,
-                          name VARCHAR(255) UNIQUE NOT NULL,
-                          nameLocal VARCHAR(255) UNIQUE NOT NULL,
+                          name VARCHAR(255) NOT NULL,
+                          nameLocal VARCHAR(255)  NOT NULL,
                           active BOOLEAN NOT NULL,
 
                           CONSTRAINT DIVISION_DIVISION_ID_PK PRIMARY KEY (divisionId),
@@ -14,8 +14,8 @@ CREATE TABLE DIVISION (
 -- Create District table
 CREATE TABLE DISTRICT (
                           districtId SERIAL,
-                          name VARCHAR(255) UNIQUE NOT NULL,
-                          nameLocal VARCHAR(255) UNIQUE NOT NULL,
+                          name VARCHAR(255)  NOT NULL,
+                          nameLocal VARCHAR(255)  NOT NULL,
                           active BOOLEAN NOT NULL,
                           divisionId INT,
 
@@ -29,8 +29,8 @@ CREATE TABLE DISTRICT (
 -- Create Upazila table
 CREATE TABLE UPAZILA (
                          upazilaId SERIAL,
-                         name VARCHAR(255) UNIQUE NOT NULL,
-                         nameLocal VARCHAR(255) UNIQUE NOT NULL,
+                         name VARCHAR(255)  NOT NULL,
+                         nameLocal VARCHAR(255)  NOT NULL,
                          active BOOLEAN NOT NULL,
                          districtId INT,
 
@@ -42,13 +42,17 @@ CREATE TABLE UPAZILA (
 );
 
 -- Create Subject table
+-- Create Subject table
 CREATE TABLE SUBJECT (
                          subjectId SERIAL,
-                         subjectName VARCHAR(255) NOT NULL,
+                         name VARCHAR(255) NOT NULL,
+                         nameLocal VARCHAR(255) NOT NULL,
 
                          CONSTRAINT SUBJECT_SUBJECT_ID_PK PRIMARY KEY (subjectId),
-                         CONSTRAINT SUBJECT_NAME_UQ UNIQUE (subjectName)
+                         CONSTRAINT SUBJECT_NAME_UQ UNIQUE (name),
+                         CONSTRAINT SUBJECT_NAME_LOCAL_UQ UNIQUE (nameLocal)
 );
+
 
 -- Insert data into Division
 INSERT INTO DIVISION (name, nameLocal, active) VALUES
@@ -73,15 +77,16 @@ INSERT INTO UPAZILA (name, nameLocal, active, districtId) VALUES
                                                               ('Bogra City', 'বগুড়া সিটি', true, 5),
                                                               ('Naogaon City', 'নওগাঁ সিটি', true, 6);
 
--- Insert data into subject
-INSERT INTO SUBJECT (subjectName) VALUES
-                                      ('Bangla'),
-                                      ('English'),
-                                      ('General Math'),
-                                      ('Higher Math'),
-                                      ('ICT'),
-                                      ('Social Science'),
-                                      ('General Science');
+-- Insert data into Subject
+INSERT INTO SUBJECT (name, nameLocal) VALUES
+                                          ('Bangla', 'বাংলা'),
+                                          ('English', 'ইংরেজি'),
+                                          ('General Math', 'সাধারিত গণিত'),
+                                          ('Higher Math', 'উচ্চতর গণিত'),
+                                          ('ICT', 'তথ্য ও যোগাযোগ প্রযুক্তি'),
+                                          ('Social Science', 'সামাজিক বিজ্ঞান'),
+                                          ('General Science', 'সাধারিত বিজ্ঞান');
+
 
 
 
