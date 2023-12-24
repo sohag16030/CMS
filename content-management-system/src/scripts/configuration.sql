@@ -17,7 +17,7 @@ CREATE TABLE DISTRICT (
                           name VARCHAR(255) UNIQUE NOT NULL,
                           nameLocal VARCHAR(255) UNIQUE NOT NULL,
                           active BOOLEAN NOT NULL,
-                          divisionId INT,
+                          divisionId INT NOT NULL,
 
                           CONSTRAINT DISTRICT_DISTRICT_ID_PK PRIMARY KEY (districtId),
                           CONSTRAINT DISTRICT_NAME_UQ UNIQUE (name),
