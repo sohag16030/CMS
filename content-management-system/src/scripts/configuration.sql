@@ -1,3 +1,46 @@
+-- CREATE DIVISION TABLE
+CREATE TABLE DIVISION (
+                          DIVISION_ID SERIAL,
+                          NAME VARCHAR(255) NOT NULL,
+                          NAME_LOCAL VARCHAR(255) NOT NULL,
+                          ACTIVE BOOLEAN NOT NULL,
+                          CREATED_AT TIMESTAMPTZ NOT NULL,
+                          UPDATED_AT TIMESTAMPTZ NOT NULL,
+
+                          CONSTRAINT DIVISION_DIVISION_ID_PK PRIMARY KEY (DIVISION_ID),
+                          CONSTRAINT DIVISION_NAME_UK UNIQUE (NAME),
+                          CONSTRAINT DIVISION_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
+                          CONSTRAINT DIVISION_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE))
+);
+
+-- INSERT DATA INTO DIVISION TABLE
+INSERT INTO DIVISION (NAME, NAME_LOCAL, ACTIVE, CREATED_AT, UPDATED_AT) VALUES
+                                                                            ('Dhaka', 'ঢাকা', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                            ('Rajshahi', 'রাজশাহী', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- CREATE DISTRICT TABLE
+CREATE TABLE DISTRICT (
+                          DISTRICT_ID SERIAL,
+                          NAME VARCHAR(255) NOT NULL,
+                          NAME_LOCAL VARCHAR(255) NOT NULL,
+                          ACTIVE BOOLEAN NOT NULL,
+                          DIVISION_ID INT NOT NULL,
+                          CREATED_AT TIMESTAMPTZ NOT NULL,
+                          UPDATED_AT TIMESTAMPTZ NOT NULL,
+
+                          CONSTRAINT DISTRICT_DISTRICT_ID_PK PRIMARY KEY (DISTRICT_ID),
+                          CONSTRAINT DISTRICT_NAME_UK UNIQUE (NAME),
+                          CONSTRAINT DISTRICT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
+                          CONSTRAINT DISTRICT_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
+                          CONSTRAINT DISTRICT_DIVISION_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID)
+);
+
+-- INSERT DATA INTO DISTRICT TABLE
+INSERT INTO DISTRICT (NAME, NAME_LOCAL, ACTIVE, DIVISION_ID, CREATED_AT, UPDATED_AT) VALUES
+                                                                                         ('Dhaka', 'ঢাকা', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('Gazipur', 'গাজীপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('Rajshahi', 'রাজশাহী', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('Chapainawabganj', 'চাঁপাইনবাবগঞ্জ', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- CREATE UPAZILA TABLE
 CREATE TABLE UPAZILA (
@@ -31,50 +74,6 @@ INSERT INTO UPAZILA (NAME, NAME_LOCAL, ACTIVE, DISTRICT_ID, CREATED_AT, UPDATED_
                                                                                         ('Shibganj', 'শিবগঞ্জ', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
--- CREATE DISTRICT TABLE
-CREATE TABLE DISTRICT (
-                          DISTRICT_ID SERIAL,
-                          NAME VARCHAR(255) NOT NULL,
-                          NAME_LOCAL VARCHAR(255) NOT NULL,
-                          ACTIVE BOOLEAN NOT NULL,
-                          DIVISION_ID INT NOT NULL,
-                          CREATED_AT TIMESTAMPTZ NOT NULL,
-                          UPDATED_AT TIMESTAMPTZ NOT NULL,
-
-                          CONSTRAINT DISTRICT_DISTRICT_ID_PK PRIMARY KEY (DISTRICT_ID),
-                          CONSTRAINT DISTRICT_NAME_UK UNIQUE (NAME),
-                          CONSTRAINT DISTRICT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
-                          CONSTRAINT DISTRICT_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
-                          CONSTRAINT DISTRICT_DIVISION_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID)
-);
-
--- INSERT DATA INTO DISTRICT TABLE
-INSERT INTO DISTRICT (NAME, NAME_LOCAL, ACTIVE, DIVISION_ID, CREATED_AT, UPDATED_AT) VALUES
-                                                                                         ('Dhaka', 'ঢাকা', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('Gazipur', 'গাজীপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('Rajshahi', 'রাজশাহী', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('Chapainawabganj', 'চাঁপাইনবাবগঞ্জ', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
-
--- CREATE DIVISION TABLE
-CREATE TABLE DIVISION (
-                          DIVISION_ID SERIAL,
-                          NAME VARCHAR(255) NOT NULL,
-                          NAME_LOCAL VARCHAR(255) NOT NULL,
-                          ACTIVE BOOLEAN NOT NULL,
-                          CREATED_AT TIMESTAMPTZ NOT NULL,
-                          UPDATED_AT TIMESTAMPTZ NOT NULL,
-
-                          CONSTRAINT DIVISION_DIVISION_ID_PK PRIMARY KEY (DIVISION_ID),
-                          CONSTRAINT DIVISION_NAME_UK UNIQUE (NAME),
-                          CONSTRAINT DIVISION_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
-                          CONSTRAINT DIVISION_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE))
-);
-
--- INSERT DATA INTO DIVISION TABLE
-INSERT INTO DIVISION (NAME, NAME_LOCAL, ACTIVE, CREATED_AT, UPDATED_AT) VALUES
-                                                                            ('Dhaka', 'ঢাকা', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('Rajshahi', 'রাজশাহী', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Create ADDRESS table
 CREATE TABLE ADDRESS (
@@ -84,8 +83,6 @@ CREATE TABLE ADDRESS (
                          DISTRICT_ID INT NOT NULL,
                          UPAZILA_ID INT NOT NULL,
                          IS_ACTIVE BOOLEAN NOT NULL,
-                         CREATED_BY INT NOT NULL,
-                         UPDATED_BY INT NOT NULL,
                          CREATED_AT TIMESTAMPTZ NOT NULL,
                          UPDATED_AT TIMESTAMPTZ NOT NULL,
 
@@ -93,16 +90,14 @@ CREATE TABLE ADDRESS (
                          CONSTRAINT ADDRESS_ADDRESS_TYPE_CHK CHECK (ADDRESS_TYPE IN ('PRESENT', 'PERMANENT')),
                          CONSTRAINT ADDRESS_DIVISION_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID),
                          CONSTRAINT ADDRESS_DISTRICT_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID),
-                         CONSTRAINT ADDRESS_UPAZILA_FK FOREIGN KEY (UPAZILA_ID) REFERENCES UPAZILA(UPAZILA_ID),
-                         CONSTRAINT ADDRESS_CREATED_BY_FK FOREIGN KEY (CREATED_BY) REFERENCES CMS_USER(USER_ID),
-                         CONSTRAINT ADDRESS_UPDATED_BY_FK FOREIGN KEY (UPDATED_BY) REFERENCES CMS_USER(USER_ID)
+                         CONSTRAINT ADDRESS_UPAZILA_FK FOREIGN KEY (UPAZILA_ID) REFERENCES UPAZILA(UPAZILA_ID)
 );
 
 -- INSERT DATA INTO ADDRESS TABLE
-INSERT INTO ADDRESS (ADDRESS_TYPE, DIVISION_ID, DISTRICT_ID, UPAZILA_ID, IS_ACTIVE, CREATED_BY, UPDATED_BY, CREATED_AT, UPDATED_AT) VALUES
-                                                                                                                                        ('PRESENT', 1, 1, 1, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                        ('PERMANENT', 1, 2, 2, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                        ('PRESENT', 2, 3, 4, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+INSERT INTO ADDRESS (ADDRESS_TYPE, DIVISION_ID, DISTRICT_ID, UPAZILA_ID, IS_ACTIVE, CREATED_AT, UPDATED_AT) VALUES
+                                                                                                                  ('PRESENT', 1, 1, 1, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                                  ('PERMANENT', 1, 2, 2, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                                  ('PRESENT', 2, 3, 4, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Create Subject table
 CREATE TABLE SUBJECT (
@@ -170,7 +165,7 @@ INSERT INTO ACADEMIC_INFO_SUBJECT (ACADEMIC_INFO_ID, SUBJECT_ID) VALUES
                                                                      (3, 5), -- SSC - ICT
                                                                      (2, 6), -- JSC - Social Science
                                                                      (3, 6), -- SSC - Social Science
-                                                                     (3, 7), -- SSC - General Science
+                                                                     (3, 7); -- SSC - General Science
 
 -- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 CREATE TABLE CMS_USER (
