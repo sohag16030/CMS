@@ -2,17 +2,7 @@ package com.cms.example.cms.entities;
 
 import com.cms.example.cms.entities.enums.AcademicClass;
 import com.cms.example.cms.entities.enums.AcademicLevel;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,7 +42,12 @@ public class AcademicInfo {
     @Column(name = "CLASS", nullable = false)
     private AcademicClass academicClass;
 
-    @OneToMany(mappedBy = "academicInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany
+    @JoinTable(
+            name = "ACADEMIC_INFO_SUBJECT",
+            joinColumns = @JoinColumn(name = "ACADEMIC_INFO_ID"),
+            inverseJoinColumns = @JoinColumn(name = "SUBJECT_ID")
+    )
     private List<Subject> subjects;
 
     @Column(name = "CREATED_AT", nullable = false)
@@ -63,4 +58,3 @@ public class AcademicInfo {
     @UpdateTimestamp
     private Date updatedAt;
 }
-

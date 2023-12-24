@@ -1,87 +1,195 @@
--- Create Division table
+
+-- CREATE DIVISION TABLE
 CREATE TABLE DIVISION (
-                          divisionId SERIAL,
-                          name VARCHAR(255) NOT NULL,
-                          nameLocal VARCHAR(255)  NOT NULL,
-                          active BOOLEAN NOT NULL,
+                          DIVISION_ID SERIAL,
+                          NAME VARCHAR(255) NOT NULL,
+                          NAME_LOCAL VARCHAR(255) NOT NULL,
+                          ACTIVE BOOLEAN NOT NULL,
+                          CREATED_AT TIMESTAMPTZ NOT NULL,
+                          UPDATED_AT TIMESTAMPTZ NOT NULL,
 
-                          CONSTRAINT DIVISION_DIVISION_ID_PK PRIMARY KEY (divisionId),
-                          CONSTRAINT DIVISION_NAME_UK UNIQUE (name),
-                          CONSTRAINT DIVISION_NAME_LOCAL_UK UNIQUE (nameLocal),
-                          CONSTRAINT DIVISION_ACTIVE_CHK CHECK (active IN (TRUE, FALSE))
+                          CONSTRAINT DIVISION_DIVISION_ID_PK PRIMARY KEY (DIVISION_ID),
+                          CONSTRAINT DIVISION_NAME_UK UNIQUE (NAME),
+                          CONSTRAINT DIVISION_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
+                          CONSTRAINT DIVISION_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE))
 );
 
--- Create District table
+
+-- CREATE DISTRICT TABLE
 CREATE TABLE DISTRICT (
-                          districtId SERIAL,
-                          name VARCHAR(255)  NOT NULL,
-                          nameLocal VARCHAR(255)  NOT NULL,
-                          active BOOLEAN NOT NULL,
-                          divisionId INT NOT NULL,
+                          DISTRICT_ID SERIAL,
+                          NAME VARCHAR(255) NOT NULL,
+                          NAME_LOCAL VARCHAR(255) NOT NULL,
+                          ACTIVE BOOLEAN NOT NULL,
+                          DIVISION_ID INT NOT NULL,
+                          CREATED_AT TIMESTAMPTZ NOT NULL,
+                          UPDATED_AT TIMESTAMPTZ NOT NULL,
 
-                          CONSTRAINT DISTRICT_DISTRICT_ID_PK PRIMARY KEY (districtId),
-                          CONSTRAINT DISTRICT_NAME_UQ UNIQUE (name),
-                          CONSTRAINT DISTRICT_NAME_LOCAL_UQ UNIQUE (nameLocal),
-                          CONSTRAINT DISTRICT_ACTIVE_CHK CHECK (active IN (TRUE, FALSE)),
-                          CONSTRAINT DISTRICT_DIVISION_FK FOREIGN KEY (divisionId) REFERENCES Division(divisionId)
+                          CONSTRAINT DISTRICT_DISTRICT_ID_PK PRIMARY KEY (DISTRICT_ID),
+                          CONSTRAINT DISTRICT_NAME_UK UNIQUE (NAME),
+                          CONSTRAINT DISTRICT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
+                          CONSTRAINT DISTRICT_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
+                          CONSTRAINT DISTRICT_DIVISION_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID)
 );
 
--- Create Upazila table
+-- CREATE UPAZILA TABLE
 CREATE TABLE UPAZILA (
-                         upazilaId SERIAL,
-                         name VARCHAR(255)  NOT NULL,
-                         nameLocal VARCHAR(255)  NOT NULL,
-                         active BOOLEAN NOT NULL,
-                         districtId INT,
+                         UPAZILA_ID SERIAL,
+                         NAME VARCHAR(255) NOT NULL,
+                         NAME_LOCAL VARCHAR(255) NOT NULL,
+                         ACTIVE BOOLEAN NOT NULL,
+                         DISTRICT_ID INT,
+                         CREATED_AT TIMESTAMPTZ NOT NULL,
+                         UPDATED_AT TIMESTAMPTZ NOT NULL,
 
-                         CONSTRAINT UPAZILA_UPAZILA_ID_PK PRIMARY KEY (upazilaId),
-                         CONSTRAINT UPAZILA_NAME_UQ UNIQUE (name),
-                         CONSTRAINT UPAZILA_NAME_LOCAL_UQ UNIQUE (nameLocal),
-                         CONSTRAINT UPAZILA_ACTIVE_CHK CHECK (active IN (TRUE, FALSE)),
-                         CONSTRAINT UPAZILA_DISTRICT_FK FOREIGN KEY (districtId) REFERENCES District(districtId)
+                         CONSTRAINT UPAZILA_UPAZILA_ID_PK PRIMARY KEY (UPAZILA_ID),
+                         CONSTRAINT UPAZILA_NAME_UQ UNIQUE (NAME),
+                         CONSTRAINT UPAZILA_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
+                         CONSTRAINT UPAZILA_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
+                         CONSTRAINT UPAZILA_DISTRICT_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID)
 );
+
+-- INSERT DATA INTO DIVISION TABLE
+INSERT INTO DIVISION (NAME, NAME_LOCAL, ACTIVE, CREATED_AT, UPDATED_AT) VALUES
+                                                                            ('Dhaka', 'ঢাকা', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                            ('Rajshahi', 'রাজশাহী', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+
+-- INSERT DATA INTO DISTRICT TABLE
+INSERT INTO DISTRICT (NAME, NAME_LOCAL, ACTIVE, DIVISION_ID, CREATED_AT, UPDATED_AT) VALUES
+                                                                                         ('DHAKA', 'ঢাকা', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('GAZIPUR', 'গাজীপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('RAJSHAHI', 'রাজশাহী', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('CHAPAINAWABGANJ', 'চাঁপাইনবাবগঞ্জ', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- INSERT DATA INTO UPAZILA TABLE
+INSERT INTO UPAZILA (NAME, NAME_LOCAL, ACTIVE, DISTRICT_ID, CREATED_AT, UPDATED_AT) VALUES
+                                                                                        -- UPAZILA UNDER DHAKA
+                                                                                        ('TANGAIL SADAR', 'টাঙ্গাইল সদর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('SAKHIPUR', 'সখিপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('BASAIL', 'বাসাইল', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+                                                                                        -- UPAZILA UNDER CHAPAINAWABGONJ
+                                                                                        ('BHOLAHAT', 'ভোলাহাট', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('GOMASTAPUR', 'গোমস্তাপুর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('NACHOLE', 'নাচোল', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('CHAPAINAWABGANJ SADAR', 'চাঁপাইনবাবগঞ্জ সদর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('SHIBGANJ', 'শিবগঞ্জ', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 
 -- Create Subject table
 CREATE TABLE SUBJECT (
-                         subjectId SERIAL,
-                         name VARCHAR(255) NOT NULL,
-                         nameLocal VARCHAR(255) NOT NULL,
+                         SUBJECT_ID SERIAL,
+                         SUBJECT_NAME VARCHAR(255)  NOT NULL,
+                         NAME_LOCAL VARCHAR(255)  NOT NULL,
+                         CREATED_AT TIMESTAMPTZ NOT NULL,
+                         UPDATED_AT TIMESTAMPTZ NOT NULL,
 
-                         CONSTRAINT SUBJECT_SUBJECT_ID_PK PRIMARY KEY (subjectId),
-                         CONSTRAINT SUBJECT_NAME_UQ UNIQUE (name),
-                         CONSTRAINT SUBJECT_NAME_LOCAL_UQ UNIQUE (nameLocal)
+                         CONSTRAINT SUBJECT_SUBJECT_ID_PK PRIMARY KEY (SUBJECT_ID),
+                         CONSTRAINT SUBJECT_NAME_UK UNIQUE (SUBJECT_NAME),
+                         CONSTRAINT SUBJECT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL)
 );
 
+-- Create ACADEMIC_INFO table
+CREATE TABLE ACADEMIC_INFO (
+                               ACADEMIC_INFO_ID SERIAL,
+                               LEVEL VARCHAR(255) NOT NULL,
+                               GRADE DOUBLE PRECISION NOT NULL,
+                               CLASS VARCHAR(255) NOT NULL,
+                               CREATED_AT TIMESTAMPTZ NOT NULL,
+                               UPDATED_AT TIMESTAMPTZ NOT NULL,
 
--- Insert data into Division
-INSERT INTO DIVISION (name, nameLocal, active) VALUES
-                                                   ('Dhaka', 'ঢাকা', true),
-                                                   ('Rajshahi', 'রাজশাহী', true);
+                               CONSTRAINT ACADEMIC_INFO_ACADEMIC_INFO_ID_PK PRIMARY KEY (ACADEMIC_INFO_ID)
+);
 
--- Insert data into District
-INSERT INTO DISTRICT (name, nameLocal, active, divisionId) VALUES
-                                                               ('Dhaka', 'ঢাকা', true, 1),
-                                                               ('Gazipur', 'গাজীপুর', true, 1),
-                                                               ('Narayanganj', 'নারায়ণগঞ্জ', true, 1),
-                                                               ('Rajshahi', 'রাজশাহী', true, 2),
-                                                               ('Bogra', 'বগুড়া', true, 2),
-                                                               ('Naogaon', 'নওগাঁ', true, 2);
+-- Create join table ACADEMIC_INFO_SUBJECT for Many-to-Many relationship
+CREATE TABLE ACADEMIC_INFO_SUBJECT (
+                                       ACADEMIC_INFO_ID INT,
+                                       SUBJECT_ID INT,
+                                       PRIMARY KEY (ACADEMIC_INFO_ID, SUBJECT_ID),
+                                       FOREIGN KEY (ACADEMIC_INFO_ID) REFERENCES ACADEMIC_INFO(ACADEMIC_INFO_ID),
+                                       FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
+);
 
--- Insert data into Upazila
-INSERT INTO UPAZILA (name, nameLocal, active, districtId) VALUES
-                                                              ('Dhaka City', 'ঢাকা সিটি', true, 1),
-                                                              ('Gazipur City', 'গাজীপুর সিটি', true, 2),
-                                                              ('Narayanganj City', 'নারায়ণগঞ্জ সিটি', true, 3),
-                                                              ('Rajshahi City', 'রাজশাহী সিটি', true, 4),
-                                                              ('Bogra City', 'বগুড়া সিটি', true, 5),
-                                                              ('Naogaon City', 'নওগাঁ সিটি', true, 6);
+-- INSERT DATA INTO SUBJECT TABLE
+INSERT INTO SUBJECT (SUBJECT_NAME, NAME_LOCAL, CREATED_AT, UPDATED_AT) VALUES
+                                                                           ('Bangla', 'বাংলা', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('English', 'ইংরেজি', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('General Math', 'সাধারিত গণিত', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('Higher Math', 'উচ্চতর গণিত', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('ICT', 'তথ্য ও যোগাযোগ প্রযুক্তি', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('Social Science', 'সামাজিক বিজ্ঞান', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('General Science', 'সাধারিত বিজ্ঞান', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
--- Insert data into Subject
-INSERT INTO SUBJECT (name, nameLocal) VALUES
-                                          ('Bangla', 'বাংলা'),
-                                          ('English', 'ইংরেজি'),
-                                          ('General Math', 'সাধারিত গণিত'),
-                                          ('Higher Math', 'উচ্চতর গণিত'),
-                                          ('ICT', 'তথ্য ও যোগাযোগ প্রযুক্তি'),
-                                          ('Social Science', 'সামাজিক বিজ্ঞান'),
-                                          ('General Science', 'সাধারিত বিজ্ঞান');
+-- INSERT DATA INTO ACADEMIC_INFO TABLE
+INSERT INTO ACADEMIC_INFO (LEVEL, GRADE, CLASS, CREATED_AT, UPDATED_AT) VALUES
+                                                                            ('PSC', 5.0, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                            ('JSC', 4.5, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                            ('SSC', 4.0, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                            ('HSC', 4.5, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- INSERT DATA INTO ACADEMIC_INFO_SUBJECT TABLE
+INSERT INTO ACADEMIC_INFO_SUBJECT (ACADEMIC_INFO_ID, SUBJECT_ID) VALUES
+                                                                     (1, 1), -- PSC - Bangla
+                                                                     (1, 2), -- PSC - English
+                                                                     (2, 2), -- JSC - English
+                                                                     (2, 3), -- JSC - General Math
+                                                                     (3, 3), -- SSC - General Math
+                                                                     (3, 4), -- SSC - Higher Math
+                                                                     (4, 4), -- HSC - Higher Math
+                                                                     (4, 5), -- HSC - ICT
+                                                                     (3, 5), -- SSC - ICT
+                                                                     (2, 6), -- JSC - Social Science
+                                                                     (3, 6), -- SSC - Social Science
+                                                                     (3, 7), -- SSC - General Science
+
+-- Create ADDRESS table
+CREATE TABLE ADDRESS (
+                         ADDRESS_ID SERIAL,
+                         ADDRESS_TYPE VARCHAR(50) NOT NULL,
+                         DIVISION_ID INT NOT NULL,
+                         DISTRICT_ID INT NOT NULL,
+                         UPAZILA_ID INT NOT NULL,
+                         IS_ACTIVE BOOLEAN NOT NULL,
+                         CREATED_BY INT NOT NULL,
+                         UPDATED_BY INT NOT NULL,
+                         CREATED_AT TIMESTAMPTZ NOT NULL,
+                         UPDATED_AT TIMESTAMPTZ NOT NULL,
+
+                         CONSTRAINT ADDRESS_ADDRESS_ID_PK PRIMARY KEY (ADDRESS_ID),
+                         CONSTRAINT ADDRESS_ADDRESS_TYPE_CHK CHECK (ADDRESS_TYPE IN ('PRESENT', 'PERMANENT')),
+                         CONSTRAINT ADDRESS_DIVISION_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID),
+                         CONSTRAINT ADDRESS_DISTRICT_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID),
+                         CONSTRAINT ADDRESS_UPAZILA_FK FOREIGN KEY (UPAZILA_ID) REFERENCES UPAZILA(UPAZILA_ID),
+                         CONSTRAINT ADDRESS_CREATED_BY_FK FOREIGN KEY (CREATED_BY) REFERENCES CMS_USER(USER_ID),
+                         CONSTRAINT ADDRESS_UPDATED_BY_FK FOREIGN KEY (UPDATED_BY) REFERENCES CMS_USER(USER_ID)
+);
+
+-- INSERT DATA INTO ADDRESS TABLE
+INSERT INTO ADDRESS (ADDRESS_TYPE, DIVISION_ID, DISTRICT_ID, UPAZILA_ID, IS_ACTIVE, CREATED_BY, UPDATED_BY, CREATED_AT, UPDATED_AT) VALUES
+                                                                                                                                        ('PRESENT', 1, 1, 1, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                                                        ('PERMANENT', 1, 2, 2, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                                                        ('PRESENT', 2, 3, 4, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+-- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+CREATE TABLE CMS_USER (
+                          CMS_USER_ID SERIAL,
+                          MOBILE_NUMBER VARCHAR(255) UNIQUE NOT NULL,
+                          EMAIL VARCHAR(255) UNIQUE,
+                          NAME VARCHAR(255) NOT NULL,
+                          GENDER VARCHAR(255) NOT NULL,
+                          STATUS VARCHAR(10) NOT NULL,
+                          IS_ACTIVE BOOLEAN NOT NULL,
+                          CREATED_AT TIMESTAMPTZ NOT NULL,
+                          UPDATED_AT TIMESTAMPTZ NOT NULL,
+
+                          CONSTRAINT CMS_USER_CMS_USER_ID_PK PRIMARY KEY (CMS_USER_ID),
+                          CONSTRAINT CMS_USER_MOBILE_NUMBER_UQ UNIQUE (MOBILE_NUMBER),
+                          CONSTRAINT CMS_USER_EMAIL_UQ UNIQUE (EMAIL),
+                          CONSTRAINT CMS_USER_GENDER_CHK CHECK (GENDER IN ('MALE', 'FEMALE', 'OTHER')),
+                          CONSTRAINT CMS_USER_STATUS_CHK CHECK (STATUS IN ('ACTIVE', 'INACTIVE')),
+                          CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE))
+);
+
+-- INSERT DATA INTO CMS_USER TABLE
+INSERT INTO CMS_USER (MOBILE_NUMBER, EMAIL, NAME, GENDER, STATUS, IS_ACTIVE, CREATED_AT, UPDATED_AT) VALUES
+                                                                                                         ('01712345670', 'nafis@example.com', 'Nafis Iqbal', 'MALE', 'ACTIVE', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                         ('01987654321', 'jamil@example.com', 'Jamil Ul Islam', 'FEMALE', 'ACTIVE', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
