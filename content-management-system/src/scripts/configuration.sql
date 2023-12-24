@@ -57,24 +57,24 @@ INSERT INTO DIVISION (NAME, NAME_LOCAL, ACTIVE, CREATED_AT, UPDATED_AT) VALUES
 
 -- INSERT DATA INTO DISTRICT TABLE
 INSERT INTO DISTRICT (NAME, NAME_LOCAL, ACTIVE, DIVISION_ID, CREATED_AT, UPDATED_AT) VALUES
-                                                                                         ('DHAKA', 'ঢাকা', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('GAZIPUR', 'গাজীপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('RAJSHAHI', 'রাজশাহী', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('CHAPAINAWABGANJ', 'চাঁপাইনবাবগঞ্জ', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+                                                                                         ('Dhaka', 'ঢাকা', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('Gazipur', 'গাজীপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('Rajshahi', 'রাজশাহী', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('Chapainawabganj', 'চাঁপাইনবাবগঞ্জ', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- INSERT DATA INTO UPAZILA TABLE
 INSERT INTO UPAZILA (NAME, NAME_LOCAL, ACTIVE, DISTRICT_ID, CREATED_AT, UPDATED_AT) VALUES
                                                                                         -- UPAZILA UNDER DHAKA
-                                                                                        ('TANGAIL SADAR', 'টাঙ্গাইল সদর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('SAKHIPUR', 'সখিপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('BASAIL', 'বাসাইল', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Tangail Sadar', 'টাঙ্গাইল সদর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Sakhipur', 'সখিপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Basail', 'বাসাইল', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-                                                                                        -- UPAZILA UNDER CHAPAINAWABGONJ
-                                                                                        ('BHOLAHAT', 'ভোলাহাট', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('GOMASTAPUR', 'গোমস্তাপুর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('NACHOLE', 'নাচোল', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('CHAPAINAWABGANJ SADAR', 'চাঁপাইনবাবগঞ্জ সদর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('SHIBGANJ', 'শিবগঞ্জ', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+                                                                                        -- UPAZILA UNDER CHAPAINAWABGANJ
+                                                                                        ('Bholahat', 'ভোলাহাট', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Gomastapur', 'গোমস্তাপুর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Nachole', 'নাচোল', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Chapainawabganj Sadar', 'চাঁপাইনবাবগঞ্জ সদর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Shibganj', 'শিবগঞ্জ', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
 -- Create Subject table
