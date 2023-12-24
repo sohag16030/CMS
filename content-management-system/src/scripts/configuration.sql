@@ -1,18 +1,34 @@
 
--- CREATE DIVISION TABLE
-CREATE TABLE DIVISION (
-                          DIVISION_ID SERIAL,
-                          NAME VARCHAR(255) NOT NULL,
-                          NAME_LOCAL VARCHAR(255) NOT NULL,
-                          ACTIVE BOOLEAN NOT NULL,
-                          CREATED_AT TIMESTAMPTZ NOT NULL,
-                          UPDATED_AT TIMESTAMPTZ NOT NULL,
+-- CREATE UPAZILA TABLE
+CREATE TABLE UPAZILA (
+                         UPAZILA_ID SERIAL,
+                         NAME VARCHAR(255) NOT NULL,
+                         NAME_LOCAL VARCHAR(255) NOT NULL,
+                         ACTIVE BOOLEAN NOT NULL,
+                         DISTRICT_ID INT,
+                         CREATED_AT TIMESTAMPTZ NOT NULL,
+                         UPDATED_AT TIMESTAMPTZ NOT NULL,
 
-                          CONSTRAINT DIVISION_DIVISION_ID_PK PRIMARY KEY (DIVISION_ID),
-                          CONSTRAINT DIVISION_NAME_UK UNIQUE (NAME),
-                          CONSTRAINT DIVISION_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
-                          CONSTRAINT DIVISION_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE))
+                         CONSTRAINT UPAZILA_UPAZILA_ID_PK PRIMARY KEY (UPAZILA_ID),
+                         CONSTRAINT UPAZILA_NAME_UQ UNIQUE (NAME),
+                         CONSTRAINT UPAZILA_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
+                         CONSTRAINT UPAZILA_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
+                         CONSTRAINT UPAZILA_DISTRICT_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID)
 );
+
+-- INSERT DATA INTO UPAZILA TABLE
+INSERT INTO UPAZILA (NAME, NAME_LOCAL, ACTIVE, DISTRICT_ID, CREATED_AT, UPDATED_AT) VALUES
+                                                                                        -- UPAZILA UNDER DHAKA
+                                                                                        ('Tangail Sadar', 'টাঙ্গাইল সদর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Sakhipur', 'সখিপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Basail', 'বাসাইল', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+                                                                                        -- UPAZILA UNDER CHAPAINAWABGANJ
+                                                                                        ('Bholahat', 'ভোলাহাট', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Gomastapur', 'গোমস্তাপুর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Nachole', 'নাচোল', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Chapainawabganj Sadar', 'চাঁপাইনবাবগঞ্জ সদর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Shibganj', 'শিবগঞ্জ', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
 -- CREATE DISTRICT TABLE
@@ -32,29 +48,6 @@ CREATE TABLE DISTRICT (
                           CONSTRAINT DISTRICT_DIVISION_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID)
 );
 
--- CREATE UPAZILA TABLE
-CREATE TABLE UPAZILA (
-                         UPAZILA_ID SERIAL,
-                         NAME VARCHAR(255) NOT NULL,
-                         NAME_LOCAL VARCHAR(255) NOT NULL,
-                         ACTIVE BOOLEAN NOT NULL,
-                         DISTRICT_ID INT,
-                         CREATED_AT TIMESTAMPTZ NOT NULL,
-                         UPDATED_AT TIMESTAMPTZ NOT NULL,
-
-                         CONSTRAINT UPAZILA_UPAZILA_ID_PK PRIMARY KEY (UPAZILA_ID),
-                         CONSTRAINT UPAZILA_NAME_UQ UNIQUE (NAME),
-                         CONSTRAINT UPAZILA_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
-                         CONSTRAINT UPAZILA_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
-                         CONSTRAINT UPAZILA_DISTRICT_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID)
-);
-
--- INSERT DATA INTO DIVISION TABLE
-INSERT INTO DIVISION (NAME, NAME_LOCAL, ACTIVE, CREATED_AT, UPDATED_AT) VALUES
-                                                                            ('Dhaka', 'ঢাকা', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('Rajshahi', 'রাজশাহী', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
-
 -- INSERT DATA INTO DISTRICT TABLE
 INSERT INTO DISTRICT (NAME, NAME_LOCAL, ACTIVE, DIVISION_ID, CREATED_AT, UPDATED_AT) VALUES
                                                                                          ('Dhaka', 'ঢাকা', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -62,85 +55,26 @@ INSERT INTO DISTRICT (NAME, NAME_LOCAL, ACTIVE, DIVISION_ID, CREATED_AT, UPDATED
                                                                                          ('Rajshahi', 'রাজশাহী', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
                                                                                          ('Chapainawabganj', 'চাঁপাইনবাবগঞ্জ', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
--- INSERT DATA INTO UPAZILA TABLE
-INSERT INTO UPAZILA (NAME, NAME_LOCAL, ACTIVE, DISTRICT_ID, CREATED_AT, UPDATED_AT) VALUES
-                                                                                        -- UPAZILA UNDER DHAKA
-                                                                                        ('Tangail Sadar', 'টাঙ্গাইল সদর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Sakhipur', 'সখিপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Basail', 'বাসাইল', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-                                                                                        -- UPAZILA UNDER CHAPAINAWABGANJ
-                                                                                        ('Bholahat', 'ভোলাহাট', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Gomastapur', 'গোমস্তাপুর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Nachole', 'নাচোল', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Chapainawabganj Sadar', 'চাঁপাইনবাবগঞ্জ সদর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Shibganj', 'শিবগঞ্জ', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- CREATE DIVISION TABLE
+CREATE TABLE DIVISION (
+                          DIVISION_ID SERIAL,
+                          NAME VARCHAR(255) NOT NULL,
+                          NAME_LOCAL VARCHAR(255) NOT NULL,
+                          ACTIVE BOOLEAN NOT NULL,
+                          CREATED_AT TIMESTAMPTZ NOT NULL,
+                          UPDATED_AT TIMESTAMPTZ NOT NULL,
 
-
--- Create Subject table
-CREATE TABLE SUBJECT (
-                         SUBJECT_ID SERIAL,
-                         SUBJECT_NAME VARCHAR(255)  NOT NULL,
-                         NAME_LOCAL VARCHAR(255)  NOT NULL,
-                         CREATED_AT TIMESTAMPTZ NOT NULL,
-                         UPDATED_AT TIMESTAMPTZ NOT NULL,
-
-                         CONSTRAINT SUBJECT_SUBJECT_ID_PK PRIMARY KEY (SUBJECT_ID),
-                         CONSTRAINT SUBJECT_NAME_UK UNIQUE (SUBJECT_NAME),
-                         CONSTRAINT SUBJECT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL)
+                          CONSTRAINT DIVISION_DIVISION_ID_PK PRIMARY KEY (DIVISION_ID),
+                          CONSTRAINT DIVISION_NAME_UK UNIQUE (NAME),
+                          CONSTRAINT DIVISION_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
+                          CONSTRAINT DIVISION_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE))
 );
 
--- Create ACADEMIC_INFO table
-CREATE TABLE ACADEMIC_INFO (
-                               ACADEMIC_INFO_ID SERIAL,
-                               LEVEL VARCHAR(255) NOT NULL,
-                               GRADE DOUBLE PRECISION NOT NULL,
-                               CLASS VARCHAR(255) NOT NULL,
-                               CREATED_AT TIMESTAMPTZ NOT NULL,
-                               UPDATED_AT TIMESTAMPTZ NOT NULL,
-
-                               CONSTRAINT ACADEMIC_INFO_ACADEMIC_INFO_ID_PK PRIMARY KEY (ACADEMIC_INFO_ID)
-);
-
--- Create join table ACADEMIC_INFO_SUBJECT for Many-to-Many relationship
-CREATE TABLE ACADEMIC_INFO_SUBJECT (
-                                       ACADEMIC_INFO_ID INT,
-                                       SUBJECT_ID INT,
-                                       PRIMARY KEY (ACADEMIC_INFO_ID, SUBJECT_ID),
-                                       FOREIGN KEY (ACADEMIC_INFO_ID) REFERENCES ACADEMIC_INFO(ACADEMIC_INFO_ID),
-                                       FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
-);
-
--- INSERT DATA INTO SUBJECT TABLE
-INSERT INTO SUBJECT (SUBJECT_NAME, NAME_LOCAL, CREATED_AT, UPDATED_AT) VALUES
-                                                                           ('Bangla', 'বাংলা', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('English', 'ইংরেজি', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('General Math', 'সাধারিত গণিত', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Higher Math', 'উচ্চতর গণিত', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('ICT', 'তথ্য ও যোগাযোগ প্রযুক্তি', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Social Science', 'সামাজিক বিজ্ঞান', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('General Science', 'সাধারিত বিজ্ঞান', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- INSERT DATA INTO ACADEMIC_INFO TABLE
-INSERT INTO ACADEMIC_INFO (LEVEL, GRADE, CLASS, CREATED_AT, UPDATED_AT) VALUES
-                                                                            ('PSC', 5.0, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('JSC', 4.5, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('SSC', 4.0, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('HSC', 4.5, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
--- INSERT DATA INTO ACADEMIC_INFO_SUBJECT TABLE
-INSERT INTO ACADEMIC_INFO_SUBJECT (ACADEMIC_INFO_ID, SUBJECT_ID) VALUES
-                                                                     (1, 1), -- PSC - Bangla
-                                                                     (1, 2), -- PSC - English
-                                                                     (2, 2), -- JSC - English
-                                                                     (2, 3), -- JSC - General Math
-                                                                     (3, 3), -- SSC - General Math
-                                                                     (3, 4), -- SSC - Higher Math
-                                                                     (4, 4), -- HSC - Higher Math
-                                                                     (4, 5), -- HSC - ICT
-                                                                     (3, 5), -- SSC - ICT
-                                                                     (2, 6), -- JSC - Social Science
-                                                                     (3, 6), -- SSC - Social Science
-                                                                     (3, 7), -- SSC - General Science
+-- INSERT DATA INTO DIVISION TABLE
+INSERT INTO DIVISION (NAME, NAME_LOCAL, ACTIVE, CREATED_AT, UPDATED_AT) VALUES
+                                                                            ('Dhaka', 'ঢাকা', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                            ('Rajshahi', 'রাজশাহী', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Create ADDRESS table
 CREATE TABLE ADDRESS (
@@ -169,6 +103,75 @@ INSERT INTO ADDRESS (ADDRESS_TYPE, DIVISION_ID, DISTRICT_ID, UPAZILA_ID, IS_ACTI
                                                                                                                                         ('PRESENT', 1, 1, 1, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
                                                                                                                                         ('PERMANENT', 1, 2, 2, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
                                                                                                                                         ('PRESENT', 2, 3, 4, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+
+-- Create Subject table
+CREATE TABLE SUBJECT (
+                         SUBJECT_ID SERIAL,
+                         SUBJECT_NAME VARCHAR(255)  NOT NULL,
+                         NAME_LOCAL VARCHAR(255)  NOT NULL,
+                         CREATED_AT TIMESTAMPTZ NOT NULL,
+                         UPDATED_AT TIMESTAMPTZ NOT NULL,
+
+                         CONSTRAINT SUBJECT_SUBJECT_ID_PK PRIMARY KEY (SUBJECT_ID),
+                         CONSTRAINT SUBJECT_NAME_UK UNIQUE (SUBJECT_NAME),
+                         CONSTRAINT SUBJECT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL)
+);
+
+-- INSERT DATA INTO SUBJECT TABLE
+INSERT INTO SUBJECT (SUBJECT_NAME, NAME_LOCAL, CREATED_AT, UPDATED_AT) VALUES
+                                                                           ('Bangla', 'বাংলা', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('English', 'ইংরেজি', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('General Math', 'সাধারিত গণিত', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('Higher Math', 'উচ্চতর গণিত', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('ICT', 'তথ্য ও যোগাযোগ প্রযুক্তি', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('Social Science', 'সামাজিক বিজ্ঞান', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                           ('General Science', 'সাধারিত বিজ্ঞান', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+
+-- Create ACADEMIC_INFO table
+CREATE TABLE ACADEMIC_INFO (
+                               ACADEMIC_INFO_ID SERIAL,
+                               LEVEL VARCHAR(255) NOT NULL,
+                               GRADE DOUBLE PRECISION NOT NULL,
+                               CLASS VARCHAR(255) NOT NULL,
+                               CREATED_AT TIMESTAMPTZ NOT NULL,
+                               UPDATED_AT TIMESTAMPTZ NOT NULL,
+
+                               CONSTRAINT ACADEMIC_INFO_ACADEMIC_INFO_ID_PK PRIMARY KEY (ACADEMIC_INFO_ID)
+);
+
+-- INSERT DATA INTO ACADEMIC_INFO TABLE
+INSERT INTO ACADEMIC_INFO (LEVEL, GRADE, CLASS, CREATED_AT, UPDATED_AT) VALUES
+                                                                            ('PSC', 5.0, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                            ('JSC', 4.5, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                            ('SSC', 4.0, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                            ('HSC', 4.5, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Create join table ACADEMIC_INFO_SUBJECT for Many-to-Many relationship
+CREATE TABLE ACADEMIC_INFO_SUBJECT (
+                                       ACADEMIC_INFO_ID INT,
+                                       SUBJECT_ID INT,
+                                       PRIMARY KEY (ACADEMIC_INFO_ID, SUBJECT_ID),
+                                       FOREIGN KEY (ACADEMIC_INFO_ID) REFERENCES ACADEMIC_INFO(ACADEMIC_INFO_ID),
+                                       FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
+);
+
+
+-- INSERT DATA INTO ACADEMIC_INFO_SUBJECT TABLE
+INSERT INTO ACADEMIC_INFO_SUBJECT (ACADEMIC_INFO_ID, SUBJECT_ID) VALUES
+                                                                     (1, 1), -- PSC - Bangla
+                                                                     (1, 2), -- PSC - English
+                                                                     (2, 2), -- JSC - English
+                                                                     (2, 3), -- JSC - General Math
+                                                                     (3, 3), -- SSC - General Math
+                                                                     (3, 4), -- SSC - Higher Math
+                                                                     (4, 4), -- HSC - Higher Math
+                                                                     (4, 5), -- HSC - ICT
+                                                                     (3, 5), -- SSC - ICT
+                                                                     (2, 6), -- JSC - Social Science
+                                                                     (3, 6), -- SSC - Social Science
+                                                                     (3, 7), -- SSC - General Science
+
 -- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 CREATE TABLE CMS_USER (
                           CMS_USER_ID SERIAL,
