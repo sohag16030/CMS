@@ -61,16 +61,6 @@ public class Address {
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean isActive;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "CREATED_BY", nullable = false)
-    private CmsUser createdBy;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "UPDATED_BY", nullable = false)
-    private CmsUser updatedBy;
-
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
     private Date createdAt;

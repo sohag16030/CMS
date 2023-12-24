@@ -1,6 +1,6 @@
 -- CREATE DIVISION TABLE
 CREATE TABLE DIVISION (
-                          DIVISION_ID SERIAL,
+                          DIVISION_ID BIGSERIAL,
                           NAME VARCHAR(255) NOT NULL,
                           NAME_LOCAL VARCHAR(255) NOT NULL,
                           ACTIVE BOOLEAN NOT NULL,
@@ -20,11 +20,11 @@ INSERT INTO DIVISION (NAME, NAME_LOCAL, ACTIVE, CREATED_AT, UPDATED_AT) VALUES
 
 -- CREATE DISTRICT TABLE
 CREATE TABLE DISTRICT (
-                          DISTRICT_ID SERIAL,
+                          DISTRICT_ID BIGSERIAL,
                           NAME VARCHAR(255) NOT NULL,
                           NAME_LOCAL VARCHAR(255) NOT NULL,
                           ACTIVE BOOLEAN NOT NULL,
-                          DIVISION_ID INT NOT NULL,
+                          DIVISION_ID BIGINT NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
                           UPDATED_AT TIMESTAMPTZ NOT NULL,
 
@@ -44,11 +44,11 @@ INSERT INTO DISTRICT (NAME, NAME_LOCAL, ACTIVE, DIVISION_ID, CREATED_AT, UPDATED
 
 -- CREATE UPAZILA TABLE
 CREATE TABLE UPAZILA (
-                         UPAZILA_ID SERIAL,
+                         UPAZILA_ID BIGSERIAL,
                          NAME VARCHAR(255) NOT NULL,
                          NAME_LOCAL VARCHAR(255) NOT NULL,
                          ACTIVE BOOLEAN NOT NULL,
-                         DISTRICT_ID INT,
+                         DISTRICT_ID BIGINT,
                          CREATED_AT TIMESTAMPTZ NOT NULL,
                          UPDATED_AT TIMESTAMPTZ NOT NULL,
 
@@ -77,11 +77,11 @@ INSERT INTO UPAZILA (NAME, NAME_LOCAL, ACTIVE, DISTRICT_ID, CREATED_AT, UPDATED_
 
 -- Create ADDRESS table
 CREATE TABLE ADDRESS (
-                         ADDRESS_ID SERIAL,
+                         ADDRESS_ID BIGSERIAL,
                          ADDRESS_TYPE VARCHAR(50) NOT NULL,
-                         DIVISION_ID INT NOT NULL,
-                         DISTRICT_ID INT NOT NULL,
-                         UPAZILA_ID INT NOT NULL,
+                         DIVISION_ID BIGINT NOT NULL,
+                         DISTRICT_ID BIGINT NOT NULL,
+                         UPAZILA_ID BIGINT NOT NULL,
                          IS_ACTIVE BOOLEAN NOT NULL,
                          CREATED_AT TIMESTAMPTZ NOT NULL,
                          UPDATED_AT TIMESTAMPTZ NOT NULL,
@@ -101,7 +101,7 @@ INSERT INTO ADDRESS (ADDRESS_TYPE, DIVISION_ID, DISTRICT_ID, UPAZILA_ID, IS_ACTI
 
 -- Create Subject table
 CREATE TABLE SUBJECT (
-                         SUBJECT_ID SERIAL,
+                         SUBJECT_ID BIGSERIAL,
                          SUBJECT_NAME VARCHAR(255)  NOT NULL,
                          NAME_LOCAL VARCHAR(255)  NOT NULL,
                          CREATED_AT TIMESTAMPTZ NOT NULL,
@@ -125,7 +125,7 @@ INSERT INTO SUBJECT (SUBJECT_NAME, NAME_LOCAL, CREATED_AT, UPDATED_AT) VALUES
 
 -- Create ACADEMIC_INFO table
 CREATE TABLE ACADEMIC_INFO (
-                               ACADEMIC_INFO_ID SERIAL,
+                               ACADEMIC_INFO_ID BIGSERIAL,
                                LEVEL VARCHAR(255) NOT NULL,
                                GRADE DOUBLE PRECISION NOT NULL,
                                CLASS VARCHAR(255) NOT NULL,
@@ -144,8 +144,8 @@ INSERT INTO ACADEMIC_INFO (LEVEL, GRADE, CLASS, CREATED_AT, UPDATED_AT) VALUES
 
 -- Create join table ACADEMIC_INFO_SUBJECT for Many-to-Many relationship
 CREATE TABLE ACADEMIC_INFO_SUBJECT (
-                                       ACADEMIC_INFO_ID INT,
-                                       SUBJECT_ID INT,
+                                       ACADEMIC_INFO_ID BIGINT,  -- Assuming ACADEMIC_INFO_ID in ACADEMIC_INFO table is of type BIGINT
+                                       SUBJECT_ID BIGINT,        -- Assuming SUBJECT_ID in SUBJECT table is of type BIGINT
                                        PRIMARY KEY (ACADEMIC_INFO_ID, SUBJECT_ID),
                                        FOREIGN KEY (ACADEMIC_INFO_ID) REFERENCES ACADEMIC_INFO(ACADEMIC_INFO_ID),
                                        FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
@@ -169,7 +169,7 @@ INSERT INTO ACADEMIC_INFO_SUBJECT (ACADEMIC_INFO_ID, SUBJECT_ID) VALUES
 
 -- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 CREATE TABLE CMS_USER (
-                          CMS_USER_ID SERIAL,
+                          CMS_USER_ID BIGSERIAL,
                           MOBILE_NUMBER VARCHAR(255) UNIQUE NOT NULL,
                           EMAIL VARCHAR(255) UNIQUE,
                           NAME VARCHAR(255) NOT NULL,
