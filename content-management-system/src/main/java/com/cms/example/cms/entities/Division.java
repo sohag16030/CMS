@@ -1,13 +1,10 @@
 package com.cms.example.cms.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +15,6 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
-import java.util.List;
 
 @Builder
 @Entity
@@ -45,9 +41,6 @@ public class Division {
     @NotNull
     @Column(name = "ACTIVE", nullable = false)
     private Boolean active;
-
-    @OneToMany(mappedBy = "division", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<District> districts;
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp

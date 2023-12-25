@@ -2,12 +2,9 @@ package com.cms.example.cms.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +28,7 @@ public class Upazila {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UPAZILA_ID")
-    private Long upozillaId;
+    private Long upazilaId;
 
     @NotNull
     @Column(name = "NAME", unique = true, nullable = false)
@@ -44,11 +41,6 @@ public class Upazila {
     @NotNull
     @Column(name = "ACTIVE", nullable = false)
     private Boolean active;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "DISTRICT_ID", nullable = false)
-    private District district;
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
