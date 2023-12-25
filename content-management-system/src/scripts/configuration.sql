@@ -93,6 +93,28 @@ CREATE TABLE ADDRESS (
                          CONSTRAINT ADDRESS_UPAZILA_ID_FK FOREIGN KEY (UPAZILA_ID) REFERENCES UPAZILA(UPAZILA_ID)
 );
 
+-- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+CREATE TABLE CMS_USER (
+                          CMS_USER_ID BIGSERIAL,
+                          MOBILE_NUMBER VARCHAR(255) UNIQUE NOT NULL,
+                          EMAIL VARCHAR(255) UNIQUE,
+                          NAME VARCHAR(255) NOT NULL,
+                          GENDER VARCHAR(255) NOT NULL,
+                          ADDRESS_ID BIGINT NOT NULL,
+                          USER_STATUS VARCHAR(10) NOT NULL,
+                          IS_ACTIVE BOOLEAN NOT NULL,
+                          CREATED_AT TIMESTAMPTZ NOT NULL,
+                          UPDATED_AT TIMESTAMPTZ NOT NULL,
+
+                          CONSTRAINT CMS_USER_CMS_USER_ID_PK PRIMARY KEY (CMS_USER_ID),
+                          CONSTRAINT CMS_USER_MOBILE_NUMBER_UK UNIQUE (MOBILE_NUMBER),
+                          CONSTRAINT CMS_USER_EMAIL_UK UNIQUE (EMAIL),
+                          CONSTRAINT CMS_USER_GENDER_CHK CHECK (GENDER IN ('MALE', 'FEMALE', 'OTHER')),
+                          CONSTRAINT CMS_USER_USER_STATUS_CHK CHECK (USER_STATUS IN ('ACTIVE', 'INACTIVE')),
+                          CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE)),
+                          CONSTRAINT CMS_USER_ADDRESS_ID_FK FOREIGN KEY (ADDRESS_ID) REFERENCES ADDRESS(ADDRESS_ID)
+);
+
 -- Create Subject table
 CREATE TABLE SUBJECT (
                          SUBJECT_ID BIGSERIAL,
@@ -123,10 +145,12 @@ CREATE TABLE ACADEMIC_INFO (
                                ACADEMIC_LEVEL VARCHAR(255) NOT NULL,
                                GRADE DOUBLE PRECISION NOT NULL,
                                CLASS VARCHAR(255) NOT NULL,
+                               CMS_USER_ID BIGINT NOT NULL, -- Add CMS_USER_ID column
                                CREATED_AT TIMESTAMPTZ NOT NULL,
                                UPDATED_AT TIMESTAMPTZ NOT NULL,
 
-                               CONSTRAINT ACADEMIC_INFO_ACADEMIC_INFO_ID_PK PRIMARY KEY (ACADEMIC_INFO_ID)
+                               CONSTRAINT ACADEMIC_INFO_ACADEMIC_INFO_ID_PK PRIMARY KEY (ACADEMIC_INFO_ID),
+                               CONSTRAINT ACADEMIC_INFO_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID)
 );
 
 -- Create join table ACADEMIC_INFO_SUBJECT for Many-to-Many relationship
@@ -136,24 +160,4 @@ CREATE TABLE ACADEMIC_INFO_SUBJECT (
                                        PRIMARY KEY (ACADEMIC_INFO_ID, SUBJECT_ID),
                                        FOREIGN KEY (ACADEMIC_INFO_ID) REFERENCES ACADEMIC_INFO(ACADEMIC_INFO_ID),
                                        FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
-);
-
--- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-CREATE TABLE CMS_USER (
-                          CMS_USER_ID BIGSERIAL,
-                          MOBILE_NUMBER VARCHAR(255) UNIQUE NOT NULL,
-                          EMAIL VARCHAR(255) UNIQUE,
-                          NAME VARCHAR(255) NOT NULL,
-                          GENDER VARCHAR(255) NOT NULL,
-                          USER_STATUS VARCHAR(10) NOT NULL,
-                          IS_ACTIVE BOOLEAN NOT NULL,
-                          CREATED_AT TIMESTAMPTZ NOT NULL,
-                          UPDATED_AT TIMESTAMPTZ NOT NULL,
-
-                          CONSTRAINT CMS_USER_CMS_USER_ID_PK PRIMARY KEY (CMS_USER_ID),
-                          CONSTRAINT CMS_USER_MOBILE_NUMBER_UK UNIQUE (MOBILE_NUMBER),
-                          CONSTRAINT CMS_USER_EMAIL_UK UNIQUE (EMAIL),
-                          CONSTRAINT CMS_USER_GENDER_CHK CHECK (GENDER IN ('MALE', 'FEMALE', 'OTHER')),
-                          CONSTRAINT CMS_USER_STATUS_CHK CHECK (USER_STATUS IN ('ACTIVE', 'INACTIVE')),
-                          CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE))
 );

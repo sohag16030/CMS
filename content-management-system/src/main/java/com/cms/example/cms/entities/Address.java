@@ -10,7 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,22 +38,22 @@ public class Address {
     private Long addressId;
 
     @NotNull
-    @Column(name = "ADDRESS_TYPE", nullable = false, length = 50)
+    @Column(name = "ADDRESS_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
     private AddressType addressType;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DIVISION_ID", nullable = false)
     private Division division;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DISTRICT_ID", nullable = false)
     private District district;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "UPAZILA_ID", nullable = false)
     private Upazila upazila;
 

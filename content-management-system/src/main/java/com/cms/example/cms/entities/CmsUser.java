@@ -2,13 +2,18 @@ package com.cms.example.cms.entities;
 
 import com.cms.example.cms.entities.enums.Gender;
 import com.cms.example.cms.entities.enums.UserStatus;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +24,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "CMS_USER")
@@ -48,6 +54,14 @@ public class CmsUser {
     @Column(name = "GENDER", nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @NotNull
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ADDRESS_ID", nullable = false)
+    private Address address;
+
+    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AcademicInfo> academicInfoList;
 
     @NotNull
     @Column(name = "USER_STATUS", nullable = false)

@@ -54,7 +54,7 @@ public class District {
     private Division division;
 
     @OneToMany(mappedBy = "district", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Upazila> upazillas;
+    private List<Upazila> upazilaList;
 
 
     @Column(name = "CREATED_AT", nullable = false)

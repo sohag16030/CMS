@@ -47,7 +47,7 @@ public class Division {
     private Boolean active;
 
     @OneToMany(mappedBy = "division", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<District> districts;
+    private List<District> districtList;
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
