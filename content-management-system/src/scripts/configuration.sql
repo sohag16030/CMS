@@ -157,8 +157,3 @@ CREATE TABLE CMS_USER (
                           CONSTRAINT CMS_USER_STATUS_CHK CHECK (USER_STATUS IN ('ACTIVE', 'INACTIVE')),
                           CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE))
 );
-
--- INSERT DATA INTO CMS_USER TABLE
-INSERT INTO CMS_USER (MOBILE_NUMBER, EMAIL, NAME, GENDER, USER_STATUS, IS_ACTIVE, CREATED_AT, UPDATED_AT) VALUES
-                                                                                                              ('01712345670', 'nafis@example.com', 'Nafis Iqbal', 'MALE', 'ACTIVE', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                              ('01987654321', 'jamil@example.com', 'Jamil Ul Islam', 'FEMALE', 'ACTIVE', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
