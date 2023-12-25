@@ -74,25 +74,6 @@ INSERT INTO UPAZILA (NAME, NAME_LOCAL, ACTIVE, DISTRICT_ID, CREATED_AT, UPDATED_
                                                                                         ('Shibganj', 'শিবগঞ্জ', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
-
--- Create ADDRESS table
-CREATE TABLE ADDRESS (
-                         ADDRESS_ID BIGSERIAL,
-                         ADDRESS_TYPE VARCHAR(50) NOT NULL,
-                         DIVISION_ID BIGINT NOT NULL,
-                         DISTRICT_ID BIGINT NOT NULL,
-                         UPAZILA_ID BIGINT NOT NULL,
-                         IS_ACTIVE BOOLEAN NOT NULL,
-                         CREATED_AT TIMESTAMPTZ NOT NULL,
-                         UPDATED_AT TIMESTAMPTZ NOT NULL,
-
-                         CONSTRAINT ADDRESS_ADDRESS_ID_PK PRIMARY KEY (ADDRESS_ID),
-                         CONSTRAINT ADDRESS_ADDRESS_TYPE_CHK CHECK (ADDRESS_TYPE IN ('PRESENT', 'PERMANENT')),
-                         CONSTRAINT ADDRESS_DIVISION_ID_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID),
-                         CONSTRAINT ADDRESS_DISTRICT_ID_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID),
-                         CONSTRAINT ADDRESS_UPAZILA_ID_FK FOREIGN KEY (UPAZILA_ID) REFERENCES UPAZILA(UPAZILA_ID)
-);
-
 -- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 CREATE TABLE CMS_USER (
                           CMS_USER_ID BIGSERIAL,
@@ -111,9 +92,30 @@ CREATE TABLE CMS_USER (
                           CONSTRAINT CMS_USER_EMAIL_UK UNIQUE (EMAIL),
                           CONSTRAINT CMS_USER_GENDER_CHK CHECK (GENDER IN ('MALE', 'FEMALE', 'OTHER')),
                           CONSTRAINT CMS_USER_USER_STATUS_CHK CHECK (USER_STATUS IN ('ACTIVE', 'INACTIVE')),
-                          CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE)),
-                          CONSTRAINT CMS_USER_ADDRESS_ID_FK FOREIGN KEY (ADDRESS_ID) REFERENCES ADDRESS(ADDRESS_ID)
+                          CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE))
 );
+
+-- Create ADDRESS table
+CREATE TABLE ADDRESS (
+                         ADDRESS_ID BIGSERIAL,
+                         ADDRESS_TYPE VARCHAR(50) NOT NULL,
+                         CMS_USER_ID BIGINT NOT NULL,
+                         DIVISION_ID BIGINT NOT NULL,
+                         DISTRICT_ID BIGINT NOT NULL,
+                         UPAZILA_ID BIGINT NOT NULL,
+                         IS_ACTIVE BOOLEAN NOT NULL,
+                         CREATED_AT TIMESTAMPTZ NOT NULL,
+                         UPDATED_AT TIMESTAMPTZ NOT NULL,
+
+                         CONSTRAINT ADDRESS_ADDRESS_ID_PK PRIMARY KEY (ADDRESS_ID),
+                         CONSTRAINT ADDRESS_ADDRESS_TYPE_CHK CHECK (ADDRESS_TYPE IN ('PRESENT', 'PERMANENT')),
+                         CONSTRAINT ADDRESS_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID),
+                         CONSTRAINT ADDRESS_DIVISION_ID_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID),
+                         CONSTRAINT ADDRESS_DISTRICT_ID_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID),
+                         CONSTRAINT ADDRESS_UPAZILA_ID_FK FOREIGN KEY (UPAZILA_ID) REFERENCES UPAZILA(UPAZILA_ID)
+);
+
+
 
 -- Create Subject table
 CREATE TABLE SUBJECT (

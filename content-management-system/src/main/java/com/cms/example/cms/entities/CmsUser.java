@@ -55,10 +55,8 @@ public class CmsUser {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @NotNull
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ADDRESS_ID", nullable = false)
-    private Address address;
+    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Address> address;
 
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AcademicInfo> academicInfoList;
