@@ -93,12 +93,6 @@ CREATE TABLE ADDRESS (
                          CONSTRAINT ADDRESS_UPAZILA_ID_FK FOREIGN KEY (UPAZILA_ID) REFERENCES UPAZILA(UPAZILA_ID)
 );
 
--- INSERT DATA INTO ADDRESS TABLE
-INSERT INTO ADDRESS (ADDRESS_TYPE, DIVISION_ID, DISTRICT_ID, UPAZILA_ID, IS_ACTIVE, CREATED_AT, UPDATED_AT) VALUES
-                                                                                                                ('PRESENT', 1, 1, 1, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                ('PERMANENT', 1, 2, 2, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                ('PRESENT', 2, 3, 4, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
 -- Create Subject table
 CREATE TABLE SUBJECT (
                          SUBJECT_ID BIGSERIAL,
@@ -135,13 +129,6 @@ CREATE TABLE ACADEMIC_INFO (
                                CONSTRAINT ACADEMIC_INFO_ACADEMIC_INFO_ID_PK PRIMARY KEY (ACADEMIC_INFO_ID)
 );
 
--- INSERT DATA INTO ACADEMIC_INFO TABLE
-INSERT INTO ACADEMIC_INFO (ACADEMIC_LEVEL, GRADE, CLASS, CREATED_AT, UPDATED_AT) VALUES
-                                                                                     ('PSC', 5.0, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                     ('JSC', 4.5, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                     ('SSC', 4.0, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                     ('HSC', 4.5, 12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
 -- Create join table ACADEMIC_INFO_SUBJECT for Many-to-Many relationship
 CREATE TABLE ACADEMIC_INFO_SUBJECT (
                                        ACADEMIC_INFO_ID BIGINT,
@@ -150,22 +137,6 @@ CREATE TABLE ACADEMIC_INFO_SUBJECT (
                                        FOREIGN KEY (ACADEMIC_INFO_ID) REFERENCES ACADEMIC_INFO(ACADEMIC_INFO_ID),
                                        FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
 );
-
-
--- INSERT DATA INTO ACADEMIC_INFO_SUBJECT TABLE
-INSERT INTO ACADEMIC_INFO_SUBJECT (ACADEMIC_INFO_ID, SUBJECT_ID) VALUES
-                                                                     (1, 1), -- PSC - Bangla
-                                                                     (1, 2), -- PSC - English
-                                                                     (2, 2), -- JSC - English
-                                                                     (2, 3), -- JSC - General Math
-                                                                     (3, 3), -- SSC - General Math
-                                                                     (3, 4), -- SSC - Higher Math
-                                                                     (4, 4), -- HSC - Higher Math
-                                                                     (4, 5), -- HSC - ICT
-                                                                     (3, 5), -- SSC - ICT
-                                                                     (2, 6), -- JSC - Social Science
-                                                                     (3, 6), -- SSC - Social Science
-                                                                     (3, 7); -- SSC - General Science
 
 -- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 CREATE TABLE CMS_USER (
