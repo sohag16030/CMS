@@ -24,22 +24,23 @@ CREATE TABLE DISTRICT (
                           NAME VARCHAR(255) NOT NULL,
                           NAME_LOCAL VARCHAR(255) NOT NULL,
                           ACTIVE BOOLEAN NOT NULL,
+                          DIVISION_ID BIGINT NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
                           UPDATED_AT TIMESTAMPTZ NOT NULL,
+
                           CONSTRAINT DISTRICT_DISTRICT_ID_PK PRIMARY KEY (DISTRICT_ID),
                           CONSTRAINT DISTRICT_NAME_UK UNIQUE (NAME),
                           CONSTRAINT DISTRICT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
-                          CONSTRAINT DISTRICT_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE))
+                          CONSTRAINT DISTRICT_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
+                          CONSTRAINT DISTRICT_DIVISION_ID_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID)
 );
 
-
 -- INSERT DATA INTO DISTRICT TABLE
-INSERT INTO DISTRICT (NAME, NAME_LOCAL, ACTIVE, CREATED_AT, UPDATED_AT) VALUES
-                                                                            ('Dhaka', 'ঢাকা', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('Gazipur', 'গাজীপুর', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('Rajshahi', 'রাজশাহী', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('Chapainawabganj', 'চাঁপাইনবাবগঞ্জ', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
+INSERT INTO DISTRICT (NAME, NAME_LOCAL, ACTIVE, DIVISION_ID, CREATED_AT, UPDATED_AT) VALUES
+                                                                                         ('Dhaka', 'ঢাকা', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('Gazipur', 'গাজীপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('Rajshahi', 'রাজশাহী', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                         ('Chapainawabganj', 'চাঁপাইনবাবগঞ্জ', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- CREATE UPAZILA TABLE
 CREATE TABLE UPAZILA (
@@ -47,27 +48,32 @@ CREATE TABLE UPAZILA (
                          NAME VARCHAR(255) NOT NULL,
                          NAME_LOCAL VARCHAR(255) NOT NULL,
                          ACTIVE BOOLEAN NOT NULL,
+                         DISTRICT_ID BIGINT,
                          CREATED_AT TIMESTAMPTZ NOT NULL,
                          UPDATED_AT TIMESTAMPTZ NOT NULL,
+
                          CONSTRAINT UPAZILA_UPAZILA_ID_PK PRIMARY KEY (UPAZILA_ID),
-                         CONSTRAINT UPAZILA_NAME_UQ UNIQUE (NAME),
+                         CONSTRAINT UPAZILA_NAME_UK UNIQUE (NAME),
                          CONSTRAINT UPAZILA_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
-                         CONSTRAINT UPAZILA_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE))
+                         CONSTRAINT UPAZILA_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
+                         CONSTRAINT UPAZILA_DISTRICT_ID_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID)
 );
 
 -- INSERT DATA INTO UPAZILA TABLE
-INSERT INTO UPAZILA (NAME, NAME_LOCAL, ACTIVE, CREATED_AT, UPDATED_AT) VALUES
-                                                                           -- UPAZILA UNDER DHAKA
-                                                                           ('Tangail Sadar', 'টাঙ্গাইল সদর', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Sakhipur', 'সখিপুর', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Basail', 'বাসাইল', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+INSERT INTO UPAZILA (NAME, NAME_LOCAL, ACTIVE, DISTRICT_ID, CREATED_AT, UPDATED_AT) VALUES
+                                                                                        -- UPAZILA UNDER DHAKA
+                                                                                        ('Tangail Sadar', 'টাঙ্গাইল সদর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Sakhipur', 'সখিপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Basail', 'বাসাইল', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 
-                                                                           -- UPAZILA UNDER CHAPAINAWABGANJ
-                                                                           ('Bholahat', 'ভোলাহাট', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Gomastapur', 'গোমস্তাপুর', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Nachole', 'নাচোল', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Chapainawabganj Sadar', 'চাঁপাইনবাবগঞ্জ সদর', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Shibganj', 'শিবগঞ্জ', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+                                                                                        -- UPAZILA UNDER CHAPAINAWABGANJ
+                                                                                        ('Bholahat', 'ভোলাহাট', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Gomastapur', 'গোমস্তাপুর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Nachole', 'নাচোল', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Chapainawabganj Sadar', 'চাঁপাইনবাবগঞ্জ সদর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                        ('Shibganj', 'শিবগঞ্জ', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+
 
 -- Create ADDRESS table
 CREATE TABLE ADDRESS (
@@ -126,7 +132,7 @@ CREATE TABLE ACADEMIC_INFO (
 -- Create join table ACADEMIC_INFO_SUBJECT for Many-to-Many relationship
 CREATE TABLE ACADEMIC_INFO_SUBJECT (
                                        ACADEMIC_INFO_ID BIGINT,
-                                       SUBJECT_ID BIGINT, 
+                                       SUBJECT_ID BIGINT,
                                        PRIMARY KEY (ACADEMIC_INFO_ID, SUBJECT_ID),
                                        FOREIGN KEY (ACADEMIC_INFO_ID) REFERENCES ACADEMIC_INFO(ACADEMIC_INFO_ID),
                                        FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
@@ -145,8 +151,8 @@ CREATE TABLE CMS_USER (
                           UPDATED_AT TIMESTAMPTZ NOT NULL,
 
                           CONSTRAINT CMS_USER_CMS_USER_ID_PK PRIMARY KEY (CMS_USER_ID),
-                          CONSTRAINT CMS_USER_MOBILE_NUMBER_UQ UNIQUE (MOBILE_NUMBER),
-                          CONSTRAINT CMS_USER_EMAIL_UQ UNIQUE (EMAIL),
+                          CONSTRAINT CMS_USER_MOBILE_NUMBER_UK UNIQUE (MOBILE_NUMBER),
+                          CONSTRAINT CMS_USER_EMAIL_UK UNIQUE (EMAIL),
                           CONSTRAINT CMS_USER_GENDER_CHK CHECK (GENDER IN ('MALE', 'FEMALE', 'OTHER')),
                           CONSTRAINT CMS_USER_STATUS_CHK CHECK (USER_STATUS IN ('ACTIVE', 'INACTIVE')),
                           CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE))
