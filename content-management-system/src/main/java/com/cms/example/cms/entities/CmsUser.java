@@ -50,7 +50,7 @@ public class CmsUser {
     private Gender gender;
 
     @NotNull
-    @Column(name = "USER_STATUS", nullable = false, length = 10)
+    @Column(name = "USER_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
