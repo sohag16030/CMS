@@ -1,0 +1,18 @@
+-- Create Division table
+CREATE TABLE Division (
+    divisionId INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    nameLocal VARCHAR(255) UNIQUE NOT NULL,
+    active BOOLEAN NOT NULL
+);
+
+-- Insert data into Division
+INSERT INTO Division (name, nameLocal, active) VALUES
+    ('Dhaka Division', 'ঢাকা বিভাগ', true),
+    ('Chittagong Division', 'চট্টগ্রাম বিভাগ', true),
+    ('Khulna Division', 'খুলনা বিভাগ', true),
+    ('Rajshahi Division', 'রাজশাহী বিভাগ', true),
+    ('Barisal Division', 'বরিশাল বিভাগ', true),
+    ('Sylhet Division', 'সিলেট বিভাগ', true),
+    ('Rangpur Division', 'রংপুর বিভাগ', true),
+    ('Mymensingh Division', 'ময়মনসিংহ বিভাগ', true);
