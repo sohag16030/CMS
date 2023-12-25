@@ -144,8 +144,8 @@ INSERT INTO ACADEMIC_INFO (ACADEMIC_LEVEL, GRADE, CLASS, CREATED_AT, UPDATED_AT)
 
 -- Create join table ACADEMIC_INFO_SUBJECT for Many-to-Many relationship
 CREATE TABLE ACADEMIC_INFO_SUBJECT (
-                                       ACADEMIC_INFO_ID BIGINT,  -- Assuming ACADEMIC_INFO_ID in ACADEMIC_INFO table is of type BIGINT
-                                       SUBJECT_ID BIGINT,        -- Assuming SUBJECT_ID in SUBJECT table is of type BIGINT
+                                       ACADEMIC_INFO_ID BIGINT,
+                                       SUBJECT_ID BIGINT,
                                        PRIMARY KEY (ACADEMIC_INFO_ID, SUBJECT_ID),
                                        FOREIGN KEY (ACADEMIC_INFO_ID) REFERENCES ACADEMIC_INFO(ACADEMIC_INFO_ID),
                                        FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
