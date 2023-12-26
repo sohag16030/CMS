@@ -44,9 +44,6 @@ public class Upazila {
     @Column(name = "NAME_LOCAL", unique = true, nullable = false)
     private String nameLocal;
 
-    @OneToMany(mappedBy = "upazila", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Address> addressList;
-
     @NotNull
     @Column(name = "ACTIVE", nullable = false)
     private Boolean active;
