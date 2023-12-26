@@ -1,5 +1,6 @@
 package com.cms.example.cms.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,10 +48,12 @@ public class Division {
     private Boolean active;
 
     @OneToMany(mappedBy = "division", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Address> addressList;
+    @JsonIgnore
+    private List<Address> addresses;
 
     @OneToMany(mappedBy = "division", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<District> districtList;
+    @JsonIgnore
+    private List<District> districts;
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
