@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(Routes.DIVISION_BY_ID_ROUTE)
-public class DivisionController {
+@RequestMapping("/api")
+public class Controller {
 
     @Autowired
     private DivisionService divisionService;
 
-    @GetMapping("/division/{divisionId}")
+    @GetMapping(Routes.DIVISION_BY_ID_ROUTE)
     public ResponseEntity<Division> getDivisionById(@PathVariable Long divisionId,
                                                     @RequestParam FetchType fetchType) {
         Division division;
