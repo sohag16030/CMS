@@ -1,5 +1,6 @@
 package com.cms.example.cms.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +20,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "UPAZILA")
@@ -40,6 +43,9 @@ public class Upazila {
     @NotNull
     @Column(name = "NAME_LOCAL", unique = true, nullable = false)
     private String nameLocal;
+
+    @OneToMany(mappedBy = "upazila", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Address> addressList;
 
     @NotNull
     @Column(name = "ACTIVE", nullable = false)

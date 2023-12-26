@@ -38,7 +38,7 @@ public class Address {
     private Long addressId;
 
     @NotNull
-    @Column(name = "ADDRESS_TYPE", nullable = false, length = 50)
+    @Column(name = "ADDRESS_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
     private AddressType addressType;
 
@@ -56,6 +56,10 @@ public class Address {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "UPAZILA_ID", nullable = false)
     private Upazila upazila;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CMS_USER_ID", nullable = false)
+    private CmsUser cmsUser;
 
     @NotNull
     @Column(name = "IS_ACTIVE", nullable = false)
