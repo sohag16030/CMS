@@ -53,7 +53,7 @@ public class Upazila {
     @JoinColumn(name = "DISTRICT_ID", nullable = false)
     private District district;
 
-    @OneToMany(mappedBy = "Upazila", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "upazila", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> addresses;
 
     @Column(name = "CREATED_AT", nullable = false)
