@@ -1,6 +1,6 @@
 package com.cms.example.cms.entities;
 
-import com.cms.example.cms.entities.enums.AddressType;
+import com.cms.example.cms.enums.AddressType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

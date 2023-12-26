@@ -1,7 +1,7 @@
 package com.cms.example.cms.entities;
 
-import com.cms.example.cms.entities.enums.Gender;
-import com.cms.example.cms.entities.enums.UserStatus;
+import com.cms.example.cms.enums.Gender;
+import com.cms.example.cms.enums.UserStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,9 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

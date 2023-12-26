@@ -1,4 +1,4 @@
-package com.cms.example.cms.entities.enums;
+package com.cms.example.cms.enums;
 
 public enum UserStatus {
     ACTIVE,

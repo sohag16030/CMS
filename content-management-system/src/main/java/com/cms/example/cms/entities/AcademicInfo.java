@@ -1,7 +1,7 @@
 package com.cms.example.cms.entities;
 
-import com.cms.example.cms.entities.enums.AcademicClass;
-import com.cms.example.cms.entities.enums.AcademicLevel;
+import com.cms.example.cms.enums.AcademicClass;
+import com.cms.example.cms.enums.AcademicLevel;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
