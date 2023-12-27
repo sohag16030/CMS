@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api")
 public class Controller {
@@ -20,16 +22,14 @@ public class Controller {
     private DivisionService divisionService;
 
     @GetMapping(Routes.DIVISION_BY_ID_ROUTE)
-    public ResponseEntity<Division> getDivisionById(@PathVariable Long divisionId,
-                                                    @RequestParam FetchType fetchType) {
-        Division division;
-
-        if (fetchType == FetchType.DETAILS) {
-            division = divisionService.getDivisionById(divisionId);
+    public ResponseEntity<?> getDivisionById(@PathVariable Long divisionId, @RequestParam FetchType fetchType) {
+        if (fetchType == FetchType.NO_FETCH) {
+            Optional<Division> division = divisionService.getDivisionById(divisionId);
+            return division.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } else {
-            division = divisionService.getDivisionById(divisionId);
+            Division divisionWithDetails = divisionService.getDivisionDetailsById(divisionId);
+            return new ResponseEntity<>(divisionWithDetails, HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(division, HttpStatus.OK);
     }
 }
