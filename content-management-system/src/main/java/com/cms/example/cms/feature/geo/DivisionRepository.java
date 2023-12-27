@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface DivisionRepository extends JpaRepository<Division, Long> {
-    @Query("SELECT d FROM Division d WHERE d.divisionId = :divisionId")
+
+    @Query("SELECT d FROM Division d LEFT JOIN FETCH d.districts WHERE d.divisionId = :divisionId")
     Optional<Division> findByIdWithDetails(@Param("divisionId") Long divisionId);
 }
