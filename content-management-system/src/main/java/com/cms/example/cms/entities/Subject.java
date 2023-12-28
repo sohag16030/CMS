@@ -1,13 +1,12 @@
 package com.cms.example.cms.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import com.sun.istack.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,11 +31,9 @@ public class Subject {
     @Column(name = "SUBJECT_ID")
     private Long subjectId;
 
-    @NotNull
     @Column(name = "SUBJECT_NAME", unique = true, nullable = false)
     private String name;
 
-    @NotNull
     @Column(name = "NAME_LOCAL", unique = true, nullable = false)
     private String nameLocal;
 

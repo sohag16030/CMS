@@ -2,18 +2,17 @@ package com.cms.example.cms.entities;
 
 import com.cms.example.cms.enums.Gender;
 import com.cms.example.cms.enums.UserStatus;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import com.sun.istack.NotNull;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,18 +36,15 @@ public class CmsUser {
     @Column(name = "CMS_USER_ID")
     private Long cmsUserId;
 
-    @NotNull
     @Column(name = "MOBILE_NUMBER", unique = true, nullable = false)
     private String mobileNumber;
 
     @Column(name = "EMAIL", unique = true)
     private String email;
 
-    @NotNull
     @Column(name = "NAME", nullable = false)
     private String name;
 
-    @NotNull
     @Column(name = "GENDER", nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -59,12 +55,10 @@ public class CmsUser {
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AcademicInfo> academicInfoList;
 
-    @NotNull
     @Column(name = "USER_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
-    @NotNull
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean isActive;
 

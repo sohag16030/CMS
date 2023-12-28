@@ -2,20 +2,19 @@ package com.cms.example.cms.entities;
 
 import com.cms.example.cms.enums.AcademicClass;
 import com.cms.example.cms.enums.AcademicLevel;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import com.sun.istack.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,16 +39,13 @@ public class AcademicInfo {
     @Column(name = "ACADEMIC_INFO_ID")
     private Long academicInfoId;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "ACADEMIC_LEVEL", nullable = false)
     private AcademicLevel academicLevel;
 
-    @NotNull
     @Column(name = "GRADE", nullable = false)
     private Double grade;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "CLASS", nullable = false)
     private AcademicClass academicClass;

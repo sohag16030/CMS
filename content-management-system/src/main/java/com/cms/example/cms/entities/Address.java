@@ -1,18 +1,17 @@
 package com.cms.example.cms.entities;
 
 import com.cms.example.cms.enums.AddressType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import com.sun.istack.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,22 +35,18 @@ public class Address {
     @Column(name = "ADDRESS_ID")
     private Long addressId;
 
-    @NotNull
     @Column(name = "ADDRESS_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
     private AddressType addressType;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DIVISION_ID", nullable = false)
     private Division division;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DISTRICT_ID", nullable = false)
     private District district;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "UPAZILA_ID", nullable = false)
     private Upazila upazila;
@@ -60,7 +55,6 @@ public class Address {
     @JoinColumn(name = "CMS_USER_ID", nullable = false)
     private CmsUser cmsUser;
 
-    @NotNull
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean isActive;
 
