@@ -1,7 +1,7 @@
 package com.cms.example.cms.entities;
 
-import com.cms.example.cms.entities.enums.Gender;
-import com.cms.example.cms.entities.enums.UserStatus;
+import com.cms.example.cms.enums.Gender;
+import com.cms.example.cms.enums.UserStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,16 +11,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
@@ -39,18 +36,15 @@ public class CmsUser {
     @Column(name = "CMS_USER_ID")
     private Long cmsUserId;
 
-    @NotNull
     @Column(name = "MOBILE_NUMBER", unique = true, nullable = false)
     private String mobileNumber;
 
     @Column(name = "EMAIL", unique = true)
     private String email;
 
-    @NotNull
     @Column(name = "NAME", nullable = false)
     private String name;
 
-    @NotNull
     @Column(name = "GENDER", nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -61,12 +55,10 @@ public class CmsUser {
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AcademicInfo> academicInfoList;
 
-    @NotNull
     @Column(name = "USER_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
-    @NotNull
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean isActive;
 

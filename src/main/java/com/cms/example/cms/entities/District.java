@@ -1,5 +1,6 @@
 package com.cms.example.cms.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,42 +17,42 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
 import java.util.List;
 
+
+@Builder
 @Entity
-@Table(name = "UPAZILA")
+@Table(name = "DISTRICT")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Upazila {
+public class District {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UPAZILA_ID")
-    private Long upazilaId;
+    @Column(name = "DISTRICT_ID")
+    private Long districtId;
 
-    @NotNull
     @Column(name = "NAME", unique = true, nullable = false)
     private String name;
 
-    @NotNull
     @Column(name = "NAME_LOCAL", unique = true, nullable = false)
     private String nameLocal;
 
-    @NotNull
     @Column(name = "ACTIVE", nullable = false)
     private Boolean active;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "DISTRICT_ID", nullable = false)
-    private District district;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DIVISION_ID", nullable = false)
+    private Division division;
+
+    @OneToMany(mappedBy = "district", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"district"}, allowSetters = true)
+    private List<Upazila> upazilas;
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp

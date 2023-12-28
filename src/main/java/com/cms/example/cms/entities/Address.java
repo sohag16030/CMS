@@ -1,8 +1,6 @@
 package com.cms.example.cms.entities;
 
-import com.cms.example.cms.entities.enums.AcademicClass;
-import com.cms.example.cms.entities.enums.AcademicLevel;
-
+import com.cms.example.cms.enums.AddressType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,8 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,51 +17,46 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
-import java.util.List;
 
 @Builder
 @Entity
-@Table(name = "ACADEMIC_INFO")
+@Table(name = "ADDRESS")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AcademicInfo {
+public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ACADEMIC_INFO_ID")
-    private Long academicInfoId;
+    @Column(name = "ADDRESS_ID")
+    private Long addressId;
 
-    @NotNull
+    @Column(name = "ADDRESS_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Column(name = "ACADEMIC_LEVEL", nullable = false)
-    private AcademicLevel academicLevel;
+    private AddressType addressType;
 
-    @NotNull
-    @Column(name = "GRADE", nullable = false)
-    private Double grade;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "DIVISION_ID", nullable = false)
+    private Division division;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "CLASS", nullable = false)
-    private AcademicClass academicClass;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "DISTRICT_ID", nullable = false)
+    private District district;
 
-    @ManyToMany
-    @JoinTable(
-            name = "ACADEMIC_INFO_SUBJECT",
-            joinColumns = @JoinColumn(name = "ACADEMIC_INFO_ID"),
-            inverseJoinColumns = @JoinColumn(name = "SUBJECT_ID")
-    )
-    private List<Subject> subjects;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "UPAZILA_ID", nullable = false)
+    private Upazila upazila;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID", nullable = false)
     private CmsUser cmsUser;
+
+    @Column(name = "IS_ACTIVE", nullable = false)
+    private Boolean isActive;
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
@@ -75,3 +66,4 @@ public class AcademicInfo {
     @UpdateTimestamp
     private Date updatedAt;
 }
+

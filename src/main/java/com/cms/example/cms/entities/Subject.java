@@ -12,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
@@ -26,17 +25,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Subject {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SUBJECT_ID")
     private Long subjectId;
 
-    @NotNull
     @Column(name = "SUBJECT_NAME", unique = true, nullable = false)
     private String name;
 
-    @NotNull
+
     @Column(name = "NAME_LOCAL", unique = true, nullable = false)
     private String nameLocal;
 

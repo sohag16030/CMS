@@ -1,60 +1,66 @@
 package com.cms.example.cms.entities;
 
-import jakarta.persistence.CascadeType;
+import com.cms.example.cms.enums.AcademicClass;
+import com.cms.example.cms.enums.AcademicLevel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
 import java.util.List;
 
-
 @Builder
 @Entity
-@Table(name = "DISTRICT")
+@Table(name = "ACADEMIC_INFO")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class District {
+public class AcademicInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "DISTRICT_ID")
-    private Long districtId;
+    @Column(name = "ACADEMIC_INFO_ID")
+    private Long academicInfoId;
 
-    @NotNull
-    @Column(name = "NAME", unique = true, nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ACADEMIC_LEVEL", nullable = false)
+    private AcademicLevel academicLevel;
 
-    @NotNull
-    @Column(name = "NAME_LOCAL", unique = true, nullable = false)
-    private String nameLocal;
+    @Column(name = "GRADE", nullable = false)
+    private Double grade;
 
-    @NotNull
-    @Column(name = "ACTIVE", nullable = false)
-    private Boolean active;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "CLASS", nullable = false)
+    private AcademicClass academicClass;
+
+    @ManyToMany
+    @JoinTable(
+            name = "ACADEMIC_INFO_SUBJECT",
+            joinColumns = @JoinColumn(name = "ACADEMIC_INFO_ID"),
+            inverseJoinColumns = @JoinColumn(name = "SUBJECT_ID")
+    )
+    private List<Subject> subjects;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "DIVISION_ID", nullable = false)
-    private Division division;
-
-    @OneToMany(mappedBy = "district", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Upazila> upazilas;
+    @JoinColumn(name = "CMS_USER_ID", nullable = false)
+    private CmsUser cmsUser;
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
@@ -64,4 +70,3 @@ public class District {
     @UpdateTimestamp
     private Date updatedAt;
 }
-

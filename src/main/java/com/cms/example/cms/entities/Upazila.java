@@ -1,10 +1,7 @@
 package com.cms.example.cms.entities;
 
-import com.cms.example.cms.entities.enums.AddressType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,53 +14,36 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
 
-
-@Builder
 @Entity
-@Table(name = "ADDRESS")
+@Table(name = "UPAZILA")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Address {
+@Builder
+public class Upazila {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ADDRESS_ID")
-    private Long addressId;
+    @Column(name = "UPAZILA_ID")
+    private Long upazilaId;
 
-    @NotNull
-    @Column(name = "ADDRESS_TYPE", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private AddressType addressType;
+    @Column(name = "NAME", unique = true, nullable = false)
+    private String name;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "DIVISION_ID", nullable = false)
-    private Division division;
+    @Column(name = "NAME_LOCAL", unique = true, nullable = false)
+    private String nameLocal;
 
-    @NotNull
+    @Column(name = "ACTIVE", nullable = false)
+    private Boolean active;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DISTRICT_ID", nullable = false)
     private District district;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "UPAZILA_ID", nullable = false)
-    private Upazila upazila;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CMS_USER_ID", nullable = false)
-    private CmsUser cmsUser;
-
-    @NotNull
-    @Column(name = "IS_ACTIVE", nullable = false)
-    private Boolean isActive;
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
