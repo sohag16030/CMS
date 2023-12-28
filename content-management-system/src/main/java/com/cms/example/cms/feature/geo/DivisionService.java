@@ -1,17 +1,17 @@
 package com.cms.example.cms.feature.geo;
 
 import com.cms.example.cms.entities.Division;
-import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class DivisionService {
 
-    @Autowired
-    private DivisionRepository divisionRepository;
+    private final DivisionRepository divisionRepository;
 
     @Transactional
     public Optional<Division> getDivisionById(Long divisionId) {
