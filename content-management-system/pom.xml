@@ -46,16 +46,6 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate5</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>jakarta.persistence</groupId>-->
-<!--            <artifactId>jakarta.persistence-api</artifactId>-->
-<!--            <version>2.2.3</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.eclipse.persistence</groupId>-->
-<!--            <artifactId>javax.persistence</artifactId>-->
-<!--            <version>2.2.1</version>-->
-<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -65,16 +55,6 @@
                 <groupId>org.hibernate.orm.tooling</groupId>
                 <artifactId>hibernate-enhance-maven-plugin</artifactId>
                 <version>5.4.2.Final</version>
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <configuration>-->
-<!--                            <enableLazyInitialization>true</enableLazyInitialization>-->
-<!--                        </configuration>-->
-<!--                        <goals>-->
-<!--                            <goal>enhance</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
             </plugin>
         </plugins>
     </build>

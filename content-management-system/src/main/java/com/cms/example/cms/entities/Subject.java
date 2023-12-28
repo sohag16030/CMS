@@ -25,7 +25,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Subject {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SUBJECT_ID")
@@ -33,6 +32,7 @@ public class Subject {
 
     @Column(name = "SUBJECT_NAME", unique = true, nullable = false)
     private String name;
+
 
     @Column(name = "NAME_LOCAL", unique = true, nullable = false)
     private String nameLocal;
