@@ -5,9 +5,7 @@ import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.enums.EntityFetchType;
-import com.cms.example.cms.feature.geo.districtService.DistrictService;
-import com.cms.example.cms.feature.geo.divsionService.DivisionService;
-import com.cms.example.cms.feature.geo.upazilaService.UpazilaService;
+import com.cms.example.cms.feature.geo.ServiceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,20 +20,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GeoController {
 
-    private final DivisionService divisionService;
-    private final DistrictService districtService;
-    private final UpazilaService upazilaService;
+    private final ServiceUtil service;
 
     @GetMapping(Routes.DIVISION_BY_ID_ROUTE)
     public ResponseEntity<?> getDivisionById(@PathVariable Long divisionId, @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
 
         if (EntityFetchType.NO_FETCH.equals(fetchType)) {
-            Optional<Division> division = divisionService.getDivisionById(divisionId);
+            Optional<Division> division = service.getDivisionById(divisionId);
             if (division.isPresent()) {
                 return new ResponseEntity<>(division, HttpStatus.OK);
             }
         } else {
-            Optional<Division> divisionWithDetails = divisionService.getDivisionDetailsById(divisionId);
+            Optional<Division> divisionWithDetails = service.getDivisionDetailsById(divisionId);
             if (divisionWithDetails.isPresent()) {
                 return new ResponseEntity<>(divisionWithDetails.get().getDistricts(), HttpStatus.OK);
             }
@@ -47,12 +43,12 @@ public class GeoController {
     public ResponseEntity<?> getDistrictById(@PathVariable Long districtId, @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
 
         if (EntityFetchType.NO_FETCH.equals(fetchType)) {
-            Optional<District> district = districtService.getDistrictById(districtId);
+            Optional<District> district = service.getDistrictById(districtId);
             if (district.isPresent()) {
                 return new ResponseEntity<>(district, HttpStatus.OK);
             }
         } else {
-            Optional<District> districtWithDetails = districtService.getDistrictDetailsById(districtId);
+            Optional<District> districtWithDetails = service.getDistrictDetailsById(districtId);
             if (districtWithDetails.isPresent()) {
                 return new ResponseEntity<>(districtWithDetails.get().getUpazilas(), HttpStatus.OK);
             }
@@ -61,11 +57,16 @@ public class GeoController {
     }
 
     @GetMapping(Routes.UPAZILA_BY_ID_ROUTE)
-    public ResponseEntity<?> getUpazilaById(@PathVariable Long upazilaId) {
+    public ResponseEntity<?> getUpazilaById(@PathVariable Long upazilaId, @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
 
-        Optional<Upazila> upazila = upazilaService.getUpazilaById(upazilaId);
+        Optional<Upazila> upazila = service.getUpazilaById(upazilaId);
         if (upazila.isPresent()) {
             return new ResponseEntity<>(upazila.get(), HttpStatus.OK);
+        } else {
+            Optional<Upazila> upazilaWithDetails = service.getUpazilaWithDetailsById(upazilaId);
+            if (upazilaWithDetails.isPresent()) {
+                return new ResponseEntity<>(upazilaWithDetails.get(), HttpStatus.OK);
+            }
         }
         return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
     }

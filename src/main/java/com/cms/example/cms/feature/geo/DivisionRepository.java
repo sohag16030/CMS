@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.geo.divsionService;
+package com.cms.example.cms.feature.geo;
 
 import com.cms.example.cms.entities.Division;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface DivisionRepository extends JpaRepository<Division, Long> {
+
     @Query("SELECT d FROM Division d LEFT JOIN FETCH d.districts WHERE d.divisionId = :divisionId")
     Optional<Division> findByIdWithDetails(@Param("divisionId") Long divisionId);
 }

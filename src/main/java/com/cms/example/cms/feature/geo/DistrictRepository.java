@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.geo.districtService;
+package com.cms.example.cms.feature.geo;
 
 import com.cms.example.cms.entities.District;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface DistrictRepository extends JpaRepository<District, Long> {
-    @Query("SELECT d FROM District d LEFT JOIN FETCH d.upazilas WHERE d.districtId = :districtId")
+
+    @Query("SELECT d FROM District d LEFT JOIN FETCH d.upazilas LEFT JOIN FETCH d.division WHERE d.districtId = :districtId")
     Optional<District> findByIdWithDetails(@Param("districtId") Long districtId);
 }
+

@@ -1,8 +1,6 @@
 package com.cms.example.cms.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,8 +44,7 @@ public class Division {
     private Boolean active;
 
     @OneToMany(mappedBy = "division", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //@JsonIgnoreProperties(value = {"division"}, allowSetters = true)
-    @JsonBackReference
+    @JsonIgnoreProperties(value = {"division"}, allowSetters = true)
     private List<District> districts;
 
     @Column(name = "CREATED_AT", nullable = false)
