@@ -46,7 +46,7 @@ public class Division {
     private Boolean active;
 
     @OneToMany(mappedBy = "division", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JsonIgnoreProperties(value = {"division"}, allowSetters = true)
+    //@JsonIgnoreProperties(value = {"division"}, allowSetters = true)
     @JsonBackReference
     private List<District> districts;
 

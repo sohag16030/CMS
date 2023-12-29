@@ -1,8 +1,11 @@
-package com.cms.example.cms.feature.geo;
+package com.cms.example.cms.feature;
 
 import com.cms.example.cms.common.Routes;
+import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.enums.EntityFetchType;
+import com.cms.example.cms.feature.geo.districtService.DistrictService;
+import com.cms.example.cms.feature.geo.divsionService.DivisionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,7 @@ import java.util.Optional;
 public class GeoController {
 
     private final DivisionService divisionService;
+    private final DistrictService districtService;
 
     @GetMapping(Routes.DIVISION_BY_ID_ROUTE)
     public ResponseEntity<?> getDivisionById(@PathVariable Long divisionId, @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
@@ -31,6 +35,23 @@ public class GeoController {
             Optional<Division> divisionWithDetails = divisionService.getDivisionDetailsById(divisionId);
             if (divisionWithDetails.isPresent()) {
                 return new ResponseEntity<>(divisionWithDetails.get().getDistricts(), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(Routes.DISTRICT_BY_ID_ROUTE)
+    public ResponseEntity<?> getDistrictById(@PathVariable Long districtId, @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
+
+        if (EntityFetchType.NO_FETCH.equals(fetchType)) {
+            Optional<District> district = districtService.getDistrictById(districtId);
+            if (district.isPresent()) {
+                return new ResponseEntity<>(district.get(), HttpStatus.OK);
+            }
+        } else {
+            Optional<District> districtWithDetails = districtService.getDistrictDetailsById(districtId);
+            if (districtWithDetails.isPresent()) {
+                return new ResponseEntity<>(districtWithDetails.get().getUpazilas(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);

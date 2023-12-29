@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.geo;
+package com.cms.example.cms.feature.geo.divsionService;
 
 import com.cms.example.cms.entities.Division;
 import org.springframework.data.jpa.repository.JpaRepository;

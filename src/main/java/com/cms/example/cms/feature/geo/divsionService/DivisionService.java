@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.geo;
+package com.cms.example.cms.feature.geo.divsionService;
 
 import com.cms.example.cms.entities.Division;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +17,4 @@ public class DivisionService {
     public Optional<Division> getDivisionDetailsById(Long divisionId) {
         return divisionRepository.findByIdWithDetails(divisionId);
     }
-
 }
