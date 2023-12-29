@@ -1,6 +1,6 @@
 package com.cms.example.cms.feature.geo;
 
-import com.cms.example.cms.entities.Division;
+import com.cms.example.cms.entities.Upazila;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,8 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface DivisionRepository extends JpaRepository<Division, Long> {
+public interface UpazilaRepository extends JpaRepository<Upazila, Long> {
 
-    @Query("SELECT d FROM Division d LEFT JOIN FETCH d.districts WHERE d.divisionId = :divisionId")
-    Optional<Division> findByIdWithDetails(@Param("divisionId") Long divisionId);
+    @Query("SELECT u FROM Upazila u LEFT JOIN FETCH u.district WHERE u.upazilaId = :upazilaId")
+    Optional<Upazila> findByIdWithDetails(@Param("upazilaId") Long upazilaId);
 }
+
