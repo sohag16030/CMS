@@ -5,7 +5,7 @@ import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.enums.EntityFetchType;
-import com.cms.example.cms.feature.geo.ServiceUtil;
+import com.cms.example.cms.feature.geo.GeoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GeoController {
 
-    private final ServiceUtil service;
+    private final GeoService service;
 
     @GetMapping(Routes.DIVISION_BY_ID_ROUTE)
     public ResponseEntity<?> getDivisionById(@PathVariable Long divisionId, @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {

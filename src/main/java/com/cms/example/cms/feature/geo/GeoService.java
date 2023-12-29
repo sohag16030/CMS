@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ServiceUtil {
+public class GeoService {
 
     private final DivisionRepository divisionRepository;
     private final DistrictRepository districtRepository;
