@@ -30,9 +30,7 @@ public class GeoController {
         } else {
             Optional<Division> divisionWithDetails = divisionService.getDivisionDetailsById(divisionId);
             if (divisionWithDetails.isPresent()) {
-                Division divisionDetails = divisionWithDetails.get();
-                divisionDetails.getDistricts();
-                return new ResponseEntity<>(divisionWithDetails, HttpStatus.OK);
+                return new ResponseEntity<>(divisionWithDetails.get().getDistricts(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
