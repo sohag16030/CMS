@@ -28,12 +28,11 @@ public class GeoController {
                 return new ResponseEntity<>(division.get(), HttpStatus.OK);
             }
         } else {
-            Optional<Division> divisionWithDetails = divisionService.getDivisionById(divisionId);
-
+            Optional<Division> divisionWithDetails = divisionService.getDivisionDetailsById(divisionId);
             if (divisionWithDetails.isPresent()) {
                 Division divisionDetails = divisionWithDetails.get();
                 divisionDetails.getDistricts();
-                return new ResponseEntity<>(divisionDetails, HttpStatus.OK);
+                return new ResponseEntity<>(divisionWithDetails, HttpStatus.OK);
             }
         }
         return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);

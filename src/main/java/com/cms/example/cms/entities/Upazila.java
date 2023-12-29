@@ -1,5 +1,6 @@
 package com.cms.example.cms.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -43,6 +44,7 @@ public class Upazila {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DISTRICT_ID", nullable = false)
+    @JsonManagedReference
     private District district;
 
     @Column(name = "CREATED_AT", nullable = false)

@@ -14,4 +14,8 @@ public class DivisionService {
     public Optional<Division> getDivisionById(Long divisionId) {
         return divisionRepository.findById(divisionId);
     }
+    public Optional<Division> getDivisionDetailsById(Long divisionId) {
+        return divisionRepository.findByIdWithDetails(divisionId);
+    }
+
 }
