@@ -13,7 +13,7 @@ public class DistrictService {
     private final DistrictRepository districtRepository;
 
     public Optional<District> getDistrictById(Long districtId) {
-        return Optional.of(districtRepository.findById(districtId).get());
+        return districtRepository.findById(districtId);
     }
     public Optional<District> getDistrictDetailsById(Long districtId) {
         return districtRepository.findByIdWithDetails(districtId);
