@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,7 +27,12 @@ public class GeoService {
 		if (optionalDivision.isPresent()) return optionalDivision.get();
 		else return null;
 	}
-
+    public List<Division> getDivisionsByFilter(Filter filter) {
+        if (filter.isEmpty()) {
+            return divisionRepository.findAll();
+        }
+        return divisionRepository.findByFilter(filter.getDivisionId(),filter.getName(),filter.getNameLocal(),filter.getActive());
+    }
     public District getDistrictById(Long districtId, EntityFetchType fetchType) {
         Optional<District> optionalDistrict = EntityFetchType.NO_FETCH.equals(fetchType) ?
                 districtRepository.findById(districtId) :

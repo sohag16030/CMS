@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -28,9 +29,21 @@ public class GeoController {
         if (Objects.nonNull(division)) {
             return new ResponseEntity<>(division, HttpStatus.OK);
         } else {
-            // TODO : throw EntityNotFoundException
-            return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping(Routes.DIVISION_LIST_ROUTE)
+    public ResponseEntity<List<Division>> getAllDivisions(
+            @RequestParam(required = false) Long divisionId,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String nameLocal,
+            @RequestParam(required = false) Boolean active
+    ) {
+        Filter divisionFilter = new Filter(divisionId, name, nameLocal, active);
+        List<Division> divisions = service.getDivisionsByFilter(divisionFilter);
+
+        return new ResponseEntity<>(divisions, HttpStatus.OK);
     }
 
     @GetMapping(Routes.DISTRICT_BY_ID_ROUTE)
@@ -40,8 +53,7 @@ public class GeoController {
         if (Objects.nonNull(districtId)) {
             return new ResponseEntity<>(district, HttpStatus.OK);
         } else {
-            // TODO : throw EntityNotFoundException
-            return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -52,8 +64,7 @@ public class GeoController {
         if (Objects.nonNull(upazilaId)) {
             return new ResponseEntity<>(upazila, HttpStatus.OK);
         } else {
-            // TODO : throw EntityNotFoundException
-            return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
     }
 }
