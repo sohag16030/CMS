@@ -6,5 +6,6 @@ public final class Routes {
     public static final String UPAZILA_BY_ID_ROUTE = "/api/upazila/{upazilaId}";
 
     public static final String DIVISION_LIST_ROUTE = "/api/allDivisions";
+    public static final String DISTRICT_LIST_ROUTE = "/api/allDistricts";
 }
 

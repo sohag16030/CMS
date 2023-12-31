@@ -17,9 +17,10 @@ public interface DivisionRepository extends JpaRepository<Division, Long> {
 
     @Query("SELECT d FROM Division d WHERE " +
             "(:divisionId IS NULL OR d.divisionId = :divisionId) AND " +
-            "(:name IS NULL OR d.name = :name) AND " +
-            "(:nameLocal IS NULL OR d.nameLocal = :nameLocal) AND " +
+            "(:name IS NULL OR d.name ILIKE %:name%) AND " +
+            "(:nameLocal IS NULL OR d.nameLocal ILIKE %:nameLocal%) AND " +
             "(:active IS NULL OR d.active = :active)")
+
     List<Division> findByFilter(@Param("divisionId") Long divisionId,
                                 @Param("name") String name,
                                 @Param("nameLocal") String nameLocal,

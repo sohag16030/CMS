@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.geo;
+package com.cms.example.cms.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,15 +9,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Filter {
+public class GeoFilter {
 
     private Long divisionId;
+    private Long districtId;
+    private Long upazilaId;
     private String name;
     private String nameLocal;
     private Boolean active;
 
     public boolean isEmpty() {
-        return divisionId == null && name == null && nameLocal == null && active == null;
+        return divisionId == null && districtId == null && upazilaId == null && name == null && nameLocal == null && active == null;
     }
 }
 

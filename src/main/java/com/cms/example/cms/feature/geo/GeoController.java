@@ -5,6 +5,7 @@ import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.enums.EntityFetchType;
+import com.cms.example.cms.dto.GeoFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,15 +35,9 @@ public class GeoController {
     }
 
     @GetMapping(Routes.DIVISION_LIST_ROUTE)
-    public ResponseEntity<List<Division>> getAllDivisions(
-            @RequestParam(required = false) Long divisionId,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String nameLocal,
-            @RequestParam(required = false) Boolean active
-    ) {
-        Filter divisionFilter = new Filter(divisionId, name, nameLocal, active);
-        List<Division> divisions = service.getDivisionsByFilter(divisionFilter);
+    public ResponseEntity<List<Division>> getAllDivisions(GeoFilter filter) {
 
+        List<Division> divisions = service.getDivisionsByFilter(filter);
         return new ResponseEntity<>(divisions, HttpStatus.OK);
     }
 
@@ -55,6 +50,13 @@ public class GeoController {
         } else {
             return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping(Routes.DISTRICT_LIST_ROUTE)
+    public ResponseEntity<List<District>> getAllDistricts(GeoFilter filter) {
+
+        List<District> districts = service.getDistrictsByFilter(filter);
+        return new ResponseEntity<>(districts, HttpStatus.OK);
     }
 
     @GetMapping(Routes.UPAZILA_BY_ID_ROUTE)
