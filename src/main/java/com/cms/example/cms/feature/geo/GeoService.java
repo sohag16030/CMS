@@ -27,16 +27,18 @@ public class GeoService {
 		else return null;
 	}
 
-    public Optional<District> getDistrictById(Long districtId) {
-        return districtRepository.findById(districtId);
+    public District getDistrictById(Long districtId, EntityFetchType fetchType) {
+        Optional<District> optionalDistrict = EntityFetchType.NO_FETCH.equals(fetchType) ?
+                districtRepository.findById(districtId) :
+                districtRepository.findByIdWithDetails(districtId);
+        if (optionalDistrict.isPresent()) return optionalDistrict.get();
+        else return null;
     }
-    public Optional<District> getDistrictDetailsById(Long districtId) {
-        return districtRepository.findByIdWithDetails(districtId);
-    }
-    public Optional<Upazila> getUpazilaById(Long districtId) {
-        return upazilaRepository.findById(districtId);
-    }
-    public Optional<Upazila> getUpazilaWithDetailsById(Long upazilaId) {
-        return upazilaRepository.findByIdWithDetails(upazilaId);
+    public Upazila getUpazilaById(Long upazilaId, EntityFetchType fetchType) {
+        Optional<Upazila> optionalUpazila = EntityFetchType.NO_FETCH.equals(fetchType) ?
+                upazilaRepository.findById(upazilaId) :
+                upazilaRepository.findByIdWithDetails(upazilaId);
+        if (optionalUpazila.isPresent()) return optionalUpazila.get();
+        else return null;
     }
 }

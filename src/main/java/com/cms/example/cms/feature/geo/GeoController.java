@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,48 +21,39 @@ public class GeoController {
 
     private final GeoService service;
 
-	@GetMapping(Routes.DIVISION_BY_ID_ROUTE)
-	public ResponseEntity<?> getDivisionById(@PathVariable Long divisionId,
-			@RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
-		Division division = service.getDivisionById(divisionId, fetchType);
-		if (Objects.nonNull(division)) {
-			return new ResponseEntity<>(division, HttpStatus.OK);
-		} else {
-			// TODO : throw EntityNotFoundException
-			return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
-		}
-	}
+    @GetMapping(Routes.DIVISION_BY_ID_ROUTE)
+    public ResponseEntity<?> getDivisionById(@PathVariable Long divisionId,
+                                             @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
+        Division division = service.getDivisionById(divisionId, fetchType);
+        if (Objects.nonNull(division)) {
+            return new ResponseEntity<>(division, HttpStatus.OK);
+        } else {
+            // TODO : throw EntityNotFoundException
+            return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
+        }
+    }
 
     @GetMapping(Routes.DISTRICT_BY_ID_ROUTE)
-    public ResponseEntity<?> getDistrictById(@PathVariable Long districtId, @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
-
-        if (EntityFetchType.NO_FETCH.equals(fetchType)) {
-            Optional<District> district = service.getDistrictById(districtId);
-            if (district.isPresent()) {
-                return new ResponseEntity<>(district, HttpStatus.OK);
-            }
+    public ResponseEntity<?> getDistrictById(@PathVariable Long districtId,
+                                             @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
+        District district = service.getDistrictById(districtId, fetchType);
+        if (Objects.nonNull(districtId)) {
+            return new ResponseEntity<>(district, HttpStatus.OK);
         } else {
-            Optional<District> districtWithDetails = service.getDistrictDetailsById(districtId);
-            if (districtWithDetails.isPresent()) {
-                return new ResponseEntity<>(districtWithDetails.get().getUpazilas(), HttpStatus.OK);
-            }
+            // TODO : throw EntityNotFoundException
+            return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(Routes.UPAZILA_BY_ID_ROUTE)
-    public ResponseEntity<?> getUpazilaById(@PathVariable Long upazilaId, @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
-        if (EntityFetchType.NO_FETCH.equals(fetchType)) {
-            Optional<Upazila> upazila = service.getUpazilaById(upazilaId);
-            if (upazila.isPresent()) {
-                return new ResponseEntity<>(upazila.get(), HttpStatus.OK);
-            }
+    public ResponseEntity<?> getUpazilaById(@PathVariable Long upazilaId,
+                                            @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
+        Upazila upazila = service.getUpazilaById(upazilaId, fetchType);
+        if (Objects.nonNull(upazilaId)) {
+            return new ResponseEntity<>(upazila, HttpStatus.OK);
         } else {
-            Optional<Upazila> upazilaWithDetails = service.getUpazilaWithDetailsById(upazilaId);
-            if (upazilaWithDetails.isPresent()) {
-                return new ResponseEntity<>(upazilaWithDetails.get(), HttpStatus.OK);
-            }
+            // TODO : throw EntityNotFoundException
+            return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>("DATA NO_FOUND", HttpStatus.NOT_FOUND);
     }
 }
