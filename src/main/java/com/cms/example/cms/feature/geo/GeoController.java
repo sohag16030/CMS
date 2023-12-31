@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature;
+package com.cms.example.cms.feature.geo;
 
 import com.cms.example.cms.common.Routes;
 import com.cms.example.cms.entities.District;
@@ -58,10 +58,11 @@ public class GeoController {
 
     @GetMapping(Routes.UPAZILA_BY_ID_ROUTE)
     public ResponseEntity<?> getUpazilaById(@PathVariable Long upazilaId, @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
-
-        Optional<Upazila> upazila = service.getUpazilaById(upazilaId);
-        if (upazila.isPresent()) {
-            return new ResponseEntity<>(upazila.get(), HttpStatus.OK);
+        if (EntityFetchType.NO_FETCH.equals(fetchType)) {
+            Optional<Upazila> upazila = service.getUpazilaById(upazilaId);
+            if (upazila.isPresent()) {
+                return new ResponseEntity<>(upazila.get(), HttpStatus.OK);
+            }
         } else {
             Optional<Upazila> upazilaWithDetails = service.getUpazilaWithDetailsById(upazilaId);
             if (upazilaWithDetails.isPresent()) {
