@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeoFilter {
+public class GeoFilterDto {
 
     private Long divisionId;
     private Long districtId;
@@ -17,9 +17,5 @@ public class GeoFilter {
     private String name;
     private String nameLocal;
     private Boolean active;
-
-    public boolean isEmpty() {
-        return divisionId == null && districtId == null && upazilaId == null && name == null && nameLocal == null && active == null;
-    }
 }
 

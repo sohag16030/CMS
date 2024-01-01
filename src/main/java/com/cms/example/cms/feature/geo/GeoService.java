@@ -4,7 +4,7 @@ import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.enums.EntityFetchType;
-import com.cms.example.cms.dto.GeoFilter;
+import com.cms.example.cms.dto.GeoFilterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +29,8 @@ public class GeoService {
 		else return null;
 	}
 
-    public List<Division> getDivisionsByFilter(GeoFilter filter) {
-        if (filter.isEmpty()) {
+    public List<Division> getDivisionsByFilter(GeoFilterDto filter) {
+        if (filter == null) {
             return divisionRepository.findAll();
         }
         return divisionRepository.findByFilter(filter.getDivisionId(),filter.getName(),filter.getNameLocal(),filter.getActive());
@@ -44,8 +44,8 @@ public class GeoService {
         else return null;
     }
 
-    public List<District> getDistrictsByFilter(GeoFilter filter) {
-        if (filter.isEmpty()) {
+    public List<District> getDistrictsByFilter(GeoFilterDto filter) {
+        if (filter == null) {
             return districtRepository.findAll();
         }
         return districtRepository.findByFilter(filter.getDistrictId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDivisionId());
@@ -59,8 +59,8 @@ public class GeoService {
         else return null;
     }
 
-    public List<Upazila> getUpazilaByFilter(GeoFilter filter) {
-        if (filter.isEmpty()) {
+    public List<Upazila> getUpazilaByFilter(GeoFilterDto filter) {
+        if (filter == null) {
             return upazilaRepository.findAll();
         }
         return upazilaRepository.findByFilter(filter.getUpazilaId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDistrictId());

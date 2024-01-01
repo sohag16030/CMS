@@ -5,7 +5,7 @@ import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.enums.EntityFetchType;
-import com.cms.example.cms.dto.GeoFilter;
+import com.cms.example.cms.dto.GeoFilterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class GeoController {
     }
 
     @GetMapping(Routes.DIVISION_LIST_ROUTE)
-    public ResponseEntity<List<Division>> getAllDivisions(GeoFilter filter) {
+    public ResponseEntity<List<Division>> getAllDivisions(GeoFilterDto filter) {
 
         List<Division> divisions = service.getDivisionsByFilter(filter);
         return new ResponseEntity<>(divisions, HttpStatus.OK);
@@ -53,7 +53,7 @@ public class GeoController {
     }
 
     @GetMapping(Routes.DISTRICT_LIST_ROUTE)
-    public ResponseEntity<List<District>> getAllDistricts(GeoFilter filter) {
+    public ResponseEntity<List<District>> getAllDistricts(GeoFilterDto filter) {
 
         List<District> districts = service.getDistrictsByFilter(filter);
         return new ResponseEntity<>(districts, HttpStatus.OK);
@@ -71,7 +71,7 @@ public class GeoController {
     }
 
     @GetMapping(Routes.UPAZILA_LIST_ROUTE)
-    public ResponseEntity<List<Upazila>> getAllUpazilas(GeoFilter filter) {
+    public ResponseEntity<List<Upazila>> getAllUpazilas(GeoFilterDto filter) {
 
         List<Upazila> upazilas = service.getUpazilaByFilter(filter);
         return new ResponseEntity<>(upazilas, HttpStatus.OK);
