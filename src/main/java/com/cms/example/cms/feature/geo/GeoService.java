@@ -28,12 +28,14 @@ public class GeoService {
 		if (optionalDivision.isPresent()) return optionalDivision.get();
 		else return null;
 	}
+
     public List<Division> getDivisionsByFilter(GeoFilter filter) {
         if (filter.isEmpty()) {
             return divisionRepository.findAll();
         }
         return divisionRepository.findByFilter(filter.getDivisionId(),filter.getName(),filter.getNameLocal(),filter.getActive());
     }
+
     public District getDistrictById(Long districtId, EntityFetchType fetchType) {
         Optional<District> optionalDistrict = EntityFetchType.NO_FETCH.equals(fetchType) ?
                 districtRepository.findById(districtId) :
@@ -41,12 +43,14 @@ public class GeoService {
         if (optionalDistrict.isPresent()) return optionalDistrict.get();
         else return null;
     }
+
     public List<District> getDistrictsByFilter(GeoFilter filter) {
         if (filter.isEmpty()) {
             return districtRepository.findAll();
         }
-        return districtRepository.findByFilter(filter.getDivisionId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDistrictId());
+        return districtRepository.findByFilter(filter.getDistrictId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDivisionId());
     }
+
     public Upazila getUpazilaById(Long upazilaId, EntityFetchType fetchType) {
         Optional<Upazila> optionalUpazila = EntityFetchType.NO_FETCH.equals(fetchType) ?
                 upazilaRepository.findById(upazilaId) :
