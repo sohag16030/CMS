@@ -69,4 +69,11 @@ public class GeoController {
             return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping(Routes.UPAZILA_LIST_ROUTE)
+    public ResponseEntity<List<Upazila>> getAllUpazilas(GeoFilter filter) {
+
+        List<Upazila> upazilas = service.getUpazilaByFilter(filter);
+        return new ResponseEntity<>(upazilas, HttpStatus.OK);
+    }
 }

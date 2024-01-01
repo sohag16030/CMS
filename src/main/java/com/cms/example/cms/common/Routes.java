@@ -7,5 +7,6 @@ public final class Routes {
 
     public static final String DIVISION_LIST_ROUTE = "/api/allDivisions";
     public static final String DISTRICT_LIST_ROUTE = "/api/allDistricts";
+    public static final String UPAZILA_LIST_ROUTE = "/api/allUpazilas";
 }
 

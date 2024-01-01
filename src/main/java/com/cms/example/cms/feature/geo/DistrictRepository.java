@@ -18,8 +18,8 @@ public interface DistrictRepository extends JpaRepository<District, Long> {
 
     @Query("SELECT d FROM District d WHERE " +
             "(:districtId IS NULL OR d.districtId = :districtId) AND " +
-            "(:name IS NULL OR d.name = :name) AND " +
-            "(:nameLocal IS NULL OR d.nameLocal = :nameLocal) AND " +
+            "(:name IS NULL OR d.name ILIKE %:name%) AND " +
+            "(:nameLocal IS NULL OR d.nameLocal ILIKE %:nameLocal%) AND " +
             "(:active IS NULL OR d.active = :active) AND " +
             "(:divisionId IS NULL OR d.division.divisionId = :divisionId)")
     List<District> findByFilter(@Param("districtId") Long districtId,

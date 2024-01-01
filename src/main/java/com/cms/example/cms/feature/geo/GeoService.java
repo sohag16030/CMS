@@ -58,4 +58,11 @@ public class GeoService {
         if (optionalUpazila.isPresent()) return optionalUpazila.get();
         else return null;
     }
+
+    public List<Upazila> getUpazilaByFilter(GeoFilter filter) {
+        if (filter.isEmpty()) {
+            return upazilaRepository.findAll();
+        }
+        return upazilaRepository.findByFilter(filter.getUpazilaId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDistrictId());
+    }
 }
