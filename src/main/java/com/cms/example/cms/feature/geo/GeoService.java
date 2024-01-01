@@ -30,9 +30,6 @@ public class GeoService {
 	}
 
     public List<Division> getDivisionsByFilter(GeoFilterDto filter) {
-        if (filter == null) {
-            return divisionRepository.findAll();
-        }
         return divisionRepository.search(filter.getDivisionId(),filter.getName(),filter.getNameLocal(),filter.getActive());
     }
 
@@ -45,9 +42,6 @@ public class GeoService {
     }
 
     public List<District> getDistrictsByFilter(GeoFilterDto filter) {
-        if (filter == null) {
-            return districtRepository.findAll();
-        }
         return districtRepository.search(filter.getDistrictId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDivisionId());
     }
 
@@ -60,9 +54,6 @@ public class GeoService {
     }
 
     public List<Upazila> getUpazilaByFilter(GeoFilterDto filter) {
-        if (filter == null) {
-            return upazilaRepository.findAll();
-        }
         return upazilaRepository.search(filter.getUpazilaId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDistrictId());
     }
 }

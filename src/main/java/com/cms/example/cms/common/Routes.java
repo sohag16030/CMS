@@ -5,8 +5,8 @@ public final class Routes {
     public static final String DISTRICT_BY_ID_ROUTE = "/api/district/{districtId}";
     public static final String UPAZILA_BY_ID_ROUTE = "/api/upazila/{upazilaId}";
 
-    public static final String DIVISION_LIST_ROUTE = "/api/allDivisions";
-    public static final String DISTRICT_LIST_ROUTE = "/api/allDistricts";
-    public static final String UPAZILA_LIST_ROUTE = "/api/allUpazilas";
+    public static final String DIVISION_LIST_ROUTE = "/api/Divisions";
+    public static final String DISTRICT_LIST_ROUTE = "/api/Districts";
+    public static final String UPAZILA_LIST_ROUTE = "/api/Upazilas";
 }
 
