@@ -21,7 +21,7 @@ public interface DivisionRepository extends JpaRepository<Division, Long> {
             "(:nameLocal IS NULL OR d.nameLocal ILIKE %:nameLocal%) AND " +
             "(:active IS NULL OR d.active = :active)")
 
-    List<Division> findByFilter(@Param("divisionId") Long divisionId,
+    List<Division> search(@Param("divisionId") Long divisionId,
                                 @Param("name") String name,
                                 @Param("nameLocal") String nameLocal,
                                 @Param("active") Boolean active);

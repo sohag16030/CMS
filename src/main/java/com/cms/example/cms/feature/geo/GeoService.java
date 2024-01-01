@@ -33,7 +33,7 @@ public class GeoService {
         if (filter == null) {
             return divisionRepository.findAll();
         }
-        return divisionRepository.findByFilter(filter.getDivisionId(),filter.getName(),filter.getNameLocal(),filter.getActive());
+        return divisionRepository.search(filter.getDivisionId(),filter.getName(),filter.getNameLocal(),filter.getActive());
     }
 
     public District getDistrictById(Long districtId, EntityFetchType fetchType) {
@@ -48,7 +48,7 @@ public class GeoService {
         if (filter == null) {
             return districtRepository.findAll();
         }
-        return districtRepository.findByFilter(filter.getDistrictId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDivisionId());
+        return districtRepository.search(filter.getDistrictId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDivisionId());
     }
 
     public Upazila getUpazilaById(Long upazilaId, EntityFetchType fetchType) {
@@ -63,6 +63,6 @@ public class GeoService {
         if (filter == null) {
             return upazilaRepository.findAll();
         }
-        return upazilaRepository.findByFilter(filter.getUpazilaId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDistrictId());
+        return upazilaRepository.search(filter.getUpazilaId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDistrictId());
     }
 }
