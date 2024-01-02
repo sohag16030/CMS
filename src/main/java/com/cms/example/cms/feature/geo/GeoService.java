@@ -54,6 +54,6 @@ public class GeoService {
     }
 
     public List<Upazila> getUpazilaByFilter(GeoFilterDto filter) {
-        return upazilaRepository.search(filter.getUpazilaId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDistrictId());
+        return upazilaRepository.search(filter.getUpazilaId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDistrictId(),filter.getDivisionId());
     }
 }
