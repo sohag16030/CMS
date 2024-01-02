@@ -31,8 +31,7 @@ public interface UpazilaRepository extends JpaRepository<Upazila, Long> {
                          @Param("upazilaId") Long upazilaId,
                          @Param("name") String name,
                          @Param("nameLocal") String nameLocal,
-                         @Param("active") Boolean active
-    );
+                         @Param("active") Boolean active);
 
 }
 

@@ -31,5 +31,4 @@ public interface DivisionRepository extends JpaRepository<Division, Long> {
                           @Param("name") String name,
                           @Param("nameLocal") String nameLocal,
                           @Param("active") Boolean active);
-
 }
