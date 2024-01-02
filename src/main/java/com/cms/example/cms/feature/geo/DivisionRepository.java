@@ -15,15 +15,21 @@ public interface DivisionRepository extends JpaRepository<Division, Long> {
     @Query("SELECT d FROM Division d LEFT JOIN FETCH d.districts WHERE d.divisionId = :divisionId")
     Optional<Division> findByIdWithDetails(@Param("divisionId") Long divisionId);
 
-    @Query("SELECT d FROM Division d WHERE " +
-            "(:divisionId IS NULL OR d.divisionId = :divisionId) AND " +
-            "(:name IS NULL OR d.name ILIKE %:name%) AND " +
-            "(:nameLocal IS NULL OR d.nameLocal ILIKE %:nameLocal%) AND " +
-            "(:active IS NULL OR d.active = :active)")
-
+    @Query("SELECT div FROM Division div " +
+            "JOIN div.districts dis " +
+            "JOIN dis.upazilas u " +
+            "WHERE " +
+            "(:divisionId IS NULL OR div.divisionId = :divisionId) AND " +
+            "(:name IS NULL OR div.name ILIKE %:name%) AND " +
+            "(:nameLocal IS NULL OR div.nameLocal ILIKE %:nameLocal%) AND " +
+            "(:active IS NULL OR div.active = :active) AND " +
+            "(:districtId IS NULL OR dis.districtId = :districtId) AND " +
+            "(:upazilaId IS NULL OR u.upazilaId = :upazilaId)")
     List<Division> search(@Param("divisionId") Long divisionId,
-                                @Param("name") String name,
-                                @Param("nameLocal") String nameLocal,
-                                @Param("active") Boolean active);
+                          @Param("districtId") Long districtId,
+                          @Param("upazilaId") Long upazilaId,
+                          @Param("name") String name,
+                          @Param("nameLocal") String nameLocal,
+                          @Param("active") Boolean active);
 
 }

@@ -16,16 +16,21 @@ public interface DistrictRepository extends JpaRepository<District, Long> {
     @Query("SELECT d FROM District d LEFT JOIN FETCH d.upazilas LEFT JOIN FETCH d.division WHERE d.districtId = :districtId")
     Optional<District> findByIdWithDetails(@Param("districtId") Long districtId);
 
-    @Query("SELECT d FROM District d LEFT JOIN d.division div WHERE " +
-            "(:districtId IS NULL OR d.districtId = :districtId) AND " +
-            "(:name IS NULL OR d.name ILIKE %:name%) AND " +
-            "(:nameLocal IS NULL OR d.nameLocal ILIKE %:nameLocal%) AND " +
-            "(:active IS NULL OR d.active = :active) AND " +
-            "(:divisionId IS NULL OR div.divisionId = :divisionId)")
-    List<District> search(@Param("districtId") Long districtId,
-                                @Param("name") String name,
-                                @Param("nameLocal") String nameLocal,
-                                @Param("active") Boolean active,
-                                @Param("divisionId") Long divisionId);
+//    @Query("SELECT dis FROM District dis " +
+//            "JOIN dis.division div " +
+//            "JOIN div.upazilas u " +
+//            "WHERE " +
+//            "(:districtId IS NULL OR dis.districtId = :districtId) AND " +
+//            "(:name IS NULL OR dis.name ILIKE %:name%) AND " +
+//            "(:nameLocal IS NULL OR dis.nameLocal ILIKE %:nameLocal%) AND " +
+//            "(:active IS NULL OR dis.active = :active) AND " +
+//            "(:divisionId IS NULL OR div.divisionId = :divisionId) AND " +
+//            "(:upazilaId IS NULL OR u.upazilaId = :upazilaId)")
+//    List<District> search(@Param("divisionId") Long divisionId,
+//                          @Param("districtId") Long districtId,
+//                          @Param("upazilaId") Long upazilaId,
+//                          @Param("name") String name,
+//                          @Param("nameLocal") String nameLocal,
+//                          @Param("active") Boolean active);
 }
 

@@ -21,16 +21,16 @@ public class GeoService {
     private final DistrictRepository districtRepository;
     private final UpazilaRepository upazilaRepository;
 
-	public Division getDivisionById(Long divisionId, EntityFetchType fetchType) {
-		Optional<Division> optionalDivision = EntityFetchType.NO_FETCH.equals(fetchType) ?
-				divisionRepository.findById(divisionId) :
-				divisionRepository.findByIdWithDetails(divisionId);
-		if (optionalDivision.isPresent()) return optionalDivision.get();
-		else return null;
-	}
+    public Division getDivisionById(Long divisionId, EntityFetchType fetchType) {
+        Optional<Division> optionalDivision = EntityFetchType.NO_FETCH.equals(fetchType) ?
+                divisionRepository.findById(divisionId) :
+                divisionRepository.findByIdWithDetails(divisionId);
+        if (optionalDivision.isPresent()) return optionalDivision.get();
+        else return null;
+    }
 
     public List<Division> getDivisionsByFilter(GeoFilterDto filter) {
-        return divisionRepository.search(filter.getDivisionId(),filter.getName(),filter.getNameLocal(),filter.getActive());
+        return divisionRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive());
     }
 
     public District getDistrictById(Long districtId, EntityFetchType fetchType) {
@@ -42,7 +42,7 @@ public class GeoService {
     }
 
     public List<District> getDistrictsByFilter(GeoFilterDto filter) {
-        return districtRepository.search(filter.getDistrictId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDivisionId());
+        return null; // districtRepository.search(filter.getDivisionId(),filter.getDistrictId(),filter.getUpazilaId(),filter.getName(),filter.getNameLocal(),filter.getActive());
     }
 
     public Upazila getUpazilaById(Long upazilaId, EntityFetchType fetchType) {
@@ -54,6 +54,6 @@ public class GeoService {
     }
 
     public List<Upazila> getUpazilaByFilter(GeoFilterDto filter) {
-        return upazilaRepository.search(filter.getUpazilaId(),filter.getName(),filter.getNameLocal(),filter.getActive(),filter.getDistrictId(),filter.getDivisionId());
+        return upazilaRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive());
     }
 }
