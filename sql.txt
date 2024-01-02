@@ -1,0 +1,21 @@
+SELECT * FROM public.division
+ORDER BY division_id ASC 
+SELECT * FROM public.district
+ORDER BY district_id ASC 
+SELECT * FROM public.upazila
+ORDER BY upazila_id ASC 
+
+select * from upazila as u
+join district as dis on u.upazila_Id =dis.division_Id
+join division as div on div.district_Id = dis.district_Id
+where u.upazila_Id = 1
+
+select * from district as dis
+join division as div on dis.division_Id = div.division_Id
+join upazila as u on u.district_Id = dis.district_Id 
+where dis.district_Id = 4 and 
+
+select * from division as div
+join district as dis on dis.division_Id =div.division_Id
+join upazila as u on u.district_Id = dis.district_Id 
+where div.division_Id = 2
