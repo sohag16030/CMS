@@ -81,7 +81,6 @@ CREATE TABLE CMS_USER (
                           EMAIL VARCHAR(255) UNIQUE,
                           NAME VARCHAR(255) NOT NULL,
                           GENDER VARCHAR(255) NOT NULL,
-                          ADDRESS_ID BIGINT NOT NULL,
                           USER_STATUS VARCHAR(10) NOT NULL,
                           IS_ACTIVE BOOLEAN NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,

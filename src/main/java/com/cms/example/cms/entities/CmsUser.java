@@ -50,10 +50,10 @@ public class CmsUser {
     private Gender gender;
 
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Address> address;
+    private List<Address> addresses;
 
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<AcademicInfo> academicInfoList;
+    private List<AcademicInfo> academicInfos;
 
     @Column(name = "USER_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
