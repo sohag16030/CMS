@@ -5,6 +5,7 @@ import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.enums.EntityFetchType;
 import com.cms.example.cms.dto.GeoFilterDto;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,21 +15,33 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class GeoService {
 
     private final DivisionRepository divisionRepository;
     private final DistrictRepository districtRepository;
     private final UpazilaRepository upazilaRepository;
+    private final EntityManager entityManager;
 
+//    public Division getDivisionById(Long divisionId, EntityFetchType fetchType) {
+//        Optional<Division> optionalDivision = EntityFetchType.NO_FETCH.equals(fetchType) ?
+//                divisionRepository.findById(divisionId) :
+//                divisionRepository.findByIdWithDetails(divisionId);
+//        if (optionalDivision.isPresent()) return optionalDivision.get();
+//        else return null;
+//    }
     public Division getDivisionById(Long divisionId, EntityFetchType fetchType) {
-        Optional<Division> optionalDivision = EntityFetchType.NO_FETCH.equals(fetchType) ?
-                divisionRepository.findById(divisionId) :
-                divisionRepository.findByIdWithDetails(divisionId);
-        if (optionalDivision.isPresent()) return optionalDivision.get();
-        else return null;
-    }
 
+        Division divisions = (Division) entityManager.createQuery("""
+    select div
+    from Division div
+    left join fetch div.districts as dis
+    left join fetch dis.upazilas
+    where div.divisionId = :divisionId
+    """, Division.class)
+                .setParameter("minId", 1L)
+                .setParameter("maxId", 50L);
+        return divisions;
+    }
     public List<Division> getDivisionsByFilter(GeoFilterDto filter) {
         return  divisionRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive());
     }
