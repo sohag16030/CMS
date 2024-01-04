@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +30,8 @@ public class GeoService {
         } else {
             optionalDivision = divisionRepository.findByIdWithDetails(divisionId);
             List<District> districts = optionalDivision.get().getDistricts();
-            List<Long> districtsId = new ArrayList<>();
-            districts.forEach(district -> {
-                districtsId.add(district.getDistrictId());
-            });
-           upazilaRepository.findByDistrictsId(districtsId);
+            List<Long> districtIds = districts.stream().map(District::getDistrictId).collect(Collectors.toList());
+            upazilaRepository.findUpazilaByDistrictIdIn(districtIds);
         }
 
         if (optionalDivision.isPresent()) {
