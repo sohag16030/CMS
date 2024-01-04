@@ -20,28 +20,15 @@ public class GeoService {
     private final DivisionRepository divisionRepository;
     private final DistrictRepository districtRepository;
     private final UpazilaRepository upazilaRepository;
-    private final EntityManager entityManager;
 
-//    public Division getDivisionById(Long divisionId, EntityFetchType fetchType) {
-//        Optional<Division> optionalDivision = EntityFetchType.NO_FETCH.equals(fetchType) ?
-//                divisionRepository.findById(divisionId) :
-//                divisionRepository.findByIdWithDetails(divisionId);
-//        if (optionalDivision.isPresent()) return optionalDivision.get();
-//        else return null;
-//    }
     public Division getDivisionById(Long divisionId, EntityFetchType fetchType) {
-
-        Division divisions = (Division) entityManager.createQuery("""
-    select div
-    from Division div
-    left join fetch div.districts as dis
-    left join fetch dis.upazilas
-    where div.divisionId = :divisionId
-    """, Division.class)
-                .setParameter("minId", 1L)
-                .setParameter("maxId", 50L);
-        return divisions;
+        Optional<Division> optionalDivision = EntityFetchType.NO_FETCH.equals(fetchType) ?
+                divisionRepository.findById(divisionId) :
+                divisionRepository.findByIdWithDetails(divisionId);
+        if (optionalDivision.isPresent()) return optionalDivision.get();
+        else return null;
     }
+
     public List<Division> getDivisionsByFilter(GeoFilterDto filter) {
         return  divisionRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive());
     }
