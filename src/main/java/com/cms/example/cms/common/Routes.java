@@ -12,11 +12,5 @@ public final class Routes {
     public static final String DISTRICT_LIST_ROUTE = "/api/districts";
     public static final String UPAZILA_LIST_ROUTE = "/api/upazilas";
 
-    //CMS_USER_SERVICES_ROUTES
-    public static final String CMS_USER_CREATE_ROUTE = "/api/cmsUser/create";
-    public static final String CMS_USER_UPDATE_ROUTE = "/api/cmsUser/update";
-    public static final String CMS_USER_BY_ID_ROUTE = "/api/cmsUser/{cmsUserId}";
-    public static final String CMS_USER_LIST_ROUTE = "/api/cmsUsers";
-
 }
 
