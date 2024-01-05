@@ -52,10 +52,10 @@ public class CmsUser {
     private Gender gender;
 
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Address> address;
+    private List<Address> addresses;
 
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<AcademicInfo> academicInfoList;
+    private List<AcademicInfo> academicInfos;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_RATING", nullable = false)
