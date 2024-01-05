@@ -13,11 +13,6 @@ CREATE TABLE DIVISION (
                           CONSTRAINT DIVISION_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE))
 );
 
--- INSERT DATA INTO DIVISION TABLE
-INSERT INTO DIVISION (NAME, NAME_LOCAL, ACTIVE, CREATED_AT, UPDATED_AT) VALUES
-                                                                            ('Dhaka', 'ঢাকা', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('Rajshahi', 'রাজশাহী', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
 -- CREATE DISTRICT TABLE
 CREATE TABLE DISTRICT (
                           DISTRICT_ID BIGSERIAL,
@@ -34,13 +29,6 @@ CREATE TABLE DISTRICT (
                           CONSTRAINT DISTRICT_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
                           CONSTRAINT DISTRICT_DIVISION_ID_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID)
 );
-
--- INSERT DATA INTO DISTRICT TABLE
-INSERT INTO DISTRICT (NAME, NAME_LOCAL, ACTIVE, DIVISION_ID, CREATED_AT, UPDATED_AT) VALUES
-                                                                                         ('Dhaka', 'ঢাকা', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('Gazipur', 'গাজীপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('Rajshahi', 'রাজশাহী', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('Chapainawabganj', 'চাঁপাইনবাবগঞ্জ', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- CREATE UPAZILA TABLE
 CREATE TABLE UPAZILA (
@@ -59,22 +47,7 @@ CREATE TABLE UPAZILA (
                          CONSTRAINT UPAZILA_DISTRICT_ID_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID)
 );
 
--- INSERT DATA INTO UPAZILA TABLE
-INSERT INTO UPAZILA (NAME, NAME_LOCAL, ACTIVE, DISTRICT_ID, CREATED_AT, UPDATED_AT) VALUES
-                                                                                        -- UPAZILA UNDER DHAKA
-                                                                                        ('Tangail Sadar', 'টাঙ্গাইল সদর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Sakhipur', 'সখিপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Basail', 'বাসাইল', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-                                                                                        -- UPAZILA UNDER CHAPAINAWABGANJ
-                                                                                        ('Bholahat', 'ভোলাহাট', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Gomastapur', 'গোমস্তাপুর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Nachole', 'নাচোল', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Chapainawabganj Sadar', 'চাঁপাইনবাবগঞ্জ সদর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Shibganj', 'শিবগঞ্জ', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
-
--- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- Create CMS_USER table
 CREATE TABLE CMS_USER (
                           CMS_USER_ID BIGSERIAL,
                           MOBILE_NUMBER VARCHAR(255) UNIQUE NOT NULL,
@@ -130,16 +103,6 @@ CREATE TABLE SUBJECT (
                          CONSTRAINT SUBJECT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL)
 );
 
--- INSERT DATA INTO SUBJECT TABLE
-INSERT INTO SUBJECT (SUBJECT_NAME, NAME_LOCAL, CREATED_AT, UPDATED_AT) VALUES
-                                                                           ('Bangla', 'বাংলা', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('English', 'ইংরেজি', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('General Math', 'সাধারিত গণিত', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Higher Math', 'উচ্চতর গণিত', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('ICT', 'তথ্য ও যোগাযোগ প্রযুক্তি', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Social Science', 'সামাজিক বিজ্ঞান', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('General Science', 'সাধারিত বিজ্ঞান', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
 
 -- Create ACADEMIC_INFO table
 CREATE TABLE ACADEMIC_INFO (
@@ -163,3 +126,14 @@ CREATE TABLE ACADEMIC_INFO_SUBJECT (
                                        FOREIGN KEY (ACADEMIC_INFO_ID) REFERENCES ACADEMIC_INFO(ACADEMIC_INFO_ID),
                                        FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
 );
+
+-- Create able STAR_RATING
+CREATE TABLE USER_RATING (
+                           USER_RATING_ID BIGSERIAL,
+                           STAR           VARCHAR(255) NOT NULL,
+                           RATING_TYPE    VARCHAR(255) NOT NULL,
+                           CONSTRAINT USER_RATING_USER_RATING_ID_PK PRIMARY KEY (USER_RATING_ID),
+                           CONSTRAINT USER_RATING_RATING_TYPE_CHK CHECK (RATING_TYPE IN ('DIAMOND', 'PLATINUM', 'GOLD', 'SILVER', 'BRONZE'))
+);
+
+ALTER TABLE CMS_USER ADD COLUMN USER_RATING BIGSERIAL;
