@@ -15,6 +15,7 @@ public interface UpazilaRepository extends JpaRepository<Upazila, Long> {
     @Query("SELECT u FROM Upazila u LEFT JOIN FETCH u.district WHERE u.upazilaId = :upazilaId")
     Optional<Upazila> findByIdWithDetails(@Param("upazilaId") Long upazilaId);
 
+
     @Query("SELECT u FROM Upazila u " +
             "JOIN u.district dis " +
             "JOIN dis.division div " +

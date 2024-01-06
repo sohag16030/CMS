@@ -13,11 +13,6 @@ CREATE TABLE DIVISION (
                           CONSTRAINT DIVISION_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE))
 );
 
--- INSERT DATA INTO DIVISION TABLE
-INSERT INTO DIVISION (NAME, NAME_LOCAL, ACTIVE, CREATED_AT, UPDATED_AT) VALUES
-                                                                            ('Dhaka', 'ঢাকা', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                            ('Rajshahi', 'রাজশাহী', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
 -- CREATE DISTRICT TABLE
 CREATE TABLE DISTRICT (
                           DISTRICT_ID BIGSERIAL,
@@ -35,12 +30,6 @@ CREATE TABLE DISTRICT (
                           CONSTRAINT DISTRICT_DIVISION_ID_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID)
 );
 
--- INSERT DATA INTO DISTRICT TABLE
-INSERT INTO DISTRICT (NAME, NAME_LOCAL, ACTIVE, DIVISION_ID, CREATED_AT, UPDATED_AT) VALUES
-                                                                                         ('Dhaka', 'ঢাকা', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('Gazipur', 'গাজীপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('Rajshahi', 'রাজশাহী', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                         ('Chapainawabganj', 'চাঁপাইনবাবগঞ্জ', TRUE, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- CREATE UPAZILA TABLE
 CREATE TABLE UPAZILA (
@@ -59,20 +48,6 @@ CREATE TABLE UPAZILA (
                          CONSTRAINT UPAZILA_DISTRICT_ID_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID)
 );
 
--- INSERT DATA INTO UPAZILA TABLE
-INSERT INTO UPAZILA (NAME, NAME_LOCAL, ACTIVE, DISTRICT_ID, CREATED_AT, UPDATED_AT) VALUES
-                                                                                        -- UPAZILA UNDER DHAKA
-                                                                                        ('Tangail Sadar', 'টাঙ্গাইল সদর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Sakhipur', 'সখিপুর', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Basail', 'বাসাইল', TRUE, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-
-                                                                                        -- UPAZILA UNDER CHAPAINAWABGANJ
-                                                                                        ('Bholahat', 'ভোলাহাট', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Gomastapur', 'গোমস্তাপুর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Nachole', 'নাচোল', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Chapainawabganj Sadar', 'চাঁপাইনবাবগঞ্জ সদর', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                        ('Shibganj', 'শিবগঞ্জ', TRUE, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
 
 -- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 CREATE TABLE CMS_USER (
@@ -83,6 +58,7 @@ CREATE TABLE CMS_USER (
                           GENDER VARCHAR(255) NOT NULL,
                           USER_RATING_ID BIGINT NOT NULL,
                           ADDRESS_ID BIGINT NOT NULL,
+                          ACADEMIC_INFO_ID BIGINT NOT NULL,
                           USER_STATUS VARCHAR(10) NOT NULL,
                           IS_ACTIVE BOOLEAN NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
@@ -112,13 +88,6 @@ CREATE TABLE USER_RATING (
                              CONSTRAINT USER_RATING_RATING_TYPE_CHK CHECK (RATING_TYPE IN ('DIAMOND', 'PLATINUM', 'GOLD', 'SILVER', 'BRONZE')),
 );
 
---- INSERT DATA INTO RATING TABLE
-INSERT INTO USER_RATING (STAR, RATING_TYPE) VALUES
-                                                ('*', 'BRONZE'),
-                                                ('**', 'SILVER'),
-                                                ('***', 'GOLD'),
-                                                ('****', 'PLATINUM'),
-                                                ('*****', 'DIAMOND');
 
 -- Create ADDRESS table
 CREATE TABLE ADDRESS (
@@ -152,16 +121,6 @@ CREATE TABLE SUBJECT (
                          CONSTRAINT SUBJECT_NAME_UK UNIQUE (SUBJECT_NAME),
                          CONSTRAINT SUBJECT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL)
 );
-
--- INSERT DATA INTO SUBJECT TABLE
-INSERT INTO SUBJECT (SUBJECT_NAME, NAME_LOCAL, CREATED_AT, UPDATED_AT) VALUES
-                                                                           ('Bangla', 'বাংলা', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('English', 'ইংরেজি', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('General Math', 'সাধারিত গণিত', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Higher Math', 'উচ্চতর গণিত', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('ICT', 'তথ্য ও যোগাযোগ প্রযুক্তি', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('Social Science', 'সামাজিক বিজ্ঞান', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                           ('General Science', 'সাধারিত বিজ্ঞান', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
 -- Create ACADEMIC_INFO table

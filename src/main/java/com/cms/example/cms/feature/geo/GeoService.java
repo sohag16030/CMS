@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +23,19 @@ public class GeoService {
     private final UpazilaRepository upazilaRepository;
 
     public Division getDivisionById(Long divisionId, EntityFetchType fetchType) {
-        Optional<Division> optionalDivision = EntityFetchType.NO_FETCH.equals(fetchType) ?
-                divisionRepository.findById(divisionId) :
-                divisionRepository.findByIdWithDetails(divisionId);
-        if (optionalDivision.isPresent()) return optionalDivision.get();
-        else return null;
+        Optional<Division> optionalDivision = null;
+        if (EntityFetchType.NO_FETCH.equals(fetchType)) {
+            optionalDivision = divisionRepository.findById(divisionId);
+
+        } else {
+            optionalDivision = divisionRepository.findByIdWithDetails(divisionId);
+            List<District> districts = optionalDivision.get().getDistricts();
+            List<Long> districtIds = districts.stream().map(District::getDistrictId).collect(Collectors.toList());
+            districtRepository.fetchUpazilaByDistrictIdIn(districtIds);
+        }
+        if (optionalDivision.isPresent()) {
+            return optionalDivision.get();
+        } else return null;
     }
 
     public List<Division> getDivisionsByFilter(GeoFilterDto filter) {

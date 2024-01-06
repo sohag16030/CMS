@@ -27,6 +27,10 @@ public class GeoController {
     public ResponseEntity<?> getDivisionById(@PathVariable Long divisionId,
                                              @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
         Division division = service.getDivisionById(divisionId, fetchType);
+
+//        List<District> districts = division.getDistricts();
+//        System.out.println(districts.size());
+
         if (Objects.nonNull(division)) {
             return new ResponseEntity<>(division, HttpStatus.OK);
         } else {
