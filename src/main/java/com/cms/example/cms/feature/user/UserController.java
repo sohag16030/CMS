@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-    private final CmsUserService service;
+    private final UserService service;
 
     @PostMapping(Routes.CMS_USER_CREATE_ROUTE)
     public ResponseEntity<CmsUser> createProduct(@RequestBody CmsUser cmsUser) {

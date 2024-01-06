@@ -57,8 +57,6 @@ CREATE TABLE CMS_USER (
                           NAME VARCHAR(255) NOT NULL,
                           GENDER VARCHAR(255) NOT NULL,
                           USER_RATING_ID BIGINT NOT NULL,
-                          ADDRESS_ID BIGINT NOT NULL,
-                          ACADEMIC_INFO_ID BIGINT NOT NULL,
                           USER_STATUS VARCHAR(10) NOT NULL,
                           IS_ACTIVE BOOLEAN NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
