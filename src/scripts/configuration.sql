@@ -81,6 +81,7 @@ CREATE TABLE CMS_USER (
                           EMAIL VARCHAR(255) UNIQUE,
                           NAME VARCHAR(255) NOT NULL,
                           GENDER VARCHAR(255) NOT NULL,
+                          USER_RATING_ID BIGINT NOT NULL,
                           ADDRESS_ID BIGINT NOT NULL,
                           USER_STATUS VARCHAR(10) NOT NULL,
                           IS_ACTIVE BOOLEAN NOT NULL,
@@ -95,10 +96,29 @@ CREATE TABLE CMS_USER (
                           CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE))
 );
 
--- Alter CMS_USER table
-ALTER TABLE CMS_USER ADD COLUMN PROFESSION_ID BIGINT NOT NULL,
-                     ADD COLUMN ADDRESS_ID BIGINT NOT NULL,
-                     ADD COLUMN ACADEMIC_INFO_ID BIGINT NOT NULL;
+-- -- Alter CMS_USER table
+-- ALTER TABLE CMS_USER ADD COLUMN PROFESSION_ID BIGINT NOT NULL,
+--                      ADD COLUMN ADDRESS_ID BIGINT NOT NULL,
+--                      ADD COLUMN ACADEMIC_INFO_ID BIGINT NOT NULL;
+
+--Create Rating table
+CREATE TABLE USER_RATING (
+                             USER_RATING_ID BIGSERIAL,
+                             STAR VARCHAR(255) NOT NULL,
+                             RATING_TYPE VARCHAR(255) NOT NULL,
+
+                             CONSTRAINT USER_RATING_USER_RATING_ID_PK PRIMARY KEY (USER_RATING_ID),
+                             CONSTRAINT USER_RATING_STAR_UK UNIQUE (STAR),
+                             CONSTRAINT USER_RATING_RATING_TYPE_CHK CHECK (RATING_TYPE IN ('DIAMOND', 'PLATINUM', 'GOLD', 'SILVER', 'BRONZE')),
+);
+
+--- INSERT DATA INTO RATING TABLE
+INSERT INTO USER_RATING (STAR, RATING_TYPE) VALUES
+                                                ('*', 'BRONZE'),
+                                                ('**', 'SILVER'),
+                                                ('***', 'GOLD'),
+                                                ('****', 'PLATINUM'),
+                                                ('*****', 'DIAMOND');
 
 -- Create ADDRESS table
 CREATE TABLE ADDRESS (
