@@ -100,34 +100,6 @@ ALTER TABLE CMS_USER ADD COLUMN PROFESSION_ID BIGINT NOT NULL,
                      ADD COLUMN ADDRESS_ID BIGINT NOT NULL,
                      ADD COLUMN ACADEMIC_INFO_ID BIGINT NOT NULL;
 
---Create Profession table
-CREATE TABLE PROFESSION (
-                            PROFESSION_ID BIGINT UNIQUE,
-                            NAME VARCHAR(255) UNIQUE NOT NULL,
-                            NAME_LOCAL VARCHAR(255) UNIQUE NOT NULL,
-                            INDUSTRY VARCHAR(255) NOT NULL,
-                            CMS_USER_ID BIGINT NOT NULL,
-                            IS_ACTIVE BOOLEAN NOT NULL,
-                            CREATED_AT TIMESTAMP NOT NULL,
-                            UPDATED_AT TIMESTAMP NOT NULL,
-
-                            CONSTRAINT PROFESSION_PROFESSION_ID_PK PRIMARY KEY (PROFESSION_ID),
-                            CONSTRAINT PROFESSION_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID)
-);
-
-INSERT INTO PROFESSION (PROFESSION_ID, NAME, NAME_LOCAL, INDUSTRY, CMS_USER_ID, IS_ACTIVE, CREATED_AT, UPDATED_AT) VALUES
-                                (1, 'Software Engineer', 'Software Engineer', 'Information Technology', 101, true, '2023-01-01 08:00:00', '2023-01-01 08:00:00'),
-                                (2, 'Financial Analyst', 'Financial Analyst', 'Finance', 102, true, '2023-01-02 09:15:00', '2023-01-02 09:15:00'),
-                                (3, 'Marketing Manager', 'Marketing Manager', 'Marketing', 103, true, '2023-01-03 10:30:00', '2023-01-03 10:30:00'),
-                                (4, 'Civil Engineer', 'Civil Engineer', 'Engineering', 104, true, '2023-01-04 11:45:00', '2023-01-04 11:45:00'),
-                                (5, 'Human Resources Specialist', 'HR Specialist', 'Human Resources', 105, true, '2023-01-05 12:00:00', '2023-01-05 12:00:00'),
-                                (6, 'Data Scientist', 'Data Scientist', 'Information Technology', 106, true, '2023-01-06 14:00:00', '2023-01-06 14:00:00'),
-                                (7, 'Sales Manager', 'Sales Manager', 'Sales', 107, true, '2023-01-07 15:30:00', '2023-01-07 15:30:00'),
-                                (8, 'Medical Doctor', 'Medical Doctor', 'Healthcare', 108, true, '2023-01-08 16:45:00', '2023-01-08 16:45:00'),
-                                (9, 'Architect', 'Architect', 'Architecture', 109, true, '2023-01-09 18:00:00', '2023-01-09 18:00:00'),
-                                (10, 'Graphic Designer', 'Graphic Designer', 'Design', 110, true, '2023-01-10 19:15:00', '2023-01-10 19:15:00');
-
-
 -- Create ADDRESS table
 CREATE TABLE ADDRESS (
                          ADDRESS_ID BIGSERIAL,

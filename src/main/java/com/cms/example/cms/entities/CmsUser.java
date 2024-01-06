@@ -50,9 +50,6 @@ public class CmsUser {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToOne(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Profession profession;
-
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> address;
 
