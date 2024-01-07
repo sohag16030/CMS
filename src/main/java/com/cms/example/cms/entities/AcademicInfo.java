@@ -58,6 +58,7 @@ public class AcademicInfo {
     )
     private List<Subject> subjects;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID", nullable = false)
     private CmsUser cmsUser;
