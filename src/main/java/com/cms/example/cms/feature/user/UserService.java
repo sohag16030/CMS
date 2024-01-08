@@ -1,19 +1,18 @@
 package com.cms.example.cms.feature.user;
 
-import com.cms.example.cms.entities.Address;
 import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.entities.UserRating;
-import com.cms.example.cms.enums.EntityFetchType;
-import com.cms.example.cms.feature.geo.GeoService;
-import com.cms.example.cms.feature.userRating.UserRatingService;
+import com.cms.example.cms.feature.geo.DistrictRepository;
+import com.cms.example.cms.feature.geo.DivisionRepository;
+import com.cms.example.cms.feature.geo.UpazilaRepository;
+import com.cms.example.cms.feature.userRating.UserRatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,31 +21,38 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final GeoService geoService;
-    private final UserRatingService ratingService;
+    private final UserRatingRepository userRatingRepository;
+    private final DivisionRepository divisionRepository;
+    private final DistrictRepository districtRepository;
+    private final UpazilaRepository upazilaRepository;
 
     @Transactional
     public CmsUser saveCmsUser(CmsUser cmsUser) {
-        if (cmsUser.getUserRating() != null) {
-            if (cmsUser.getUserRating().getUserRatingId() != null) {
-               UserRating rating = ratingService.getUserRatingById(cmsUser.getUserRating().getUserRatingId()));
-            }
+        if (cmsUser.getUserRating() != null && cmsUser.getUserRating().getUserRatingId() != null) {
+            Optional<UserRating> rating = userRatingRepository.findById(cmsUser.getUserRating().getUserRatingId());
         }
+
         if (cmsUser.getAddresses() != null) {
             cmsUser.getAddresses().forEach(address -> {
-                if (address.getDivision().getDivisionId() != null) {
-                    address.setDivision(geoService.getDivisionById(address.getDivision().getDivisionId(), EntityFetchType.NO_FETCH));
+                if (address.getDivision() != null && address.getDivision().getDivisionId() != null) {
+                    Optional<Division> divisionOptional = divisionRepository.findByIdWithDetails(address.getDivision().getDivisionId());
+                    divisionOptional.ifPresent(address::setDivision);
                 }
-                if (address.getDistrict().getDistrictId() != null) {
-                    address.setDistrict(geoService.getDistrictById(address.getDistrict().getDistrictId(), EntityFetchType.NO_FETCH));
+
+                if (address.getDistrict() != null && address.getDistrict().getDistrictId() != null) {
+                    Optional<District> districtOptional = districtRepository.findByIdWithDetails(address.getDistrict().getDistrictId());
+                    districtOptional.ifPresent(address::setDistrict);
                 }
-                if (address.getUpazila().getUpazilaId() != null) {
-                    address.setUpazila(geoService.getUpazilaById(address.getUpazila().getUpazilaId(), EntityFetchType.NO_FETCH));
+
+                if (address.getUpazila() != null && address.getUpazila().getUpazilaId() != null) {
+                    Optional<Upazila> upazilaOptional = upazilaRepository.findByIdWithDetails(address.getUpazila().getUpazilaId());
+                    upazilaOptional.ifPresent(address::setUpazila);
                 }
+
                 address.setCmsUser(cmsUser);
             });
         }
+
         return userRepository.save(cmsUser);
     }
-
 }
