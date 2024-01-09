@@ -1,5 +1,6 @@
 package com.cms.example.cms.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,6 +18,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "UPAZILA")
@@ -52,5 +54,10 @@ public class Upazila {
     @Column(name = "UPDATED_AT", nullable = false)
     @UpdateTimestamp
     private Date updatedAt;
+
+    @JsonIgnore
+    public static Boolean isNonNull(Upazila upazila){
+        return Objects.nonNull(upazila) && Objects.nonNull(upazila.getUpazilaId());
+    }
 }
 

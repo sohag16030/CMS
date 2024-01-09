@@ -1,5 +1,6 @@
 package com.cms.example.cms.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,6 +22,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Builder
@@ -61,5 +63,10 @@ public class District {
     @Column(name = "UPDATED_AT", nullable = false)
     @UpdateTimestamp
     private Date updatedAt;
+
+    @JsonIgnore
+    public static Boolean isNonNull(District district){
+        return Objects.nonNull(district) && Objects.nonNull(district.getDistrictId());
+    }
 }
 

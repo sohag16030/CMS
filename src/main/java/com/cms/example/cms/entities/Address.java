@@ -1,6 +1,8 @@
 package com.cms.example.cms.entities;
 
 import com.cms.example.cms.enums.AddressType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -41,10 +43,12 @@ public class Address {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DIVISION_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"districts"}, allowSetters = true)
     private Division division;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DISTRICT_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"upazilas"}, allowSetters = true)
     private District district;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

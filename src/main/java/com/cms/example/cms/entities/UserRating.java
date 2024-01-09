@@ -1,6 +1,7 @@
 package com.cms.example.cms.entities;
 
 import com.cms.example.cms.enums.RatingType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +15,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "USER_RATING")
@@ -35,5 +38,10 @@ public class UserRating {
     @Column(name = "RATING_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
     private RatingType ratingType;
+
+    @JsonIgnore
+    public static Boolean isNonNull(UserRating userRating){
+        return Objects.nonNull(userRating) && Objects.nonNull(userRating.getUserRatingId());
+    }
 
 }
