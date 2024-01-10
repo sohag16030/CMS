@@ -1,24 +1,19 @@
 package com.cms.example.cms.feature.user;
 
-import com.cms.example.cms.entities.Address;
 import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.entities.UserRating;
-import com.cms.example.cms.enums.EntityFetchType;
 import com.cms.example.cms.feature.geo.DistrictRepository;
 import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.userRating.UserRatingRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -40,6 +35,9 @@ public class UserService {
         populateAddress(cmsUser);
         userRepository.save(cmsUser);
         CmsUser user = getCmsUserById(cmsUser.getCmsUserId());
+
+        user.getUserRating();
+
         for (int i = 0; i < 2; i++) {
             user.getAddresses().get(i).getDivision();
             user.getAddresses().get(i).getDistrict();
