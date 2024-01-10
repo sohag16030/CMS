@@ -53,7 +53,6 @@ public class District {
     private Division division;
 
     @OneToMany(mappedBy = "district", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"district"}, allowSetters = true)
     private List<Upazila> upazilas;
 
     @Column(name = "CREATED_AT", nullable = false)

@@ -43,20 +43,21 @@ public class Address {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DIVISION_ID", nullable = false)
-    @JsonIgnoreProperties(value = {"districts"}, allowSetters = true)
     private Division division;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DISTRICT_ID", nullable = false)
-    @JsonIgnoreProperties(value = {"upazilas"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"division"}, allowSetters = true)
     private District district;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "UPAZILA_ID", nullable = false)
+    @JsonIgnoreProperties(value = {"district"}, allowSetters = true)
     private Upazila upazila;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID", nullable = false)
+    @JsonIgnore
     private CmsUser cmsUser;
 
     @Column(name = "IS_ACTIVE", nullable = false)

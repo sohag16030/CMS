@@ -2,6 +2,8 @@ package com.cms.example.cms.entities;
 
 import com.cms.example.cms.enums.Gender;
 import com.cms.example.cms.enums.UserStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
