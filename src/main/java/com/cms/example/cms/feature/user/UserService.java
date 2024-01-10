@@ -39,7 +39,13 @@ public class UserService {
         }
         populateAddress(cmsUser);
         userRepository.save(cmsUser);
-        return getCmsUserById(cmsUser.getCmsUserId());
+        CmsUser user = getCmsUserById(cmsUser.getCmsUserId());
+        for (int i = 0; i < 2; i++) {
+            user.getAddresses().get(i).getDivision();
+            user.getAddresses().get(i).getDistrict();
+            user.getAddresses().get(i).getUpazila();
+        }
+      return user;
     }
 
     public CmsUser getCmsUserById(Long cmsUserId) {
