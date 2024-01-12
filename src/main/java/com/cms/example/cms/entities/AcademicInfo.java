@@ -2,6 +2,7 @@ package com.cms.example.cms.entities;
 
 import com.cms.example.cms.enums.AcademicClass;
 import com.cms.example.cms.enums.AcademicLevel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -58,9 +59,9 @@ public class AcademicInfo {
     )
     private List<Subject> subjects;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID", nullable = false)
+    @JsonIgnore
     private CmsUser cmsUser;
 
     @Column(name = "CREATED_AT", nullable = false)

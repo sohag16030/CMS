@@ -1,19 +1,24 @@
 package com.cms.example.cms.feature.user;
 
+import com.cms.example.cms.entities.AcademicInfo;
 import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
+import com.cms.example.cms.entities.Subject;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.entities.UserRating;
 import com.cms.example.cms.feature.geo.DistrictRepository;
 import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
+import com.cms.example.cms.feature.subject.SubjectRepository;
 import com.cms.example.cms.feature.userRating.UserRatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +31,7 @@ public class UserService {
     private final DivisionRepository divisionRepository;
     private final DistrictRepository districtRepository;
     private final UpazilaRepository upazilaRepository;
+    private final SubjectRepository subjectRepository;
 
     @Transactional
     public CmsUser saveCmsUser(CmsUser cmsUser) {
@@ -33,11 +39,12 @@ public class UserService {
             cmsUser.setUserRating(userRatingRepository.getOne(cmsUser.getUserRating().getUserRatingId()));
         }
         populateAddress(cmsUser);
+        populateAcademicInfo(cmsUser);
+
         userRepository.save(cmsUser);
         CmsUser user = getCmsUserById(cmsUser.getCmsUserId());
 
         user.getUserRating();
-
         for (int i = 0; i < 2; i++) {
             user.getAddresses().get(i).getDivision();
             user.getAddresses().get(i).getDistrict();
@@ -46,14 +53,25 @@ public class UserService {
       return user;
     }
 
-    public CmsUser getCmsUserById(Long cmsUserId) {
-        Optional<CmsUser> optionalCmsUser = null;
-        optionalCmsUser = userRepository.findById(cmsUserId);
-
-        if (optionalCmsUser.isPresent()) {
-            return optionalCmsUser.get();
-        } else return null;
+    private void populateAcademicInfo(CmsUser cmsUser) {
+        if (CollectionUtils.isEmpty(cmsUser.getAcademicInfos())) return;
+        cmsUser.getAcademicInfos().forEach(academicInfo -> {
+            populateSubject(academicInfo);
+            academicInfo.setCmsUser(cmsUser);
+        });
     }
+
+    private void populateSubject(AcademicInfo academicInfo) {
+        List<Subject> subjectList = new ArrayList<>();
+        academicInfo.getSubjects().forEach(subject -> {
+            if (Subject.isNonNull(subject)) {
+                Subject retrievedSubject = subjectRepository.getOne(subject.getSubjectId());
+                subjectList.add(retrievedSubject);
+            }
+        });
+        academicInfo.setSubjects(subjectList);
+    }
+
 
     private void populateAddress(CmsUser cmsUser) {
         if (CollectionUtils.isEmpty(cmsUser.getAddresses())) return;
@@ -72,4 +90,13 @@ public class UserService {
             address.setCmsUser(cmsUser);
         });
     }
+    public CmsUser getCmsUserById(Long cmsUserId) {
+        Optional<CmsUser> optionalCmsUser = null;
+        optionalCmsUser = userRepository.findById(cmsUserId);
+
+        if (optionalCmsUser.isPresent()) {
+            return optionalCmsUser.get();
+        } else return null;
+    }
+
 }

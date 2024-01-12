@@ -1,5 +1,7 @@
 package com.cms.example.cms.entities;
 
+import com.cms.example.cms.feature.subject.SubjectRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +18,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Builder
 @Entity
@@ -47,4 +50,9 @@ public class Subject {
     @Column(name = "UPDATED_AT", nullable = false)
     @UpdateTimestamp
     private Date updatedAt;
+
+    @JsonIgnore
+    public static Boolean isNonNull(Subject subject){
+        return Objects.nonNull(subject) && Objects.nonNull(subject.getSubjectId());
+    }
 }
