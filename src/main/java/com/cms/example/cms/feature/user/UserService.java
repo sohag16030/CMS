@@ -1,6 +1,7 @@
 package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.entities.AcademicInfo;
+import com.cms.example.cms.entities.Address;
 import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
@@ -20,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -83,6 +85,10 @@ public class UserService {
     public CmsUser getCmsUserById(Long cmsUserId) {
         Optional<CmsUser> optionalCmsUser = null;
         optionalCmsUser = userRepository.findById(cmsUserId);
+
+        userRepository.fetchRatingInfoByRatingId(optionalCmsUser.get().getCmsUserId(),optionalCmsUser.get().getUserRating().getUserRatingId());
+        userRepository.fetchAddressInfoByUserId(optionalCmsUser.get().getCmsUserId());
+        userRepository.fetchAcademicInfoByUserId(optionalCmsUser.get().getCmsUserId());
 
         if (optionalCmsUser.isPresent()) {
             return optionalCmsUser.get();

@@ -14,12 +14,10 @@ public final class Routes {
 
     //CMS_USER_SERVICES_ROUTES
     public static final String CMS_USER_CREATE_ROUTE = "/api/cmsUser/create";
+    public static final String CMS_USER_BY_ID_ROUTE = "/api/cmsUser/{userId}";
     public static final String CMS_USER_UPDATE_ROUTE = "/api/cmsUser/update";
-    public static final String CMS_USER_BY_ID_ROUTE = "/api/cmsUser/{cmsUserId}";
     public static final String CMS_USER_LIST_ROUTE = "/api/cmsUsers";
 
-    //USER_RATING_SERVICES_ROUTES
-    public static final String USER_RATING_BY_ID_ROUTE = "/api/userRating/{userRatingId}";
 
 }
 
