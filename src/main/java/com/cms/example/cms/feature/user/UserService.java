@@ -88,6 +88,7 @@ public class UserService {
 
         userRepository.fetchRatingInfoByRatingId(optionalCmsUser.get().getCmsUserId(),optionalCmsUser.get().getUserRating().getUserRatingId());
         userRepository.fetchAddressInfoByUserId(optionalCmsUser.get().getCmsUserId());
+
         userRepository.fetchAcademicInfoByUserId(optionalCmsUser.get().getCmsUserId());
 
         if (optionalCmsUser.isPresent()) {

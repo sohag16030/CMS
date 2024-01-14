@@ -24,11 +24,10 @@ public interface UserRepository extends JpaRepository<CmsUser, Long> {
             "WHERE u.cmsUserId = :cmsUserId")
     List<CmsUser> fetchAddressInfoByUserId(@Param("cmsUserId") Long cmsUserId);
 
-
-
     @Query("SELECT u FROM CmsUser u " +
-            "JOIN u.academicInfos a " +
+            "JOIN FETCH u.academicInfos a " +
             "JOIN a.subjects s " +
             "WHERE u.cmsUserId = :cmsUserId")
     List<CmsUser> fetchAcademicInfoByUserId(@Param("cmsUserId") Long cmsUserId);
+
 }
