@@ -40,17 +40,7 @@ public class UserService {
         }
         populateAddress(cmsUser);
         populateAcademicInfo(cmsUser);
-
-        userRepository.save(cmsUser);
-        CmsUser user = getCmsUserById(cmsUser.getCmsUserId());
-
-        user.getUserRating();
-        for (int i = 0; i < 2; i++) {
-            user.getAddresses().get(i).getDivision();
-            user.getAddresses().get(i).getDistrict();
-            user.getAddresses().get(i).getUpazila();
-        }
-      return user;
+        return userRepository.save(cmsUser);
     }
 
     private void populateAcademicInfo(CmsUser cmsUser) {
@@ -72,7 +62,6 @@ public class UserService {
         academicInfo.setSubjects(subjectList);
     }
 
-
     private void populateAddress(CmsUser cmsUser) {
         if (CollectionUtils.isEmpty(cmsUser.getAddresses())) return;
         cmsUser.getAddresses().forEach(address -> {
@@ -90,6 +79,7 @@ public class UserService {
             address.setCmsUser(cmsUser);
         });
     }
+
     public CmsUser getCmsUserById(Long cmsUserId) {
         Optional<CmsUser> optionalCmsUser = null;
         optionalCmsUser = userRepository.findById(cmsUserId);

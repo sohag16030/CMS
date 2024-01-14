@@ -3,6 +3,7 @@ package com.cms.example.cms.entities;
 import com.cms.example.cms.enums.AcademicClass;
 import com.cms.example.cms.enums.AcademicLevel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -61,7 +62,7 @@ public class AcademicInfo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID", nullable = false)
-    @JsonIgnore
+    @JsonIgnoreProperties(value = {"addresses","academicInfos"}, allowSetters = true)
     private CmsUser cmsUser;
 
     @Column(name = "CREATED_AT", nullable = false)

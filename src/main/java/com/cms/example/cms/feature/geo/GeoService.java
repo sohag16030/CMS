@@ -29,9 +29,9 @@ public class GeoService {
 
         } else {
             optionalDivision = divisionRepository.findByIdWithDetails(divisionId);
-//            List<District> districts = optionalDivision.get().getDistricts();
-//            List<Long> districtIds = districts.stream().map(District::getDistrictId).collect(Collectors.toList());
-//            districtRepository.fetchUpazilaByDistrictIdIn(districtIds);
+            List<District> districts = optionalDivision.get().getDistricts();
+            List<Long> districtIds = districts.stream().map(District::getDistrictId).collect(Collectors.toList());
+            districtRepository.fetchUpazilaByDistrictIdIn(districtIds);
         }
         if (optionalDivision.isPresent()) {
             return optionalDivision.get();
