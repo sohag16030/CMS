@@ -7,14 +7,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public interface UserRepository extends JpaRepository<CmsUser, Long> {
 
-    @Query("SELECT u FROM CmsUser u LEFT JOIN FETCH u.userRating r WHERE u.cmsUserId= :cmsUserId AND r.userRatingId = :userRatingId")
-    CmsUser fetchRatingInfoByRatingId(@Param("cmsUserId") Long cmsUserId,
-                                   @Param("userRatingId") Long userRatingId);
+    @Query("SELECT u FROM CmsUser u LEFT JOIN FETCH u.userRating r WHERE u.cmsUserId= :cmsUserId")
+    Optional<CmsUser> fetchRatingInfoByRatingId(@Param("cmsUserId") Long cmsUserId);
 
     @Query("SELECT u FROM CmsUser u " +
             "JOIN FETCH u.addresses a " +
