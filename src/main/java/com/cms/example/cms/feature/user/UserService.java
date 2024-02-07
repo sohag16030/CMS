@@ -42,7 +42,7 @@ public class UserService {
         }
         populateAddress(cmsUser);
         populateAcademicInfo(cmsUser);
-        userRepository.save(cmsUser);
+        cmsUser = userRepository.save(cmsUser);
         return getCmsUserById(cmsUser.getCmsUserId());
     }
 
@@ -85,17 +85,16 @@ public class UserService {
 
     public CmsUser getCmsUserById(Long cmsUserId) {
         Optional<CmsUser> optionalCmsUser = null;
-        //optionalCmsUser = userRepository.findById(cmsUserId);
-        optionalCmsUser = userRepository.fetchRatingInfoByRatingId(cmsUserId);
-        //userRepository.fetchRatingInfoByRatingId(optionalCmsUser.get().getCmsUserId(),optionalCmsUser.get().getUserRating().getUserRatingId());
-        userRepository.fetchAddressInfoByUserId(optionalCmsUser.get().getCmsUserId());
-        userRepository.fetchAcademicInfoByUserId(optionalCmsUser.get().getCmsUserId());
-
+        optionalCmsUser = userRepository.fetchRatingAddressInfoByUserId(cmsUserId);
+        userRepository.fetchRatingAddressInfoByUserId(optionalCmsUser.get().getCmsUserId());
+        List<AcademicInfo> academicInfos = userRepository.fetchAcademicInfoByUserId(optionalCmsUser.get().getCmsUserId());
+        for (int i = 0; i < academicInfos.size(); i++) {
+            List<Subject> subjects = academicInfos.get(i).getSubjects();
+        }
         if (optionalCmsUser.isPresent()) {
             return optionalCmsUser.get();
         } else return null;
     }
-                                    ///////// update process///////////
 
     @Transactional
     public CmsUser updateCmsUser(CmsUser updatedUser) {
@@ -105,8 +104,6 @@ public class UserService {
         }
 
         // Update user properties
-        existingUser.setMobileNumber(updatedUser.getMobileNumber());
-        existingUser.setEmail(updatedUser.getEmail());
         existingUser.setName(updatedUser.getName());
         existingUser.setGender(updatedUser.getGender());
         existingUser.setUserRating(updatedUser.getUserRating());
@@ -123,13 +120,13 @@ public class UserService {
                     .orElse(null);
             if (existingAddress != null) {
                 existingAddress.setAddressType(updatedAddress.getAddressType());
-                existingAddress.setDivision(updatedAddress.getDivision());
-                existingAddress.setDistrict(updatedAddress.getDistrict());
-                existingAddress.setUpazila(updatedAddress.getUpazila());
+                existingAddress.setDivision(divisionRepository.getOne(updatedAddress.getDivision().getDivisionId()));
+                existingAddress.setDistrict(districtRepository.getOne(updatedAddress.getDistrict().getDistrictId()));
+                existingAddress.setUpazila(upazilaRepository.getOne(updatedAddress.getUpazila().getUpazilaId()));
                 existingAddress.setIsActive(updatedAddress.getIsActive());
                 updatedAddresses.add(existingAddress);
             } else {
-                updatedAddresses.add(updatedAddress);
+                //need to create new address
             }
         }
         existingUser.setAddresses(updatedAddresses);
@@ -146,27 +143,26 @@ public class UserService {
                 existingAcademicInfo.setAcademicLevel(updatedAcademicInfo.getAcademicLevel());
                 existingAcademicInfo.setGrade(updatedAcademicInfo.getGrade());
                 existingAcademicInfo.setAcademicClass(updatedAcademicInfo.getAcademicClass());
-                existingAcademicInfo.setSubjects(updatedAcademicInfo.getSubjects());
+
+                // Update subjects
+                List<Subject> updatedSubjects = new ArrayList<>();
+                for (Subject updatedSubject : existingAcademicInfo.getSubjects()) {
+                    Subject existingSubject = subjectRepository.findById(updatedSubject.getSubjectId()).orElse(null);
+                    if (existingSubject != null) {
+                        updatedSubjects.add(subjectRepository.getOne(updatedSubject.getSubjectId()));
+                    } else {
+                        //need to add new subject
+                        //updatedSubjects.add(updatedSubject);
+                    }
+                }
+                existingAcademicInfo.setSubjects(updatedSubjects);
                 updatedAcademicInfos.add(existingAcademicInfo);
             } else {
+                //need to add new academic info
                 updatedAcademicInfos.add(updatedAcademicInfo);
             }
         }
         existingUser.setAcademicInfos(updatedAcademicInfos);
-
-        // Update subjects
-        for (AcademicInfo academicInfo : existingUser.getAcademicInfos()) {
-            List<Subject> updatedSubjects = new ArrayList<>();
-            for (Subject updatedSubject : academicInfo.getSubjects()) {
-                Subject existingSubject = subjectRepository.findById(updatedSubject.getSubjectId()).orElse(null);
-                if (existingSubject != null) {
-                    updatedSubjects.add(existingSubject);
-                } else {
-                    updatedSubjects.add(updatedSubject);
-                }
-            }
-            academicInfo.setSubjects(updatedSubjects);
-        }
 
         // Save the updated user
         return userRepository.save(existingUser);
