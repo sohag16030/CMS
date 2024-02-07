@@ -21,7 +21,6 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -87,10 +86,12 @@ public class UserService {
         Optional<CmsUser> optionalCmsUser = null;
         optionalCmsUser = userRepository.fetchRatingAddressInfoByUserId(cmsUserId);
         userRepository.fetchRatingAddressInfoByUserId(optionalCmsUser.get().getCmsUserId());
-        List<AcademicInfo> academicInfos = userRepository.fetchAcademicInfoByUserId(optionalCmsUser.get().getCmsUserId());
-        for (int i = 0; i < academicInfos.size(); i++) {
-            List<Subject> subjects = academicInfos.get(i).getSubjects();
+        CmsUser cmsUsers = userRepository.fetchAcademicInfoByUserId(optionalCmsUser.get().getCmsUserId());
+
+        for (int i = 0; i < cmsUsers.getAcademicInfos().size(); i++) {
+            List<Subject> subjects = cmsUsers.getAcademicInfos().get(i).getSubjects();
         }
+
         if (optionalCmsUser.isPresent()) {
             return optionalCmsUser.get();
         } else return null;
