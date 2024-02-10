@@ -122,6 +122,7 @@ public class UserService {
                     .filter(address -> address.getAddressId().equals(updatedAddress.getAddressId()))
                     .findFirst()
                     .orElse(null);
+
             if (existingAddress != null) {
                 existingAddress.setAddressType(updatedAddress.getAddressType());
                 existingAddress.setDivision(divisionRepository.getOne(updatedAddress.getDivision().getDivisionId()));
@@ -143,6 +144,7 @@ public class UserService {
                     .filter(info -> info.getAcademicInfoId().equals(updatedAcademicInfo.getAcademicInfoId()))
                     .findFirst()
                     .orElse(null);
+
             if (existingAcademicInfo != null) {
                 existingAcademicInfo.setAcademicLevel(updatedAcademicInfo.getAcademicLevel());
                 existingAcademicInfo.setGrade(updatedAcademicInfo.getGrade());
@@ -150,13 +152,12 @@ public class UserService {
 
                 // Update subjects
                 List<Subject> updatedSubjects = new ArrayList<>();
-                for (Subject updatedSubject : existingAcademicInfo.getSubjects()) {
+                for (Subject updatedSubject : updatedAcademicInfo.getSubjects()) {
                     Subject existingSubject = subjectRepository.findById(updatedSubject.getSubjectId()).orElse(null);
                     if (existingSubject != null) {
                         updatedSubjects.add(subjectRepository.getOne(updatedSubject.getSubjectId()));
                     } else {
                         //need to add new subject
-                        //updatedSubjects.add(updatedSubject);
                     }
                 }
                 existingAcademicInfo.setSubjects(updatedSubjects);
@@ -169,7 +170,8 @@ public class UserService {
         existingUser.setAcademicInfos(updatedAcademicInfos);
 
         // Save the updated user
-        return userRepository.save(existingUser);
+        CmsUser updatedCmsUser = userRepository.save(existingUser);
+        return getCmsUserById(updatedCmsUser.getCmsUserId());
     }
 
 }
