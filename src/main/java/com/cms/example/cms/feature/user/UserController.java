@@ -31,13 +31,13 @@ public class UserController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @PutMapping(Routes.CMS_USER_UPDATE_ROUTE)
-    public ResponseEntity<CmsUser> updateCmsUser( @RequestBody CmsUser updatedUser) {
+    @PutMapping(Routes.CMS_USER_UPDATE_BY_IDROUTE)
+    public ResponseEntity<?> updateCmsUser(@PathVariable Long cmsUserId, @RequestBody CmsUser sourceUser) {
         try {
-            CmsUser user = service.updateCmsUser(updatedUser);
-            return ResponseEntity.ok(user);
+            CmsUser user = service.updateCmsUser(cmsUserId,sourceUser);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
     }
 

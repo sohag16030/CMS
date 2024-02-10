@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<CmsUser, Long> {
             "JOIN FETCH a.district " +
             "JOIN FETCH a.upazila " +
             "WHERE u.cmsUserId = :cmsUserId")
-    Optional<CmsUser> fetchRatingAddressInfoByUserId(@Param("cmsUserId") Long cmsUserId);
+    Optional<CmsUser> fetchUserRatingWithAddressInfoByUserId(@Param("cmsUserId") Long cmsUserId);
 
     @Query("SELECT u FROM CmsUser u " +
             "JOIN FETCH u.academicInfos a " +

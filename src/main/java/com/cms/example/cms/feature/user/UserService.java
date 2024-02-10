@@ -15,6 +15,7 @@ import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.subject.SubjectRepository;
 import com.cms.example.cms.feature.userRating.UserRatingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -22,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -81,18 +83,16 @@ public class UserService {
                 subjectList.add(retrievedSubject);
             }
         });
+        academicInfo.getSubjects().clear();
         academicInfo.setSubjects(subjectList);
     }
 
     public CmsUser getCmsUserById(Long cmsUserId) {
         Optional<CmsUser> optionalCmsUser = null;
-        optionalCmsUser = userRepository.fetchRatingAddressInfoByUserId(cmsUserId);
-        userRepository.fetchRatingAddressInfoByUserId(optionalCmsUser.get().getCmsUserId());
+        optionalCmsUser = userRepository.fetchUserRatingWithAddressInfoByUserId(cmsUserId);
         CmsUser cmsUsers = userRepository.fetchAcademicInfoByUserId(optionalCmsUser.get().getCmsUserId());
-        List<Long> academicInfoIds = new ArrayList<>();
-        for (int i = 0; i < cmsUsers.getAcademicInfos().size(); i++) {
-            academicInfoIds.add(cmsUsers.getAcademicInfos().get(i).getAcademicInfoId());
-        }
+
+        List<Long> academicInfoIds = cmsUsers.getAcademicInfos().stream().map(AcademicInfo::getAcademicInfoId).collect(Collectors.toList());
         academicInfoRepository.fetchSubjectsByAcademicInfoIdIn(academicInfoIds);
 
         if (optionalCmsUser.isPresent()) {
@@ -101,22 +101,25 @@ public class UserService {
     }
 
     @Transactional
-    public CmsUser updateCmsUser(CmsUser updatedUser) {
-        CmsUser existingUser = userRepository.findById(updatedUser.getCmsUserId()).orElse(null);
+    public CmsUser updateCmsUser(Long cmsUserId, CmsUser sourceUser) {
+        CmsUser existingUser = userRepository.findById(cmsUserId).orElse(null);
         if (existingUser == null) {
             throw new RuntimeException("User not found");
         }
+        // Create a new object to hold only the properties want to copy
+        UserPropertiesToCopy propertiesToCopy = new UserPropertiesToCopy();
+        propertiesToCopy.setName(sourceUser.getName());
+        propertiesToCopy.setGender(sourceUser.getGender());
+        propertiesToCopy.setUserRating(sourceUser.getUserRating());
+        propertiesToCopy.setUserStatus(sourceUser.getUserStatus());
+        propertiesToCopy.setIsActive(sourceUser.getIsActive());
 
-        // Update user properties
-        existingUser.setName(updatedUser.getName());
-        existingUser.setGender(updatedUser.getGender());
-        existingUser.setUserRating(updatedUser.getUserRating());
-        existingUser.setUserStatus(updatedUser.getUserStatus());
-        existingUser.setIsActive(updatedUser.getIsActive());
+       // Copy properties from the filtered object to the existingUser
+        BeanUtils.copyProperties(propertiesToCopy, existingUser);
 
         // Update addresses
         List<Address> updatedAddresses = new ArrayList<>();
-        for (Address updatedAddress : updatedUser.getAddresses()) {
+        for (Address updatedAddress : sourceUser.getAddresses()) {
             Address existingAddress = existingUser.getAddresses()
                     .stream()
                     .filter(address -> address.getAddressId().equals(updatedAddress.getAddressId()))
@@ -125,20 +128,30 @@ public class UserService {
 
             if (existingAddress != null) {
                 existingAddress.setAddressType(updatedAddress.getAddressType());
-                existingAddress.setDivision(divisionRepository.getOne(updatedAddress.getDivision().getDivisionId()));
-                existingAddress.setDistrict(districtRepository.getOne(updatedAddress.getDistrict().getDistrictId()));
-                existingAddress.setUpazila(upazilaRepository.getOne(updatedAddress.getUpazila().getUpazilaId()));
+
+                // Null checks before calling getOne()
+                if (updatedAddress.getDivision() != null) {
+                    existingAddress.setDivision(divisionRepository.getOne(updatedAddress.getDivision().getDivisionId()));
+                }
+                if (updatedAddress.getDistrict() != null) {
+                    existingAddress.setDistrict(districtRepository.getOne(updatedAddress.getDistrict().getDistrictId()));
+                }
+                if (updatedAddress.getUpazila() != null) {
+                    existingAddress.setUpazila(upazilaRepository.getOne(updatedAddress.getUpazila().getUpazilaId()));
+                }
+
                 existingAddress.setIsActive(updatedAddress.getIsActive());
                 updatedAddresses.add(existingAddress);
             } else {
                 //need to create new address
             }
         }
+        existingUser.getAddresses().clear();
         existingUser.setAddresses(updatedAddresses);
 
         // Update academicInfos
         List<AcademicInfo> updatedAcademicInfos = new ArrayList<>();
-        for (AcademicInfo updatedAcademicInfo : updatedUser.getAcademicInfos()) {
+        for (AcademicInfo updatedAcademicInfo : sourceUser.getAcademicInfos()) {
             AcademicInfo existingAcademicInfo = existingUser.getAcademicInfos()
                     .stream()
                     .filter(info -> info.getAcademicInfoId().equals(updatedAcademicInfo.getAcademicInfoId()))
@@ -160,6 +173,7 @@ public class UserService {
                         //need to add new subject
                     }
                 }
+                existingAcademicInfo.getSubjects().clear();
                 existingAcademicInfo.setSubjects(updatedSubjects);
                 updatedAcademicInfos.add(existingAcademicInfo);
             } else {
