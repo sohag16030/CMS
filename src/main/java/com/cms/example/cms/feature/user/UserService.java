@@ -8,6 +8,7 @@ import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Subject;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.entities.UserRating;
+import com.cms.example.cms.feature.academicInfo.AcademicInfoRepository;
 import com.cms.example.cms.feature.geo.DistrictRepository;
 import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
@@ -33,6 +34,7 @@ public class UserService {
     private final DistrictRepository districtRepository;
     private final UpazilaRepository upazilaRepository;
     private final SubjectRepository subjectRepository;
+    private final AcademicInfoRepository academicInfoRepository;
 
     @Transactional
     public CmsUser saveCmsUser(CmsUser cmsUser) {
@@ -87,10 +89,11 @@ public class UserService {
         optionalCmsUser = userRepository.fetchRatingAddressInfoByUserId(cmsUserId);
         userRepository.fetchRatingAddressInfoByUserId(optionalCmsUser.get().getCmsUserId());
         CmsUser cmsUsers = userRepository.fetchAcademicInfoByUserId(optionalCmsUser.get().getCmsUserId());
-
+        List<Long> academicInfoIds = new ArrayList<>();
         for (int i = 0; i < cmsUsers.getAcademicInfos().size(); i++) {
-            List<Subject> subjects = cmsUsers.getAcademicInfos().get(i).getSubjects();
+            academicInfoIds.add(cmsUsers.getAcademicInfos().get(i).getAcademicInfoId());
         }
+        academicInfoRepository.fetchSubjectsByAcademicInfoIdIn(academicInfoIds);
 
         if (optionalCmsUser.isPresent()) {
             return optionalCmsUser.get();
