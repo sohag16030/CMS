@@ -9,6 +9,7 @@ import com.cms.example.cms.entities.Subject;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.entities.UserRating;
 import com.cms.example.cms.feature.academicInfo.AcademicInfoRepository;
+import com.cms.example.cms.feature.address.AddressRepository;
 import com.cms.example.cms.feature.geo.DistrictRepository;
 import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
@@ -21,8 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +41,7 @@ public class UserService {
     private final UpazilaRepository upazilaRepository;
     private final SubjectRepository subjectRepository;
     private final AcademicInfoRepository academicInfoRepository;
+    private final AddressRepository addressRepository;
 
     @Transactional
     public CmsUser saveCmsUser(CmsUser cmsUser) {
@@ -114,43 +119,46 @@ public class UserService {
         propertiesToCopy.setUserStatus(sourceUser.getUserStatus());
         propertiesToCopy.setIsActive(sourceUser.getIsActive());
 
-       // Copy properties from the filtered object to the existingUser
+        // Copy properties from the filtered object to the existingUser
         BeanUtils.copyProperties(propertiesToCopy, existingUser);
 
         // Update addresses
+
+        List<Long> addressIds = sourceUser.getAddresses().stream().map(Address::getAddressId).toList();
+        List<Address> getAddressesInfoByIds = addressRepository.fetchAddressesInfoByAddressIdsIn(addressIds);
+
+        Map<Long, Address> addressesMap = getAddressesInfoByIds.stream()
+                .collect(Collectors.toMap(Address::getAddressId, Function.identity()));
+
         List<Address> updatedAddresses = new ArrayList<>();
-        for (Address updatedAddress : sourceUser.getAddresses()) {
-            Address existingAddress = existingUser.getAddresses()
-                    .stream()
-                    .filter(address -> address.getAddressId().equals(updatedAddress.getAddressId()))
-                    .findFirst()
-                    .orElse(null);
+        List<Address> updatedAddressesSource = sourceUser.getAddresses();
 
-            if (existingAddress != null) {
-                existingAddress.setAddressType(updatedAddress.getAddressType());
-
-                // Null checks before calling getOne()
-                if (updatedAddress.getDivision() != null) {
-                    existingAddress.setDivision(divisionRepository.getOne(updatedAddress.getDivision().getDivisionId()));
+        for (Address updatedAddressSource : updatedAddressesSource) {
+            Long addressId = updatedAddressSource.getAddressId();
+            if(addressesMap.containsKey(addressId)){
+                Address modifiedAddress = addressesMap.get(addressId);
+               //update address
+                modifiedAddress.setAddressId(addressId);
+                modifiedAddress.setAddressType(updatedAddressSource.getAddressType());
+                if (updatedAddressSource.getDivision() != null) {
+                    modifiedAddress.setDivision(divisionRepository.getOne(updatedAddressSource.getDivision().getDivisionId()));
                 }
-                if (updatedAddress.getDistrict() != null) {
-                    existingAddress.setDistrict(districtRepository.getOne(updatedAddress.getDistrict().getDistrictId()));
+                if (updatedAddressSource.getDistrict() != null) {
+                    modifiedAddress.setDistrict(districtRepository.getOne(updatedAddressSource.getDistrict().getDistrictId()));
                 }
-                if (updatedAddress.getUpazila() != null) {
-                    existingAddress.setUpazila(upazilaRepository.getOne(updatedAddress.getUpazila().getUpazilaId()));
+                if (updatedAddressSource.getUpazila() != null) {
+                    modifiedAddress.setUpazila(upazilaRepository.getOne(updatedAddressSource.getUpazila().getUpazilaId()));
                 }
-
-                existingAddress.setIsActive(updatedAddress.getIsActive());
-                updatedAddresses.add(existingAddress);
-            } else {
-                //need to create new address
+                modifiedAddress.setIsActive(updatedAddressSource.getIsActive());
+                updatedAddresses.add(modifiedAddress);
             }
         }
         existingUser.getAddresses().clear();
         existingUser.setAddresses(updatedAddresses);
-
+        
         // Update academicInfos
         List<AcademicInfo> updatedAcademicInfos = new ArrayList<>();
+
         for (AcademicInfo updatedAcademicInfo : sourceUser.getAcademicInfos()) {
             AcademicInfo existingAcademicInfo = existingUser.getAcademicInfos()
                     .stream()
