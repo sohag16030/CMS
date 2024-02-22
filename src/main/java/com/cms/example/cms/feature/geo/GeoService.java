@@ -39,7 +39,8 @@ public class GeoService {
     }
 
     public List<Division> getDivisionsByFilter(GeoFilterDto filter) {
-        return  divisionRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive());
+       // return  divisionRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive());
+    return null;
     }
 
     public District getDistrictById(Long districtId, EntityFetchType fetchType) {

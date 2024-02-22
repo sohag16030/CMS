@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -124,7 +123,7 @@ public class UserService {
 
         // Update addresses
 
-        List<Long> addressIds = sourceUser.getAddresses().stream().map(Address::getAddressId).toList();
+        List<Long> addressIds = sourceUser.getAddresses().stream().map(Address::getAddressId).collect(Collectors.toList());
         List<Address> getAddressesInfoByIds = addressRepository.fetchAddressesInfoByAddressIdsIn(addressIds);
 
         Map<Long, Address> addressesMap = getAddressesInfoByIds.stream()
