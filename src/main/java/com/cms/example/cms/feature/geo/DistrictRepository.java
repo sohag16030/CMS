@@ -18,21 +18,21 @@ public interface DistrictRepository extends JpaRepository<District, Long> {
     @Query("SELECT d FROM District d LEFT JOIN FETCH d.upazilas WHERE d.districtId IN :districtsIds")
     List<District> fetchUpazilaByDistrictIdIn(@Param("districtsIds") List<Long> districtsIds);
 
-//    @Query("SELECT dis FROM District dis " +
-//            "JOIN dis.division div " +
-//            "JOIN dis.upazilas u " +
-//            "WHERE " +
-//            "(:districtId IS NULL OR dis.districtId = :districtId) AND " +
-//            "(:name IS NULL OR dis.name ILIKE %:name%) AND " +
-//            "(:nameLocal IS NULL OR dis.nameLocal ILIKE %:nameLocal%) AND " +
-//            "(:active IS NULL OR dis.active = :active) AND " +
-//            "(:divisionId IS NULL OR div.divisionId = :divisionId) AND " +
-//            "(:upazilaId IS NULL OR u.upazilaId = :upazilaId)")
-//    List<District> search(@Param("divisionId") Long divisionId,
-//                          @Param("districtId") Long districtId,
-//                          @Param("upazilaId") Long upazilaId,
-//                          @Param("name") String name,
-//                          @Param("nameLocal") String nameLocal,
-//                          @Param("active") Boolean active);
+    @Query("SELECT dis FROM District dis " +
+            "JOIN dis.division div " +
+            "JOIN dis.upazilas u " +
+            "WHERE " +
+            "(:districtId IS NULL OR dis.districtId = :districtId) AND " +
+            "(:name IS NULL OR LOWER(div.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
+            "(:nameLocal IS NULL OR LOWER(div.nameLocal) LIKE LOWER(CONCAT('%', :nameLocal, '%'))) AND " +
+            "(:active IS NULL OR dis.active = :active) AND " +
+            "(:divisionId IS NULL OR div.divisionId = :divisionId) AND " +
+            "(:upazilaId IS NULL OR u.upazilaId = :upazilaId)")
+    List<District> search(@Param("divisionId") Long divisionId,
+                          @Param("districtId") Long districtId,
+                          @Param("upazilaId") Long upazilaId,
+                          @Param("name") String name,
+                          @Param("nameLocal") String nameLocal,
+                          @Param("active") Boolean active);
 }
 
