@@ -23,8 +23,8 @@ public interface DistrictRepository extends JpaRepository<District, Long> {
             "JOIN dis.upazilas u " +
             "WHERE " +
             "(:districtId IS NULL OR dis.districtId = :districtId) AND " +
-            "(:name IS NULL OR dis.name ILIKE %:name%) AND " +
-            "(:nameLocal IS NULL OR dis.nameLocal ILIKE %:nameLocal%) AND " +
+            "(:name IS NULL OR LOWER(div.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
+            "(:nameLocal IS NULL OR LOWER(div.nameLocal) LIKE LOWER(CONCAT('%', :nameLocal, '%'))) AND " +
             "(:active IS NULL OR dis.active = :active) AND " +
             "(:divisionId IS NULL OR div.divisionId = :divisionId) AND " +
             "(:upazilaId IS NULL OR u.upazilaId = :upazilaId)")

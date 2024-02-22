@@ -39,7 +39,7 @@ public class GeoService {
     }
 
     public List<Division> getDivisionsByFilter(GeoFilterDto filter) {
-        return  divisionRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive());
+       return  divisionRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive());
     }
 
     public District getDistrictById(Long districtId, EntityFetchType fetchType) {
@@ -63,6 +63,6 @@ public class GeoService {
     }
 
     public List<Upazila> getUpazilaByFilter(GeoFilterDto filter) {
-        return upazilaRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive());
+        return  upazilaRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive());
     }
 }
