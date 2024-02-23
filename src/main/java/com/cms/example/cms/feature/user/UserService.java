@@ -191,8 +191,8 @@ public class UserService {
         existingUser.setAcademicInfos(updatedAcademicInfos);
 
         // Save the updated user
-        CmsUser updatedCmsUser = userRepository.save(existingUser);
-        return getCmsUserById(updatedCmsUser.getCmsUserId());
+        userRepository.save(existingUser);
+        return getCmsUserById(cmsUserId);
     }
 
 }

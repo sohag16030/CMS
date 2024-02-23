@@ -37,7 +37,7 @@ public class UserController {
             CmsUser user = service.updateCmsUser(cmsUserId,sourceUser);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (RuntimeException e) {
-            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
         }
     }
 
