@@ -1,6 +1,8 @@
 package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.entities.CmsUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,5 +29,7 @@ public interface UserRepository extends JpaRepository<CmsUser, Long> {
             "JOIN a.subjects s " +
             "WHERE u.cmsUserId = :cmsUserId")
     CmsUser fetchAcademicInfoByUserId(@Param("cmsUserId") Long cmsUserId);
+
+    Page<CmsUser> findByNameContaining(String name, Pageable pageable);
 
 }

@@ -13,9 +13,10 @@ public final class Routes {
     public static final String UPAZILA_LIST_ROUTE = "/api/upazilas";
 
     //CMS_USER_SERVICES_ROUTES
-    public static final String CMS_USER_CREATE_ROUTE = "/api/cmsUser/create";
+    public static final String CMS_USER_CREATE_ROUTE = "/api/cmsUser";
     public static final String CMS_USER_BY_ID_ROUTE = "/api/cmsUser/{userId}";
-    public static final String CMS_USER_UPDATE_BY_IDROUTE = "/api/cmsUser/update/{cmsUserId}";
+    public static final String CMS_USER_UPDATE_BY_IDROUTE = "/api/cmsUser/{cmsUserId}";
+    public static final String CMS_USER_LIST_ROUTE = "/api/cmsUsers";
 
 
 }

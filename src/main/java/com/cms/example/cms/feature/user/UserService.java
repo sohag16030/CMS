@@ -17,6 +17,8 @@ import com.cms.example.cms.feature.subject.SubjectRepository;
 import com.cms.example.cms.feature.userRating.UserRatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -94,7 +96,7 @@ public class UserService {
     public CmsUser getCmsUserById(Long cmsUserId) {
         Optional<CmsUser> optionalCmsUser = null;
         optionalCmsUser = userRepository.fetchUserRatingWithAddressInfoByUserId(cmsUserId);
-        CmsUser cmsUsers = userRepository.fetchAcademicInfoByUserId(optionalCmsUser.get().getCmsUserId());
+        CmsUser cmsUsers = userRepository.fetchAcademicInfoByUserId(cmsUserId);
 
         List<Long> academicInfoIds = cmsUsers.getAcademicInfos().stream().map(AcademicInfo::getAcademicInfoId).collect(Collectors.toList());
         academicInfoRepository.fetchSubjectsByAcademicInfoIdIn(academicInfoIds);
@@ -188,11 +190,19 @@ public class UserService {
                 updatedAcademicInfos.add(updatedAcademicInfo);
             }
         }
+        existingUser.getAcademicInfos().clear();
         existingUser.setAcademicInfos(updatedAcademicInfos);
 
         // Save the updated user
-        userRepository.save(existingUser);
+        //userRepository.save(existingUser);
         return getCmsUserById(cmsUserId);
     }
 
+    public Page<CmsUser> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    public Page<CmsUser> findByNameContaining(String name, Pageable pageable) {
+      return  userRepository.findByNameContaining(name,pageable);
+    }
 }
