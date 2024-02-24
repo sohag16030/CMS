@@ -1,11 +1,7 @@
 package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.common.Routes;
-import com.cms.example.cms.dto.GeoFilterDto;
 import com.cms.example.cms.entities.CmsUser;
-import com.cms.example.cms.entities.District;
-import com.cms.example.cms.entities.Division;
-import com.cms.example.cms.enums.EntityFetchType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
