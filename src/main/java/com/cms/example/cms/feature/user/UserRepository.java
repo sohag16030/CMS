@@ -30,6 +30,8 @@ public interface UserRepository extends JpaRepository<CmsUser, Long> {
             "WHERE u.cmsUserId = :cmsUserId")
     CmsUser fetchAcademicInfoByUserId(@Param("cmsUserId") Long cmsUserId);
 
+    Page<CmsUser> findAll(Pageable pageable);
+
     Page<CmsUser> findByNameContaining(String name, Pageable pageable);
 
 }

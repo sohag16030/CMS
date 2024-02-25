@@ -1,5 +1,6 @@
 package com.cms.example.cms.feature.user;
 
+import com.cms.example.cms.dto.PaginatedCmsUserResponse;
 import com.cms.example.cms.entities.AcademicInfo;
 import com.cms.example.cms.entities.Address;
 import com.cms.example.cms.entities.CmsUser;
@@ -198,11 +199,19 @@ public class UserService {
         return getCmsUserById(cmsUserId);
     }
 
-    public Page<CmsUser> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public PaginatedCmsUserResponse getAllUsers(Pageable pageable) {
+        Page<CmsUser> cmsUsers = userRepository.findAll(pageable);
+        return PaginatedCmsUserResponse.builder()
+                .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
+                .cmsUserList(cmsUsers.getContent())
+                .build();
     }
 
-    public Page<CmsUser> findByNameContaining(String name, Pageable pageable) {
-      return  userRepository.findByNameContaining(name,pageable);
+    public PaginatedCmsUserResponse filterUsers(String name, Pageable pageable) {
+        Page<CmsUser> cmsUsers = userRepository.findByNameContaining(name, pageable);
+        return PaginatedCmsUserResponse.builder()
+                .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
+                .cmsUserList(cmsUsers.getContent())
+                .build();
     }
 }
