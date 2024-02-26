@@ -1,11 +1,18 @@
 package com.cms.example.cms.feature.geo;
 
+import com.cms.example.cms.dto.PaginatedCmsUserResponse;
+import com.cms.example.cms.dto.PaginatedDistrictResponse;
+import com.cms.example.cms.dto.PaginatedDivisionResponse;
+import com.cms.example.cms.dto.PaginatedUpazilaResponse;
+import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.enums.EntityFetchType;
 import com.cms.example.cms.dto.GeoFilterDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +45,12 @@ public class GeoService {
         } else return null;
     }
 
-    public List<Division> getDivisionsByFilter(GeoFilterDto filter) {
-       return  divisionRepository.search(filter.getDivisionId(), filter.getName(), filter.getNameLocal(), filter.getActive());
+    public PaginatedDivisionResponse getDivisionsByFilter(GeoFilterDto filter,Pageable pageable) {
+        Page<Division> divisions =  divisionRepository.search(filter.getDivisionId(), filter.getName(), filter.getNameLocal(), filter.getActive(),pageable);
+        return PaginatedDivisionResponse.builder()
+                .numberOfItems(divisions.getTotalElements()).numberOfPages(divisions.getTotalPages())
+                .divisionList(divisions.getContent())
+                .build();
     }
 
     public District getDistrictById(Long districtId, EntityFetchType fetchType) {
@@ -50,8 +61,12 @@ public class GeoService {
         else return null;
     }
 
-    public List<District> getDistrictsByFilter(GeoFilterDto filter) {
-        return districtRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getName(), filter.getNameLocal(), filter.getActive());
+    public PaginatedDistrictResponse getDistrictsByFilter(GeoFilterDto filter,Pageable pageable) {
+        Page<District> districts =  districtRepository.search(filter.getDivisionId(),filter.getDistrictId(), filter.getName(), filter.getNameLocal(), filter.getActive(),pageable);
+        return PaginatedDistrictResponse.builder()
+                .numberOfItems(districts.getTotalElements()).numberOfPages(districts.getTotalPages())
+                .districtList(districts.getContent())
+                .build();
     }
 
     public Upazila getUpazilaById(Long upazilaId, EntityFetchType fetchType) {
@@ -62,7 +77,11 @@ public class GeoService {
         else return null;
     }
 
-    public List<Upazila> getUpazilaByFilter(GeoFilterDto filter) {
-        return  upazilaRepository.search(filter.getDivisionId(), filter.getDistrictId(), filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive());
+    public PaginatedUpazilaResponse getUpazilaByFilter(GeoFilterDto filter,Pageable pageable) {
+        Page<Upazila> upazilas =  upazilaRepository.search(filter.getDivisionId(),filter.getDistrictId(),filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive(),pageable);
+        return PaginatedUpazilaResponse.builder()
+                .numberOfItems(upazilas.getTotalElements()).numberOfPages(upazilas.getTotalPages())
+                .upazilaList(upazilas.getContent())
+                .build();
     }
 }

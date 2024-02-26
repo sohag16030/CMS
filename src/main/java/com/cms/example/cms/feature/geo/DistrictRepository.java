@@ -1,6 +1,8 @@
 package com.cms.example.cms.feature.geo;
 
 import com.cms.example.cms.entities.District;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,10 +28,10 @@ public interface DistrictRepository extends JpaRepository<District, Long> {
             "(:nameLocal IS NULL OR LOWER(dis.nameLocal) LIKE LOWER(CONCAT('%', :nameLocal, '%'))) AND " +
             "(:active IS NULL OR dis.active = :active) AND " +
             "(:divisionId IS NULL OR div.divisionId = :divisionId)")
-    List<District> search(@Param("divisionId") Long divisionId,
+    Page<District> search(@Param("divisionId") Long divisionId,
                           @Param("districtId") Long districtId,
                           @Param("name") String name,
                           @Param("nameLocal") String nameLocal,
-                          @Param("active") Boolean active);
+                          @Param("active") Boolean active, Pageable pageable);
 }
 

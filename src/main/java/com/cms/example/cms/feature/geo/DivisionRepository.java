@@ -1,6 +1,8 @@
 package com.cms.example.cms.feature.geo;
 
 import com.cms.example.cms.entities.Division;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,8 +23,8 @@ public interface DivisionRepository extends JpaRepository<Division, Long> {
             "(:name IS NULL OR LOWER(div.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
             "(:nameLocal IS NULL OR LOWER(div.nameLocal) LIKE LOWER(CONCAT('%', :nameLocal, '%'))) AND " +
             "(:active IS NULL OR div.active = :active)")
-    List<Division> search(@Param("divisionId") Long divisionId,
+    Page<Division> search(@Param("divisionId") Long divisionId,
                           @Param("name") String name,
                           @Param("nameLocal") String nameLocal,
-                          @Param("active") Boolean active);
+                          @Param("active") Boolean active, Pageable pageable);
 }

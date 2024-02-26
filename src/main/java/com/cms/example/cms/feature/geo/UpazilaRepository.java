@@ -1,6 +1,8 @@
 package com.cms.example.cms.feature.geo;
 
 import com.cms.example.cms.entities.Upazila;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,12 +28,12 @@ public interface UpazilaRepository extends JpaRepository<Upazila, Long> {
             "(:active IS NULL OR u.active = :active) AND " +
             "(:districtId IS NULL OR dis.districtId = :districtId) AND " +
             "(:divisionId IS NULL OR div.divisionId = :divisionId)")
-    List<Upazila> search(@Param("divisionId") Long divisionId,
+    Page<Upazila> search(@Param("divisionId") Long divisionId,
                          @Param("districtId") Long districtId,
                          @Param("upazilaId") Long upazilaId,
                          @Param("name") String name,
                          @Param("nameLocal") String nameLocal,
-                         @Param("active") Boolean active);
+                         @Param("active") Boolean active, Pageable pageable);
 
 }
 
