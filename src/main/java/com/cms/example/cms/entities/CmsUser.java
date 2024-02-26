@@ -57,6 +57,9 @@ public class CmsUser {
     private UserRating userRating;
 
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserContent> userContents;
+
+    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> addresses;
 
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

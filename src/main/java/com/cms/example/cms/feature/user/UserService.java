@@ -15,7 +15,6 @@ import com.cms.example.cms.feature.geo.DistrictRepository;
 import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.subject.SubjectRepository;
-import com.cms.example.cms.feature.userRating.UserRatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
