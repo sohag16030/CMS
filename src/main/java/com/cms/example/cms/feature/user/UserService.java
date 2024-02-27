@@ -8,6 +8,7 @@ import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Subject;
 import com.cms.example.cms.entities.Upazila;
+import com.cms.example.cms.entities.UserContent;
 import com.cms.example.cms.entities.UserRating;
 import com.cms.example.cms.feature.academicInfo.AcademicInfoRepository;
 import com.cms.example.cms.feature.address.AddressRepository;
@@ -15,7 +16,6 @@ import com.cms.example.cms.feature.geo.DistrictRepository;
 import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.subject.SubjectRepository;
-import com.cms.example.cms.feature.userRating.UserRatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -44,6 +44,7 @@ public class UserService {
     private final SubjectRepository subjectRepository;
     private final AcademicInfoRepository academicInfoRepository;
     private final AddressRepository addressRepository;
+    private final UserContentRepository userContentRepository;
 
     @Transactional
     public CmsUser saveCmsUser(CmsUser cmsUser) {
@@ -102,6 +103,9 @@ public class UserService {
         List<Long> academicInfoIds = cmsUsers.getAcademicInfos().stream().map(AcademicInfo::getAcademicInfoId).collect(Collectors.toList());
         academicInfoRepository.fetchSubjectsByAcademicInfoIdIn(academicInfoIds);
 
+        List<Long> contentInfoIds = cmsUsers.getUserContents().stream().map(UserContent::getUserContentId).collect(Collectors.toList());
+        userContentRepository.fetchUserContentsByContentsIdIn(contentInfoIds);
+
         if (optionalCmsUser.isPresent()) {
             return optionalCmsUser.get();
         } else return null;
@@ -114,18 +118,13 @@ public class UserService {
             throw new RuntimeException("User not found");
         }
         // Create a new object to hold only the properties want to copy
-        UserPropertiesToCopy propertiesToCopy = new UserPropertiesToCopy();
-        propertiesToCopy.setName(sourceUser.getName());
-        propertiesToCopy.setGender(sourceUser.getGender());
-        propertiesToCopy.setUserRating(sourceUser.getUserRating());
-        propertiesToCopy.setUserStatus(sourceUser.getUserStatus());
-        propertiesToCopy.setIsActive(sourceUser.getIsActive());
-
-        // Copy properties from the filtered object to the existingUser
-        BeanUtils.copyProperties(propertiesToCopy, existingUser);
+        existingUser.setName(sourceUser.getName());
+        existingUser.setGender(sourceUser.getGender());
+        existingUser.setUserRating(sourceUser.getUserRating());
+        existingUser.setUserStatus(sourceUser.getUserStatus());
+        existingUser.setIsActive(sourceUser.getIsActive());
 
         // Update addresses
-
         List<Long> addressIds = sourceUser.getAddresses().stream().map(Address::getAddressId).collect(Collectors.toList());
         List<Address> getAddressesInfoByIds = addressRepository.fetchAddressesInfoByAddressIdsIn(addressIds);
 
@@ -179,8 +178,6 @@ public class UserService {
                     Subject existingSubject = subjectRepository.findById(updatedSubject.getSubjectId()).orElse(null);
                     if (existingSubject != null) {
                         updatedSubjects.add(subjectRepository.getOne(updatedSubject.getSubjectId()));
-                    } else {
-                        //need to add new subject
                     }
                 }
                 existingAcademicInfo.getSubjects().clear();
@@ -194,8 +191,6 @@ public class UserService {
         existingUser.getAcademicInfos().clear();
         existingUser.setAcademicInfos(updatedAcademicInfos);
 
-        // Save the updated user
-        //userRepository.save(existingUser);
         return getCmsUserById(cmsUserId);
     }
 
