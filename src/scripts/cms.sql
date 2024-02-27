@@ -140,7 +140,8 @@ CREATE TABLE USER_RATING (
 CREATE TABLE USER_CONTENT (
                          USER_CONTENT_ID BIGSERIAL,
                          TITLE VARCHAR(50) NOT NULL,
-                         DESCRIPTION VARCHAR(50) NOT NULL,
+                         CONTENT_TYPE VARCHAR(50) NOT NULL,
+                         DATA OID NOT NULL,
                          CMS_USER_ID BIGINT NOT NULL,
                          IS_ACTIVE BOOLEAN NOT NULL,
                          CREATED_AT TIMESTAMPTZ NOT NULL,

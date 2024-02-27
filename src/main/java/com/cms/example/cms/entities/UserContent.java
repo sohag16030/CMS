@@ -19,6 +19,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
@@ -40,8 +41,12 @@ public class UserContent {
     @Column(name = "TITLE", nullable = false)
     private String title;
 
-    @Column(name = "DESCRIPTION", nullable = false)
-    private String description;
+    @Column(name = "CONTENT_TYPE", nullable = false)
+    private String type;
+
+    @Lob
+    @Column(name = "DATA", nullable = false)
+    private byte[] data;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID", nullable = false)
@@ -58,6 +63,9 @@ public class UserContent {
     @Column(name = "UPDATED_AT", nullable = false)
     @UpdateTimestamp
     private Date updatedAt;
+
+    public UserContent(String fileName, String contentType, byte[] bytes) {
+    }
 
     @JsonIgnore
     public static Boolean isNonNull(UserContent userContent){
