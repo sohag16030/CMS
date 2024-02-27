@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.user;
+package com.cms.example.cms.feature.user.repository;
 
 import com.cms.example.cms.entities.UserRating;
 import org.springframework.data.jpa.repository.JpaRepository;

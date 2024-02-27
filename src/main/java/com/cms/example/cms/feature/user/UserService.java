@@ -1,6 +1,7 @@
 package com.cms.example.cms.feature.user;
 
-import com.cms.example.cms.dto.PaginatedCmsUserResponse;
+import com.cms.example.cms.dto.GeoFilterDto;
+import com.cms.example.cms.dto.PaginatedDistrictResponse;
 import com.cms.example.cms.entities.AcademicInfo;
 import com.cms.example.cms.entities.Address;
 import com.cms.example.cms.entities.CmsUser;
@@ -16,8 +17,10 @@ import com.cms.example.cms.feature.geo.DistrictRepository;
 import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.subject.SubjectRepository;
+import com.cms.example.cms.feature.user.repository.UserContentRepository;
+import com.cms.example.cms.feature.user.repository.UserRatingRepository;
+import com.cms.example.cms.feature.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -194,19 +197,13 @@ public class UserService {
         return getCmsUserById(cmsUserId);
     }
 
-    public PaginatedCmsUserResponse getAllUsers(Pageable pageable) {
-        Page<CmsUser> cmsUsers = userRepository.findAll(pageable);
-        return PaginatedCmsUserResponse.builder()
-                .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
-                .cmsUserList(cmsUsers.getContent())
-                .build();
+    public PaginatedDistrictResponse getCmsUsersByFilter( CmsUser cmsUser, Pageable pageable) {
+       // Page<CmsUser> cmsUsers =  userRepository.search(,pageable);
+//        return PaginatedDistrictResponse.builder()
+//                .numberOfItems(districts.getTotalElements()).numberOfPages(districts.getTotalPages())
+//                .districtList(districts.getContent())
+//                .build();
+        return null;
     }
 
-    public PaginatedCmsUserResponse filterUsers(String name, Pageable pageable) {
-        Page<CmsUser> cmsUsers = userRepository.findByNameContaining(name, pageable);
-        return PaginatedCmsUserResponse.builder()
-                .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
-                .cmsUserList(cmsUsers.getContent())
-                .build();
-    }
 }

@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.user;
+package com.cms.example.cms.feature.user.repository;
 
 import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.Division;
@@ -31,19 +31,21 @@ public interface UserRepository extends JpaRepository<CmsUser, Long> {
             "WHERE u.cmsUserId = :cmsUserId")
     CmsUser fetchAcademicInfoByUserId(@Param("cmsUserId") Long cmsUserId);
 
-    Page<CmsUser> findAll(Pageable pageable);
-
-    Page<CmsUser> findByNameContaining(String name, Pageable pageable);
-
-//    @Query("SELECT cms FROM CmsUser cms " +
-//            "WHERE " +
-//            "(:cmsUserId IS NULL OR cms.cmsUserId = :cmsUserId) AND " +
-//            "(:mobileNumber IS NULL OR LOWER(cms.mobileNumber) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-//            "(:nameLocal IS NULL OR LOWER(div.nameLocal) LIKE LOWER(CONCAT('%', :nameLocal, '%'))) AND " +
-//            "(:active IS NULL OR div.active = :active)")
-//    Page<Division> search(@Param("cmsUserId") Long cmsUserId,
-//                          @Param("mobileNumber") String mobileNumber,
-//                          @Param("nameLocal") String nameLocal,
-//                          @Param("active") Boolean active, Pageable pageable);
+//    @Query("SELECT u FROM CmsUser u " +
+//            "JOIN FETCH u.userRating r " +
+//            "JOIN FETCH u.addresses a " +
+//            "JOIN FETCH a.division " +
+//            "JOIN FETCH a.district " +
+//            "JOIN FETCH a.upazila " +
+//            "WHERE u.cmsUserId = :cmsUserId")
+//    Page<CmsUser> search(@Param("cmsUserId") Long cmsUserId,
+//                         @Param("userContentId") Long userContentId,
+//                         @Param("userRatingId") Long userRatingId,
+//                         @Param("addressId") Long addressId,
+//                         @Param("academicInfoId") Long academicInfoId,
+//                         @Param("mobileNumber") String mobileNumber,
+//                         @Param("email") String email,
+//                         @Param("name") String name,
+//                         @Param("active") Boolean active, Pageable pageable);
 
 }

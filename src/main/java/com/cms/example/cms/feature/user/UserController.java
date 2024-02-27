@@ -52,8 +52,9 @@ public class UserController {
             @RequestParam(required = false) String query,
             Pageable pageable) {
         if (query == null || query.isEmpty()) {
-            return ResponseEntity.ok(userService.getAllUsers(pageable));
+            //return ResponseEntity.ok(userService.getAllUsers(pageable));
         }
-        return ResponseEntity.ok(userService.filterUsers(query, pageable));
+        //return ResponseEntity.ok(userService.filterUsers(query, pageable));
+        return null;
     }
 }
