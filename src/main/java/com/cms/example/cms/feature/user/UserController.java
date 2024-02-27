@@ -52,6 +52,10 @@ public class UserController {
     public ResponseEntity getAllCmsUsers(
             @RequestParam(required = false) String query,
             Pageable pageable) {
-        return ResponseEntity.ok(userService.getCmsUsersByFilter(query, pageable));
+        if (query == null || query.isEmpty()) {
+            return ResponseEntity.ok(userService.getAllUsers(pageable));
+        }
+        return ResponseEntity.ok(userService.filterUsers(query, pageable));
+
     }
 }

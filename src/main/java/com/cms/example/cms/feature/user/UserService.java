@@ -196,9 +196,16 @@ public class UserService {
         return getCmsUserById(cmsUserId);
     }
 
-    public PaginatedCmsUserResponse getCmsUsersByFilter(String query, Pageable pageable) {
-        Page<CmsUser> cmsUsers =  userRepository.search(query,pageable);
+    public PaginatedCmsUserResponse getAllUsers(Pageable pageable) {
+        Page<CmsUser> cmsUsers = userRepository.findAll(pageable);
+        return PaginatedCmsUserResponse.builder()
+                .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
+                .cmsUserList(cmsUsers.getContent())
+                .build();
+    }
 
+    public PaginatedCmsUserResponse filterUsers(String name, Pageable pageable) {
+        Page<CmsUser> cmsUsers = userRepository.findByNameContaining(name, pageable);
         return PaginatedCmsUserResponse.builder()
                 .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
                 .cmsUserList(cmsUsers.getContent())
