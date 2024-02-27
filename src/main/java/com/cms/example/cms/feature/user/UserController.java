@@ -30,7 +30,7 @@ public class UserController {
     @PutMapping(Routes.CMS_USER_UPDATE_BY_IDROUTE)
     public ResponseEntity<?> updateCmsUser(@PathVariable Long cmsUserId, @RequestBody CmsUser sourceUser) {
         try {
-            CmsUser user = userService.updateCmsUser(cmsUserId,sourceUser);
+            CmsUser user = userService.updateCmsUser(cmsUserId, sourceUser);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
@@ -47,14 +47,11 @@ public class UserController {
             return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping(Routes.CMS_USER_LIST_ROUTE)
     public ResponseEntity getAllCmsUsers(
             @RequestParam(required = false) String query,
             Pageable pageable) {
-        if (query == null || query.isEmpty()) {
-            //return ResponseEntity.ok(userService.getAllUsers(pageable));
-        }
-        //return ResponseEntity.ok(userService.filterUsers(query, pageable));
-        return null;
+        return ResponseEntity.ok(userService.getCmsUsersByFilter(query, pageable));
     }
 }

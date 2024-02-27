@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.user.repository;
+package com.cms.example.cms.feature.userContent;
 
 import com.cms.example.cms.entities.UserContent;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,6 @@
 package com.cms.example.cms.feature.user;
 
-import com.cms.example.cms.dto.GeoFilterDto;
-import com.cms.example.cms.dto.PaginatedDistrictResponse;
+import com.cms.example.cms.dto.PaginatedCmsUserResponse;
 import com.cms.example.cms.entities.AcademicInfo;
 import com.cms.example.cms.entities.Address;
 import com.cms.example.cms.entities.CmsUser;
@@ -17,8 +16,8 @@ import com.cms.example.cms.feature.geo.DistrictRepository;
 import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.subject.SubjectRepository;
-import com.cms.example.cms.feature.user.repository.UserContentRepository;
-import com.cms.example.cms.feature.user.repository.UserRatingRepository;
+import com.cms.example.cms.feature.userContent.UserContentRepository;
+import com.cms.example.cms.feature.userRating.UserRatingRepository;
 import com.cms.example.cms.feature.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -197,13 +196,13 @@ public class UserService {
         return getCmsUserById(cmsUserId);
     }
 
-    public PaginatedDistrictResponse getCmsUsersByFilter( CmsUser cmsUser, Pageable pageable) {
-       // Page<CmsUser> cmsUsers =  userRepository.search(,pageable);
-//        return PaginatedDistrictResponse.builder()
-//                .numberOfItems(districts.getTotalElements()).numberOfPages(districts.getTotalPages())
-//                .districtList(districts.getContent())
-//                .build();
-        return null;
+    public PaginatedCmsUserResponse getCmsUsersByFilter(String query, Pageable pageable) {
+        Page<CmsUser> cmsUsers =  userRepository.search(query,pageable);
+
+        return PaginatedCmsUserResponse.builder()
+                .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
+                .cmsUserList(cmsUsers.getContent())
+                .build();
     }
 
 }
