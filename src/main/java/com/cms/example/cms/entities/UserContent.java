@@ -45,30 +45,30 @@ public class UserContent {
     private String type;
 
     @Lob
-    @Column(name = "DATA", nullable = false)
+    @Column(name = "DATA", length = 1000)
     private byte[] data;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID", nullable = false)
     @JsonIgnore
     private CmsUser cmsUser;
-
-    @Column(name = "IS_ACTIVE", nullable = false)
-    private Boolean isActive;
-
-    @Column(name = "CREATED_AT", nullable = false)
-    @CreationTimestamp
-    private Date createdAt;
-
-    @Column(name = "UPDATED_AT", nullable = false)
-    @UpdateTimestamp
-    private Date updatedAt;
-
-    public UserContent(String fileName, String contentType, byte[] bytes) {
-    }
-
-    @JsonIgnore
-    public static Boolean isNonNull(UserContent userContent){
-        return Objects.nonNull(userContent) && Objects.nonNull(userContent.getUserContentId());
-    }
+//
+//    @Column(name = "IS_ACTIVE", nullable = false)
+//    private Boolean isActive;
+//
+//    @Column(name = "CREATED_AT", nullable = false)
+//    @CreationTimestamp
+//    private Date createdAt;
+//
+//    @Column(name = "UPDATED_AT", nullable = false)
+//    @UpdateTimestamp
+//    private Date updatedAt;
+//
+//    public UserContent(String fileName, String contentType, byte[] bytes) {
+//    }
+//
+//    @JsonIgnore
+//    public static Boolean isNonNull(UserContent userContent){
+//        return Objects.nonNull(userContent) && Objects.nonNull(userContent.getUserContentId());
+//    }
 }

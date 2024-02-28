@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface UserContentRepository extends JpaRepository<UserContent, Long> {
 
-    @Query("SELECT c FROM UserContent c WHERE c.userContentId IN :contentInfoIds")
-    List<UserContent> fetchUserContentsByContentsIdIn(List<Long> contentInfoIds);
+//    @Query("SELECT c FROM UserContent c WHERE c.userContentId IN :contentInfoIds")
+//    List<UserContent> fetchUserContentsByContentsIdIn(List<Long> contentInfoIds);
 }

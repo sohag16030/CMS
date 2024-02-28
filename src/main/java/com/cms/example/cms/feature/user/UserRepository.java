@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.user.repository;
+package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.Division;

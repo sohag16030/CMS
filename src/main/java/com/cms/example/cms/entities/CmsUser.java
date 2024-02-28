@@ -52,17 +52,17 @@ public class CmsUser {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_RATING_ID", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "USER_RATING_ID")
     private UserRating userRating;
 
-    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<UserContent> userContents;
+//    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    private List<UserContent> userContents;
 
-    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
     private List<Address> addresses;
 
-    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
     private List<AcademicInfo> academicInfos;
 
     @Column(name = "USER_STATUS", nullable = false)

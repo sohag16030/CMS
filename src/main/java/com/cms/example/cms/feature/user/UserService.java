@@ -18,7 +18,6 @@ import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.subject.SubjectRepository;
 import com.cms.example.cms.feature.userContent.UserContentRepository;
 import com.cms.example.cms.feature.userRating.UserRatingRepository;
-import com.cms.example.cms.feature.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -105,8 +104,8 @@ public class UserService {
         List<Long> academicInfoIds = cmsUsers.getAcademicInfos().stream().map(AcademicInfo::getAcademicInfoId).collect(Collectors.toList());
         academicInfoRepository.fetchSubjectsByAcademicInfoIdIn(academicInfoIds);
 
-        List<Long> contentInfoIds = cmsUsers.getUserContents().stream().map(UserContent::getUserContentId).collect(Collectors.toList());
-        userContentRepository.fetchUserContentsByContentsIdIn(contentInfoIds);
+//        List<Long> contentInfoIds = cmsUsers.getUserContents().stream().map(UserContent::getUserContentId).collect(Collectors.toList());
+//        userContentRepository.fetchUserContentsByContentsIdIn(contentInfoIds);
 
         if (optionalCmsUser.isPresent()) {
             return optionalCmsUser.get();
