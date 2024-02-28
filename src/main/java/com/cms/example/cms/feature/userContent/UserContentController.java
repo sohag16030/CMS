@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,10 +17,10 @@ import java.util.stream.Collectors;
 public class UserContentController {
 
     @Autowired
-    private ContentStorageService storageService;
+    private ContentUploadService storageService;
 
-    @PostMapping("/uploadFiles")
-    public ResponseEntity<ResponseMessage> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+    @PostMapping("/uploadContents")
+    public ResponseEntity<ResponseMessage> uploadMultipleFiles(@RequestParam("contents") MultipartFile[] files) {
         ResponseMessage responseMessage = new ResponseMessage();
         List<ContentUploadResponse> contentUploadResponseList = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -33,31 +31,31 @@ public class UserContentController {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
-    @GetMapping("/files")
-    public ResponseEntity<List<ResponseFile>> getListFiles() {
-        List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
+    @GetMapping("/contents")
+    public ResponseEntity<List<ResponseFile>> getListContents() {
+        List<ResponseFile> files = storageService.getAllFiles().map(content -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("/files/")
-                    .path(dbFile.getUserContentId().toString())
+                    .path(content.getUserContentId().toString())
                     .toUriString();
 
             return new ResponseFile(
-                    dbFile.getTitle(),
+                    content.getTitle(),
                     fileDownloadUri,
-                    dbFile.getType(),
-                    dbFile.getData().length);
+                    content.getType(),
+                    content.getData().length);
         }).collect(Collectors.toList());
 
-        return ResponseEntity.status(HttpStatus.OK).body(files);
+        return new ResponseEntity<>(files, HttpStatus.OK);
     }
 
-    @GetMapping("/files/{id}")
-    public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
-        UserContent fileDB = storageService.getFile(id);
+    @GetMapping("/content/{id}")
+    public ResponseEntity<byte[]> getContent(@PathVariable Long id) {
+        UserContent userContent = storageService.getFile(id);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getTitle() + "\"")
-                .body(fileDB.getData());
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; content_name=\"" + userContent.getTitle() + "\"")
+                .body(userContent.getData());
     }
 }
