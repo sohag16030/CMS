@@ -88,8 +88,7 @@ public class UserService {
     }
 
     public CmsUser getCmsUserById(Long cmsUserId) {
-        Optional<CmsUser> optionalCmsUser = null;
-        optionalCmsUser = userRepository.fetchUserAddressInfoByUserId(cmsUserId);
+        Optional<CmsUser> optionalCmsUser = userRepository.fetchUserAddressInfoByUserId(cmsUserId);
         CmsUser cmsUsers = userRepository.fetchAcademicInfoByUserId(cmsUserId);
 
         List<Long> academicInfoIds = cmsUsers.getAcademicInfos().stream().map(AcademicInfo::getAcademicInfoId).collect(Collectors.toList());
@@ -107,6 +106,8 @@ public class UserService {
             throw new RuntimeException("User not found");
         }
         // Create a new object to hold only the properties want to copy
+        existingUser.setMobileNumber(sourceUser.getMobileNumber());
+        existingUser.setEmail(sourceUser.getEmail());
         existingUser.setName(sourceUser.getName());
         existingUser.setGender(sourceUser.getGender());
         existingUser.setUserStatus(sourceUser.getUserStatus());
@@ -120,13 +121,12 @@ public class UserService {
                 .collect(Collectors.toMap(Address::getAddressId, Function.identity()));
 
         List<Address> updatedAddresses = new ArrayList<>();
-        List<Address> updatedAddressesSource = sourceUser.getAddresses();
 
-        for (Address updatedAddressSource : updatedAddressesSource) {
+        for (Address updatedAddressSource : sourceUser.getAddresses()) {
             Long addressId = updatedAddressSource.getAddressId();
-            if(addressesMap.containsKey(addressId)){
+            if (addressesMap.containsKey(addressId)) {
                 Address modifiedAddress = addressesMap.get(addressId);
-               //update address
+                //update address
                 modifiedAddress.setAddressId(addressId);
                 modifiedAddress.setAddressType(updatedAddressSource.getAddressType());
                 if (updatedAddressSource.getDivision() != null) {
@@ -144,7 +144,7 @@ public class UserService {
         }
         existingUser.getAddresses().clear();
         existingUser.setAddresses(updatedAddresses);
-        
+
         // Update academicInfos
         List<AcademicInfo> updatedAcademicInfos = new ArrayList<>();
 

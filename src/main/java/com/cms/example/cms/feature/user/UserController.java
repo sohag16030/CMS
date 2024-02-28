@@ -32,7 +32,7 @@ public class UserController {
         try {
             CmsUser user = userService.updateCmsUser(cmsUserId, sourceUser);
             return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
         }
     }
