@@ -35,9 +35,9 @@ INSERT INTO SUBJECT (SUBJECT_NAME, NAME_LOCAL, CREATED_AT, UPDATED_AT) VALUES
     ('General Science', 'সাধারিত বিজ্ঞান', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --- INSERT DATA INTO RATING TABEL
-INSERT INTO USER_RATING (STAR, RATING_TYPE) VALUES
-    ('*', 'BRONZE'),
-    ('**', 'SILVER'),
-    ('***', 'GOLD'),
-    ('****', 'PLATINUM'),
-    ('*****', 'DIAMOND');
+-- INSERT INTO CONTENT_RATING (STAR, RATING_TYPE) VALUES
+--     ('*', 'BRONZE'),
+--     ('**', 'SILVER'),
+--     ('***', 'GOLD'),
+--     ('****', 'PLATINUM'),
+--     ('*****', 'DIAMOND');

@@ -17,13 +17,12 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<CmsUser, Long> {
 
     @Query("SELECT u FROM CmsUser u " +
-            "JOIN FETCH u.userRating r " +
             "JOIN FETCH u.addresses a " +
             "JOIN FETCH a.division " +
             "JOIN FETCH a.district " +
             "JOIN FETCH a.upazila " +
             "WHERE u.cmsUserId = :cmsUserId")
-    Optional<CmsUser> fetchUserRatingWithAddressInfoByUserId(@Param("cmsUserId") Long cmsUserId);
+    Optional<CmsUser> fetchUserAddressInfoByUserId(@Param("cmsUserId") Long cmsUserId);
 
     @Query("SELECT u FROM CmsUser u " +
             "JOIN FETCH u.academicInfos a " +

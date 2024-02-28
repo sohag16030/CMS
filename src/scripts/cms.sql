@@ -56,7 +56,6 @@ CREATE TABLE CMS_USER (
                           EMAIL VARCHAR(255) UNIQUE,
                           NAME VARCHAR(255) NOT NULL,
                           GENDER VARCHAR(255) NOT NULL,
-                          USER_RATING_ID BIGINT,
                           USER_STATUS VARCHAR(10) NOT NULL,
                           IS_ACTIVE BOOLEAN NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
@@ -127,18 +126,19 @@ CREATE TABLE ACADEMIC_INFO_SUBJECT (
                                        FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
 );
 
--- Create able STAR_RATING
-CREATE TABLE USER_RATING (
-                           USER_RATING_ID BIGSERIAL,
-                           STAR           VARCHAR(255) NOT NULL,
-                           RATING_TYPE    VARCHAR(255) NOT NULL,
-                           CONSTRAINT USER_RATING_USER_RATING_ID_PK PRIMARY KEY (USER_RATING_ID),
-                           CONSTRAINT USER_RATING_RATING_TYPE_CHK CHECK (RATING_TYPE IN ('DIAMOND', 'PLATINUM', 'GOLD', 'SILVER', 'BRONZE'))
-);
+-- -- Create able STAR_RATING
+-- CREATE TABLE CONTENT_RATING (
+--                            CONTENT_RATING_ID BIGSERIAL,
+--                            STAR           VARCHAR(255) NOT NULL,
+--                            RATING_TYPE    VARCHAR(255) NOT NULL,
+--                            CONSTRAINT USER_RATING_USER_RATING_ID_PK PRIMARY KEY (CONTENT_RATING_ID),
+--                            CONSTRAINT USER_RATING_RATING_TYPE_CHK CHECK (RATING_TYPE IN ('DIAMOND', 'PLATINUM', 'GOLD', 'SILVER', 'BRONZE'))
+-- );
 
 -- Create USER_CONTENT table
 CREATE TABLE USER_CONTENT (
                          USER_CONTENT_ID BIGSERIAL,
+                         CONTENT_RATING_ID BIGINT NOT NULL,
                          TITLE VARCHAR(50) NOT NULL,
                          CONTENT_TYPE VARCHAR(50) NOT NULL,
                          DATA OID ,
@@ -149,5 +149,6 @@ CREATE TABLE USER_CONTENT (
 
                          CONSTRAINT USER_CONTENT_USER_CONTENT_ID_PK PRIMARY KEY (USER_CONTENT_ID),
                          CONSTRAINT USER_CONTENT_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID)
+--                          CONSTRAINT USER_CONTENT_CONTENT_RATING_ID_FK FOREIGN KEY (CONTENT_RATING_ID) REFERENCES CONTENT_RATING(CONTENT_RATING_ID)
 
 );

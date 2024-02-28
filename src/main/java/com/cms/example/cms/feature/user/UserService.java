@@ -8,16 +8,12 @@ import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Subject;
 import com.cms.example.cms.entities.Upazila;
-import com.cms.example.cms.entities.UserContent;
-import com.cms.example.cms.entities.UserRating;
 import com.cms.example.cms.feature.academicInfo.AcademicInfoRepository;
 import com.cms.example.cms.feature.address.AddressRepository;
 import com.cms.example.cms.feature.geo.DistrictRepository;
 import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.subject.SubjectRepository;
-import com.cms.example.cms.feature.userContent.UserContentRepository;
-import com.cms.example.cms.feature.userRating.UserRatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +34,6 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserRatingRepository userRatingRepository;
     private final DivisionRepository divisionRepository;
     private final DistrictRepository districtRepository;
     private final UpazilaRepository upazilaRepository;
@@ -48,9 +43,6 @@ public class UserService {
 
     @Transactional
     public CmsUser saveCmsUser(CmsUser cmsUser) {
-        if (UserRating.isNonNull(cmsUser.getUserRating())) {
-            cmsUser.setUserRating(userRatingRepository.getOne(cmsUser.getUserRating().getUserRatingId()));
-        }
         populateAddress(cmsUser);
         populateAcademicInfo(cmsUser);
         cmsUser = userRepository.save(cmsUser);
@@ -97,14 +89,11 @@ public class UserService {
 
     public CmsUser getCmsUserById(Long cmsUserId) {
         Optional<CmsUser> optionalCmsUser = null;
-        optionalCmsUser = userRepository.fetchUserRatingWithAddressInfoByUserId(cmsUserId);
+        optionalCmsUser = userRepository.fetchUserAddressInfoByUserId(cmsUserId);
         CmsUser cmsUsers = userRepository.fetchAcademicInfoByUserId(cmsUserId);
 
         List<Long> academicInfoIds = cmsUsers.getAcademicInfos().stream().map(AcademicInfo::getAcademicInfoId).collect(Collectors.toList());
         academicInfoRepository.fetchSubjectsByAcademicInfoIdIn(academicInfoIds);
-
-//        List<Long> contentInfoIds = cmsUsers.getUserContents().stream().map(UserContent::getUserContentId).collect(Collectors.toList());
-//        userContentRepository.fetchUserContentsByContentsIdIn(contentInfoIds);
 
         if (optionalCmsUser.isPresent()) {
             return optionalCmsUser.get();
@@ -120,7 +109,6 @@ public class UserService {
         // Create a new object to hold only the properties want to copy
         existingUser.setName(sourceUser.getName());
         existingUser.setGender(sourceUser.getGender());
-        existingUser.setUserRating(sourceUser.getUserRating());
         existingUser.setUserStatus(sourceUser.getUserStatus());
         existingUser.setIsActive(sourceUser.getIsActive());
 
