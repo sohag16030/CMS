@@ -22,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(Routes.CMS_USER_CREATE_ROUTE)
-    public ResponseEntity<CmsUser> createProduct(@RequestBody CmsUser cmsUser) {
+    public ResponseEntity<CmsUser> createCmsUser(@RequestBody CmsUser cmsUser) {
         CmsUser createdUser = userService.saveCmsUser(cmsUser);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }

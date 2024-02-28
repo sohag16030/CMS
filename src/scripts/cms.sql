@@ -143,9 +143,9 @@ CREATE TABLE USER_CONTENT (
                          CONTENT_TYPE VARCHAR(50) NOT NULL,
                          DATA OID ,
                          CMS_USER_ID BIGINT NOT NULL,
---                          IS_ACTIVE BOOLEAN NOT NULL,
---                          CREATED_AT TIMESTAMPTZ NOT NULL,
---                          UPDATED_AT TIMESTAMPTZ NOT NULL,
+                         IS_ACTIVE BOOLEAN NOT NULL,
+                         CREATED_AT TIMESTAMPTZ NOT NULL,
+                         UPDATED_AT TIMESTAMPTZ NOT NULL,
 
                          CONSTRAINT USER_CONTENT_USER_CONTENT_ID_PK PRIMARY KEY (USER_CONTENT_ID),
                          CONSTRAINT USER_CONTENT_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID)

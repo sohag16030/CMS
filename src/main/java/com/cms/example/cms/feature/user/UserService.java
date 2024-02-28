@@ -45,7 +45,6 @@ public class UserService {
     private final SubjectRepository subjectRepository;
     private final AcademicInfoRepository academicInfoRepository;
     private final AddressRepository addressRepository;
-    private final UserContentRepository userContentRepository;
 
     @Transactional
     public CmsUser saveCmsUser(CmsUser cmsUser) {

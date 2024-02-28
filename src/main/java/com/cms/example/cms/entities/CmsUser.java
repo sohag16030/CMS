@@ -56,9 +56,6 @@ public class CmsUser {
     @JoinColumn(name = "USER_RATING_ID")
     private UserRating userRating;
 
-//    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    private List<UserContent> userContents;
-
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
     private List<Address> addresses;
 

@@ -33,6 +33,7 @@ public class ContentStorageService {
         userContent.setTitle(fileName);
         userContent.setType(file.getContentType());
         userContent.setData(file.getBytes());
+        userContent.setIsActive(true);
         userContent.setCmsUser(userRepository.getOne(8L));
 
         return fileDBRepository.save(userContent);
