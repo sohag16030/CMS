@@ -38,7 +38,7 @@ public class UserContentController {
         List<ResponseFile> files = storageService.getAllFiles().map(content -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
-                    .path("/files/")
+                    .path("/content/")
                     .path(content.getUserContentId().toString())
                     .toUriString();
 
