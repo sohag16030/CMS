@@ -21,16 +21,16 @@ public class ContentUploadService {
     @Autowired
     private UserRepository userRepository;
 
-    public ContentUploadResponse uploadFile(@RequestParam("file") MultipartFile file) {
+    public ContentUploadResponse uploadFile( MultipartFile file,Long cmsUserId) {
         try {
-            store(file);
+            store(file,cmsUserId);
             return new ContentUploadResponse("SUCCESS", file.getOriginalFilename());
         } catch (Exception e) {
             return new ContentUploadResponse("FAILED", file.getOriginalFilename());
         }
     }
 
-    public UserContent store(MultipartFile file) throws IOException {
+    public UserContent store(MultipartFile file,Long cmsUserId) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             UserContent userContent = new UserContent();
@@ -38,7 +38,7 @@ public class ContentUploadService {
             userContent.setType(file.getContentType());
             userContent.setData(file.getBytes());
             userContent.setIsActive(true);
-            userContent.setCmsUser(userRepository.getOne(8L));
+            userContent.setCmsUser(userRepository.getOne(cmsUserId));
 
             return fileDBRepository.save(userContent);
         } catch (IOException ex) {
