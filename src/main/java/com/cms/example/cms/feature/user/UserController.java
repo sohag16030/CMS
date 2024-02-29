@@ -2,10 +2,12 @@ package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.common.Routes;
 import com.cms.example.cms.entities.CmsUser;
+import com.cms.example.cms.feature.userContent.exception.ContentsNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @PostMapping(Routes.CMS_USER_CREATE_ROUTE)
     public ResponseEntity<CmsUser> createCmsUser(@RequestBody CmsUser cmsUser) {
@@ -57,5 +61,20 @@ public class UserController {
         }
         return ResponseEntity.ok(userService.filterUsers(query, pageable));
 
+    }
+
+    @DeleteMapping(Routes.CMS_USER_DELETE_BY_ID_ROUTE)
+    public ResponseEntity<?> deleteUserById(@PathVariable Long userId) {
+        try {
+            userRepository.deleteById(userId);
+            Optional<CmsUser> userOptional = userRepository.findById(userId);
+            if (!userOptional.isPresent()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user. No records exists with Id :: " + userId);
+        }
     }
 }
