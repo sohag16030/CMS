@@ -53,8 +53,8 @@ public class UserContentController {
     }
 
     @GetMapping(Routes.USER_CONTENT_DOWNLOAD_BY_ID_ROUTE)
-    public ResponseEntity<byte[]> getContent(@PathVariable Long id) {
-        UserContent userContent = storageService.getFile(id);
+    public ResponseEntity<byte[]> downloadContent(@PathVariable Long userContentId) {
+        UserContent userContent = storageService.getFile(userContentId);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; content_name=\"" + userContent.getTitle() + "\"")

@@ -23,6 +23,7 @@ public final class Routes {
     public static final String USER_CONTENT_UPLOAD_ROUTE = "/api/content";
     public static final String USER_CONTENT_UPDATE_ROUTE = "/api/content/{userContentId}";
     public static final String USER_CONTENT_DOWNLOAD_BY_ID_ROUTE = "/api/content/{userContentId}";
+    public static final String USER_CONTENT_BY_ID_ROUTE = "/api/content/{userContentId}";
     public static final String USER_CONTENT_LIST_ROUTE = "/api/content";
     public static final String USER_CONTENT_DELETE_ROUTE = "/api/content/{userContentId}";
 
