@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class ResponseFile {
-    private String name;
+    private String title;
     private String url;
     private String type;
     private long size;
