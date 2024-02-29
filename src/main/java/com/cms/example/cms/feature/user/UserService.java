@@ -114,6 +114,15 @@ public class UserService {
         existingUser.setIsActive(sourceUser.getIsActive());
 
         // Update addresses
+        updateAddresses(existingUser, sourceUser);
+
+        // Update academicInfos
+        updateAcademicInfos(existingUser, sourceUser);
+
+        return getCmsUserById(cmsUserId);
+    }
+
+    private void updateAddresses(CmsUser existingUser, CmsUser sourceUser) {
         List<Long> addressIds = sourceUser.getAddresses().stream().map(Address::getAddressId).collect(Collectors.toList());
         List<Address> getAddressesInfoByIds = addressRepository.fetchAddressesInfoByAddressIdsIn(addressIds);
 
@@ -125,27 +134,56 @@ public class UserService {
         for (Address updatedAddressSource : sourceUser.getAddresses()) {
             Long addressId = updatedAddressSource.getAddressId();
             if (addressesMap.containsKey(addressId)) {
-                Address modifiedAddress = addressesMap.get(addressId);
-                //update address
-                modifiedAddress.setAddressId(addressId);
-                modifiedAddress.setAddressType(updatedAddressSource.getAddressType());
-                if (updatedAddressSource.getDivision() != null) {
-                    modifiedAddress.setDivision(divisionRepository.getOne(updatedAddressSource.getDivision().getDivisionId()));
-                }
-                if (updatedAddressSource.getDistrict() != null) {
-                    modifiedAddress.setDistrict(districtRepository.getOne(updatedAddressSource.getDistrict().getDistrictId()));
-                }
-                if (updatedAddressSource.getUpazila() != null) {
-                    modifiedAddress.setUpazila(upazilaRepository.getOne(updatedAddressSource.getUpazila().getUpazilaId()));
-                }
-                modifiedAddress.setIsActive(updatedAddressSource.getIsActive());
+                // modify existing addresses
+                Address modifiedAddress = modifyExistingAddress(updatedAddressSource, addressId, addressesMap);
                 updatedAddresses.add(modifiedAddress);
+            } else {
+                // new address should be added with existing addresses
+                // populate updated address
+                Address newAddress = populateNewAddressForUpdatedAddress(existingUser, updatedAddressSource);
+                updatedAddresses.add(newAddress);
             }
         }
+
         existingUser.getAddresses().clear();
         existingUser.setAddresses(updatedAddresses);
+    }
 
-        // Update academicInfos
+    private Address modifyExistingAddress(Address updatedAddressSource, Long addressId, Map<Long, Address> addressesMap) {
+        Address modifiedAddress = addressesMap.get(addressId);
+        //update address
+        //modifiedAddress.setAddressId(addressId);
+        modifiedAddress.setAddressType(updatedAddressSource.getAddressType());
+        if (updatedAddressSource.getDivision() != null) {
+            modifiedAddress.setDivision(divisionRepository.getOne(updatedAddressSource.getDivision().getDivisionId()));
+        }
+        if (updatedAddressSource.getDistrict() != null) {
+            modifiedAddress.setDistrict(districtRepository.getOne(updatedAddressSource.getDistrict().getDistrictId()));
+        }
+        if (updatedAddressSource.getUpazila() != null) {
+            modifiedAddress.setUpazila(upazilaRepository.getOne(updatedAddressSource.getUpazila().getUpazilaId()));
+        }
+        modifiedAddress.setIsActive(updatedAddressSource.getIsActive());
+        return modifiedAddress;
+    }
+
+    private Address populateNewAddressForUpdatedAddress(CmsUser existingUser, Address updatedAddressSource) {
+        if (Division.isNonNull(updatedAddressSource.getDivision())) {
+            updatedAddressSource.setDivision(divisionRepository.getOne(updatedAddressSource.getDivision().getDivisionId()));
+        }
+
+        if (District.isNonNull(updatedAddressSource.getDistrict())) {
+            updatedAddressSource.setDistrict(districtRepository.getOne(updatedAddressSource.getDistrict().getDistrictId()));
+        }
+
+        if (Upazila.isNonNull(updatedAddressSource.getUpazila())) {
+            updatedAddressSource.setUpazila(upazilaRepository.getOne(updatedAddressSource.getUpazila().getUpazilaId()));
+        }
+        updatedAddressSource.setCmsUser(existingUser);
+        return updatedAddressSource;
+    }
+
+    private void updateAcademicInfos(CmsUser existingUser, CmsUser sourceUser) {
         List<AcademicInfo> updatedAcademicInfos = new ArrayList<>();
 
         for (AcademicInfo updatedAcademicInfo : sourceUser.getAcademicInfos()) {
@@ -156,30 +194,36 @@ public class UserService {
                     .orElse(null);
 
             if (existingAcademicInfo != null) {
-                existingAcademicInfo.setAcademicLevel(updatedAcademicInfo.getAcademicLevel());
-                existingAcademicInfo.setGrade(updatedAcademicInfo.getGrade());
-                existingAcademicInfo.setAcademicClass(updatedAcademicInfo.getAcademicClass());
-
-                // Update subjects
-                List<Subject> updatedSubjects = new ArrayList<>();
-                for (Subject updatedSubject : updatedAcademicInfo.getSubjects()) {
-                    Subject existingSubject = subjectRepository.findById(updatedSubject.getSubjectId()).orElse(null);
-                    if (existingSubject != null) {
-                        updatedSubjects.add(subjectRepository.getOne(updatedSubject.getSubjectId()));
-                    }
-                }
-                existingAcademicInfo.getSubjects().clear();
-                existingAcademicInfo.setSubjects(updatedSubjects);
-                updatedAcademicInfos.add(existingAcademicInfo);
+                // modify existing academic info
+                AcademicInfo modifiedExistingAcademicInfo = modifyExistingAcademicInfo( updatedAcademicInfo, existingAcademicInfo);
+                updatedAcademicInfos.add(modifiedExistingAcademicInfo);
             } else {
                 //need to add new academic info
+                populateSubject(updatedAcademicInfo);
+                updatedAcademicInfo.setCmsUser(existingUser);
                 updatedAcademicInfos.add(updatedAcademicInfo);
             }
         }
         existingUser.getAcademicInfos().clear();
         existingUser.setAcademicInfos(updatedAcademicInfos);
+    }
 
-        return getCmsUserById(cmsUserId);
+    private AcademicInfo modifyExistingAcademicInfo(AcademicInfo updatedAcademicInfo, AcademicInfo existingAcademicInfo) {
+        existingAcademicInfo.setAcademicLevel(updatedAcademicInfo.getAcademicLevel());
+        existingAcademicInfo.setGrade(updatedAcademicInfo.getGrade());
+        existingAcademicInfo.setAcademicClass(updatedAcademicInfo.getAcademicClass());
+
+        // Update subjects
+        List<Subject> updatedSubjects = new ArrayList<>();
+        for (Subject updatedSubject : updatedAcademicInfo.getSubjects()) {
+            Subject existingSubject = subjectRepository.findById(updatedSubject.getSubjectId()).orElse(null);
+            if (existingSubject != null) {
+                updatedSubjects.add(subjectRepository.getOne(updatedSubject.getSubjectId()));
+            }
+        }
+        existingAcademicInfo.getSubjects().clear();
+        existingAcademicInfo.setSubjects(updatedSubjects);
+        return  existingAcademicInfo;
     }
 
     public PaginatedCmsUserResponse getAllUsers(Pageable pageable) {
