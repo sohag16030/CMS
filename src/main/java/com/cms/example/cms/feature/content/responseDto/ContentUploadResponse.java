@@ -1,10 +1,13 @@
 package com.cms.example.cms.feature.content.responseDto;
 
+import com.cms.example.cms.entities.Content;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,6 +15,5 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class ContentUploadResponse {
-    private String status;
-    private String title;
+    private List<Content> contents;
 }

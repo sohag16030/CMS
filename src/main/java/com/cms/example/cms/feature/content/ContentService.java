@@ -36,31 +36,7 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final UserRepository userRepository;
 
-//    public ContentUploadResponse uploadContent(MultipartFile file, Long cmsUserId) {
-//        try {
-//            store(file,cmsUserId);
-//            return new ContentUploadResponse("SUCCESS", file.getOriginalFilename());
-//        } catch (Exception e) {
-//            return new ContentUploadResponse("FAILED", file.getOriginalFilename());
-//        }
-//    }
-
-    //    public Content store(MultipartFile file, Long cmsUserId) throws IOException {
-//        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-//        try {
-//            Content userContent = new Content();
-//            userContent.setTitle(fileName);
-//            userContent.setType(file.getContentType());
-//            userContent.setData(file.getBytes());
-//            userContent.setIsActive(true);
-//            userContent.setCmsUser(userRepository.getOne(cmsUserId));
-//
-//            return contentRepository.save(userContent);
-//        } catch (IOException ex) {
-//            throw new ContentStorageException("Could not store file " + fileName + ". Please try again!", ex);
-//        }
-//    }
-    public String uploadContentToFileSystem(MultipartFile file, Long cmsUserId) throws Exception {
+    public Content uploadContentToFileSystem(MultipartFile file, Long cmsUserId) throws Exception {
         File directory = new File(UPLOAD_DIR);
         if (!directory.exists()) {
             directory.mkdirs();
@@ -80,7 +56,7 @@ public class ContentService {
                 .isActive(true)
                 .build());
 
-        if (content != null) return "Content upload successful" + filePath;
+        if (content != null) return content;
         return null;
     }
 
@@ -102,37 +78,24 @@ public class ContentService {
         }
     }
 
-//    public Content getFile(Long id) {
-//        try {
-//            return contentRepository.findById(id).get();
-//        } catch (ContentsNotFoundException ex) {
-//            throw new ContentsNotFoundException("File not found id ::" + id, ex);
-//        }
-//
-//    }
-
-//    public Stream<Content> getAllFiles() {
-//        return contentRepository.findAll().stream();
-//    }
-//
     public Optional<Content> getContentWithUserById(Long contentId) {
         Optional<Content> content = contentRepository.findByIdWithDetails(contentId);
         return content;
     }
-//
-//    public PaginatedContentResponse getAllContents(Pageable pageable) {
-//        Page<Content> contents = contentRepository.findAll(pageable);
-//        return PaginatedContentResponse.builder()
-//                .numberOfItems(contents.getTotalElements()).numberOfPages(contents.getTotalPages())
-//                .contentList(contents.getContent())
-//                .build();
-//    }
-//
-//    public PaginatedContentResponse filterContents(String title, Pageable pageable) {
-//        Page<Content> contents = contentRepository.findByTitleContaining(title, pageable);
-//        return PaginatedContentResponse.builder()
-//                .numberOfItems(contents.getTotalElements()).numberOfPages(contents.getTotalPages())
-//                .contentList(contents.getContent())
-//                .build();
-//    }
+
+    public PaginatedContentResponse getAllContents(Pageable pageable) {
+        Page<Content> contents = contentRepository.findAll(pageable);
+        return PaginatedContentResponse.builder()
+                .numberOfItems(contents.getTotalElements()).numberOfPages(contents.getTotalPages())
+                .contentList(contents.getContent())
+                .build();
+    }
+
+    public PaginatedContentResponse filterContents(String title, Pageable pageable) {
+        Page<Content> contents = contentRepository.findByTitleContaining(title, pageable);
+        return PaginatedContentResponse.builder()
+                .numberOfItems(contents.getTotalElements()).numberOfPages(contents.getTotalPages())
+                .contentList(contents.getContent())
+                .build();
+    }
 }
