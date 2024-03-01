@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,11 +49,12 @@ public class ContentController {
     @GetMapping(Routes.CONTENT_BY_ID_ROUTE)
     public ResponseEntity<?> getContent(@PathVariable Long contentId) {
         Optional<Content> content = contentService.getContentWithUserById(contentId);
-
-//        ContentDto contentDto = new ContentDto(content.get().getContentId(),content.get().getTitle(),content.get().getType(),
-//                contentDownloadUri,content.get().getData().length,con)
-
-        return new ResponseEntity<>(content, HttpStatus.OK);
+        if (Objects.nonNull(content)) {
+            return new ResponseEntity<>(content, HttpStatus.OK);
+        } else {
+            // TODO : throw EntityNotFoundException
+            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
+        }
     }
 //
 //    @GetMapping(Routes.CONTENT_LIST_ROUTE)
