@@ -84,13 +84,6 @@ public class ContentService {
         return null;
     }
 
-    public byte[] downloadContentFromFileSystem(Long contentId) throws IOException {
-        Optional<Content> contentData = contentRepository.findById(contentId);
-        String filePath = contentData.get().getPath();
-        byte[] content = Files.readAllBytes(new File(filePath).toPath());
-        return content;
-    }
-
     public MediaType getContentTypeFromFileName(String fileName) {
         String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
         switch (extension.toLowerCase()) {
@@ -122,10 +115,10 @@ public class ContentService {
 //        return contentRepository.findAll().stream();
 //    }
 //
-//    public Optional<Content> getContentWithUserById(Long contentId) {
-//        Optional<Content> content = contentRepository.findByIdWithDetails(contentId);
-//        return content;
-//    }
+    public Optional<Content> getContentWithUserById(Long contentId) {
+        Optional<Content> content = contentRepository.findByIdWithDetails(contentId);
+        return content;
+    }
 //
 //    public PaginatedContentResponse getAllContents(Pageable pageable) {
 //        Page<Content> contents = contentRepository.findAll(pageable);

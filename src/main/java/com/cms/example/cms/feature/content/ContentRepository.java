@@ -15,8 +15,9 @@ import java.util.Optional;
 @Repository
 public interface ContentRepository extends JpaRepository<Content, Long> {
 
-//    @Query("SELECT con FROM Content con LEFT JOIN FETCH con.cmsUser WHERE con.contentId = :contentId")
-//    Optional<Content> findByIdWithDetails(Long contentId);
+    @Query("SELECT con FROM Content con LEFT JOIN FETCH con.cmsUser WHERE con.contentId = :contentId")
+    Optional<Content> findByIdWithDetails(Long contentId);
+
 //
 //    Page<Content> findAll(Pageable pageable);
 //

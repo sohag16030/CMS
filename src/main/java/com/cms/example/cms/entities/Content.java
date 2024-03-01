@@ -46,7 +46,6 @@ public class Content {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID", nullable = false)
-    @JsonIgnore
     private CmsUser cmsUser;
 
     @Column(name = "IS_ACTIVE", nullable = false)

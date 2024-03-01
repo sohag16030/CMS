@@ -45,22 +45,15 @@ public class ContentController {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
-//    @GetMapping(Routes.CONTENT_BY_ID_ROUTE)
-//    public ResponseEntity<?> getContent(@PathVariable Long contentId) {
-//        Optional<Content> content = contentService.getContentWithUserById(contentId);
-//
-//        Content data = contentService.getFile(contentId);
-//        String contentDownloadUri = ServletUriComponentsBuilder
-//                .fromCurrentContextPath()
-//                .path("/content/")
-//                .path(data.getContentId().toString())
-//                .toUriString();
-//
-////        ContentDto contentDto = new ContentDto(content.get().getContentId(),content.get().getTitle(),content.get().getType(),
-////                contentDownloadUri,content.get().getData().length,con)
-//
-//        return new ResponseEntity<>(content, HttpStatus.OK);
-//    }
+    @GetMapping(Routes.CONTENT_BY_ID_ROUTE)
+    public ResponseEntity<?> getContent(@PathVariable Long contentId) {
+        Optional<Content> content = contentService.getContentWithUserById(contentId);
+
+//        ContentDto contentDto = new ContentDto(content.get().getContentId(),content.get().getTitle(),content.get().getType(),
+//                contentDownloadUri,content.get().getData().length,con)
+
+        return new ResponseEntity<>(content, HttpStatus.OK);
+    }
 //
 //    @GetMapping(Routes.CONTENT_LIST_ROUTE)
 //    public ResponseEntity<List<ResponseFile>> getListContents( @RequestParam(required = false) String query,
