@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.userContent;
+package com.cms.example.cms.feature.content.responseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ResponseFile {
+public class ContentUploadResponse {
+    private String status;
     private String title;
-    private String url;
-    private String type;
-    private long size;
 }

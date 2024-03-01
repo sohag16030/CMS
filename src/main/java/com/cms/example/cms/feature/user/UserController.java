@@ -2,7 +2,6 @@ package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.common.Routes;
 import com.cms.example.cms.entities.CmsUser;
-import com.cms.example.cms.feature.userContent.exception.ContentsNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

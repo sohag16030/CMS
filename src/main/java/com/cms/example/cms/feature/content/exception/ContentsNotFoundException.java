@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.userContent.exception;
+package com.cms.example.cms.feature.content.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

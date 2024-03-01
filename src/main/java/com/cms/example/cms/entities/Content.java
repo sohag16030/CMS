@@ -23,27 +23,26 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "USER_CONTENT")
+@Table(name = "CONTENT")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserContent {
+public class Content {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_CONTENT_ID")
-    private Long userContentId;
+    @Column(name = "CONTENT_ID")
+    private Long contentId;
 
     @Column(name = "TITLE", nullable = false)
     private String title;
 
-    @Column(name = "CONTENT_TYPE", nullable = false)
+    @Column(name = "TYPE", nullable = false)
     private String type;
 
-    @Lob
-    @Column(name = "DATA", length = 1000)
-    private byte[] data;
+    @Column(name = "PATH", nullable = false)
+    private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID", nullable = false)
@@ -62,7 +61,7 @@ public class UserContent {
     private Date updatedAt;
 
     @JsonIgnore
-    public static Boolean isNonNull(UserContent userContent){
-        return Objects.nonNull(userContent) && Objects.nonNull(userContent.getUserContentId());
+    public static Boolean isNonNull(Content userContent){
+        return Objects.nonNull(userContent) && Objects.nonNull(userContent.getContentId());
     }
 }
