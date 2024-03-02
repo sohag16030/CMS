@@ -36,6 +36,15 @@ public class CmsUser {
     @Column(name = "CMS_USER_ID")
     private Long cmsUserId;
 
+    @Column(name = "USER_NAME", unique = true, nullable = false)
+    private String userName;
+
+    @Column(name = "PASSWORD", unique = true, nullable = false)
+    private String password;
+
+    @Column(name = "ROLES", unique = true, nullable = false)
+    private String roles;
+
     @Column(name = "MOBILE_NUMBER", unique = true, nullable = false)
     private String mobileNumber;
 

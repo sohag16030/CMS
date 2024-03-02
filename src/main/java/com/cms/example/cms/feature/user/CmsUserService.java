@@ -17,6 +17,7 @@ import com.cms.example.cms.feature.subject.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -31,18 +32,23 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class UserService {
+public class CmsUserService {
 
-    private final UserRepository userRepository;
+    private final CmsUserRepository userRepository;
     private final DivisionRepository divisionRepository;
     private final DistrictRepository districtRepository;
     private final UpazilaRepository upazilaRepository;
     private final SubjectRepository subjectRepository;
     private final AcademicInfoRepository academicInfoRepository;
     private final AddressRepository addressRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public static final String DEFAULT_ROLE = "ROLE_USER";
 
     @Transactional
     public CmsUser saveCmsUser(CmsUser cmsUser) {
+        cmsUser.setRoles(DEFAULT_ROLE);
+        cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
         populateAddress(cmsUser);
         populateAcademicInfo(cmsUser);
         cmsUser = userRepository.save(cmsUser);

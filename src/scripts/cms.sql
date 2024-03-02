@@ -2,14 +2,12 @@
 CREATE TABLE DIVISION (
                           DIVISION_ID BIGSERIAL,
                           NAME VARCHAR(255) NOT NULL,
-                          NAME_LOCAL VARCHAR(255) NOT NULL,
                           ACTIVE BOOLEAN NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
                           UPDATED_AT TIMESTAMPTZ NOT NULL,
 
                           CONSTRAINT DIVISION_DIVISION_ID_PK PRIMARY KEY (DIVISION_ID),
                           CONSTRAINT DIVISION_NAME_UK UNIQUE (NAME),
-                          CONSTRAINT DIVISION_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
                           CONSTRAINT DIVISION_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE))
 );
 
@@ -17,7 +15,6 @@ CREATE TABLE DIVISION (
 CREATE TABLE DISTRICT (
                           DISTRICT_ID BIGSERIAL,
                           NAME VARCHAR(255) NOT NULL,
-                          NAME_LOCAL VARCHAR(255) NOT NULL,
                           ACTIVE BOOLEAN NOT NULL,
                           DIVISION_ID BIGINT NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
@@ -25,7 +22,6 @@ CREATE TABLE DISTRICT (
 
                           CONSTRAINT DISTRICT_DISTRICT_ID_PK PRIMARY KEY (DISTRICT_ID),
                           CONSTRAINT DISTRICT_NAME_UK UNIQUE (NAME),
-                          CONSTRAINT DISTRICT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
                           CONSTRAINT DISTRICT_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
                           CONSTRAINT DISTRICT_DIVISION_ID_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID)
 );
@@ -35,7 +31,6 @@ CREATE TABLE DISTRICT (
 CREATE TABLE UPAZILA (
                          UPAZILA_ID BIGSERIAL,
                          NAME VARCHAR(255) NOT NULL,
-                         NAME_LOCAL VARCHAR(255) NOT NULL,
                          ACTIVE BOOLEAN NOT NULL,
                          DISTRICT_ID BIGINT,
                          CREATED_AT TIMESTAMPTZ NOT NULL,
@@ -43,7 +38,6 @@ CREATE TABLE UPAZILA (
 
                          CONSTRAINT UPAZILA_UPAZILA_ID_PK PRIMARY KEY (UPAZILA_ID),
                          CONSTRAINT UPAZILA_NAME_UK UNIQUE (NAME),
-                         CONSTRAINT UPAZILA_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
                          CONSTRAINT UPAZILA_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
                          CONSTRAINT UPAZILA_DISTRICT_ID_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID)
 );
@@ -55,6 +49,9 @@ CREATE TABLE CMS_USER (
                           MOBILE_NUMBER VARCHAR(255) UNIQUE NOT NULL,
                           EMAIL VARCHAR(255) UNIQUE,
                           NAME VARCHAR(255) NOT NULL,
+                          USER_NAME VARCHAR(255) NOT NULL,
+                          PASSWORD VARCHAR(255) NOT NULL,
+                          ROLES VARCHAR(255) NOT NULL,
                           GENDER VARCHAR(255) NOT NULL,
                           USER_STATUS VARCHAR(10) NOT NULL,
                           IS_ACTIVE BOOLEAN NOT NULL,
@@ -68,6 +65,25 @@ CREATE TABLE CMS_USER (
                           CONSTRAINT CMS_USER_USER_STATUS_CHK CHECK (USER_STATUS IN ('ACTIVE', 'INACTIVE')),
                           CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE))
 );
+
+-- Create BLACK_LISTED_TOKENS table
+CREATE TABLE BLACK_LISTED_TOKENS (
+                                     BLACK_LISTED_TOKEN_ID BIGSERIAL PRIMARY KEY,
+                                     ACCESS_TOKEN VARCHAR(255) NOT NULL,
+                                     CMS_USER_ID BIGINT,
+                                     CONSTRAINT BLACK_LISTED_TOKENS_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID)
+);
+
+
+-- Create REFRESH_TOKEN table
+CREATE TABLE REFRESH_TOKEN (
+                               REFRESH_TOKEN_ID BIGSERIAL PRIMARY KEY,
+                               REFRESH_TOKEN VARCHAR(255) NOT NULL,
+                               EXPIRY_DATE TIMESTAMP WITH TIME ZONE NOT NULL,
+                               CMS_USER_ID BIGINT,
+                               CONSTRAINT REFRESH_TOKEN_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID)
+);
+
 
 -- Create ADDRESS table
 CREATE TABLE ADDRESS (
@@ -93,13 +109,11 @@ CREATE TABLE ADDRESS (
 CREATE TABLE SUBJECT (
                          SUBJECT_ID BIGSERIAL,
                          SUBJECT_NAME VARCHAR(255)  NOT NULL,
-                         NAME_LOCAL VARCHAR(255)  NOT NULL,
                          CREATED_AT TIMESTAMPTZ NOT NULL,
                          UPDATED_AT TIMESTAMPTZ NOT NULL,
 
                          CONSTRAINT SUBJECT_SUBJECT_ID_PK PRIMARY KEY (SUBJECT_ID),
-                         CONSTRAINT SUBJECT_NAME_UK UNIQUE (SUBJECT_NAME),
-                         CONSTRAINT SUBJECT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL)
+                         CONSTRAINT SUBJECT_NAME_UK UNIQUE (SUBJECT_NAME)
 );
 
 

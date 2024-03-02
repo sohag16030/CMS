@@ -46,7 +46,7 @@ public class GeoService {
     }
 
     public PaginatedDivisionResponse getDivisionsByFilter(GeoFilterDto filter,Pageable pageable) {
-        Page<Division> divisions =  divisionRepository.search(filter.getDivisionId(), filter.getName(), filter.getNameLocal(), filter.getActive(),pageable);
+        Page<Division> divisions =  divisionRepository.search(filter.getDivisionId(), filter.getName(), filter.getActive(),pageable);
         return PaginatedDivisionResponse.builder()
                 .numberOfItems(divisions.getTotalElements()).numberOfPages(divisions.getTotalPages())
                 .divisionList(divisions.getContent())
@@ -62,7 +62,7 @@ public class GeoService {
     }
 
     public PaginatedDistrictResponse getDistrictsByFilter(GeoFilterDto filter,Pageable pageable) {
-        Page<District> districts =  districtRepository.search(filter.getDivisionId(),filter.getDistrictId(), filter.getName(), filter.getNameLocal(), filter.getActive(),pageable);
+        Page<District> districts =  districtRepository.search(filter.getDivisionId(),filter.getDistrictId(), filter.getName(), filter.getActive(),pageable);
         return PaginatedDistrictResponse.builder()
                 .numberOfItems(districts.getTotalElements()).numberOfPages(districts.getTotalPages())
                 .districtList(districts.getContent())
@@ -78,7 +78,7 @@ public class GeoService {
     }
 
     public PaginatedUpazilaResponse getUpazilaByFilter(GeoFilterDto filter,Pageable pageable) {
-        Page<Upazila> upazilas =  upazilaRepository.search(filter.getDivisionId(),filter.getDistrictId(),filter.getUpazilaId(), filter.getName(), filter.getNameLocal(), filter.getActive(),pageable);
+        Page<Upazila> upazilas =  upazilaRepository.search(filter.getDivisionId(),filter.getDistrictId(),filter.getUpazilaId(), filter.getName(), filter.getActive(),pageable);
         return PaginatedUpazilaResponse.builder()
                 .numberOfItems(upazilas.getTotalElements()).numberOfPages(upazilas.getTotalPages())
                 .upazilaList(upazilas.getContent())

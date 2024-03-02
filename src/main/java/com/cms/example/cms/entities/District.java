@@ -42,9 +42,6 @@ public class District {
     @Column(name = "NAME", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "NAME_LOCAL", unique = true, nullable = false)
-    private String nameLocal;
-
     @Column(name = "ACTIVE", nullable = false)
     private Boolean active;
 

@@ -20,9 +20,9 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
-    private final UserService userService;
-    private final UserRepository userRepository;
+public class CmsUserController {
+    private final CmsUserService userService;
+    private final CmsUserRepository userRepository;
 
     @PostMapping(Routes.CMS_USER_CREATE_ROUTE)
     public ResponseEntity<CmsUser> createCmsUser(@RequestBody CmsUser cmsUser) {

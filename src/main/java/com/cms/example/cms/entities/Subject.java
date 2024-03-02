@@ -36,10 +36,6 @@ public class Subject {
     @Column(name = "SUBJECT_NAME", unique = true, nullable = false)
     private String name;
 
-
-    @Column(name = "NAME_LOCAL", unique = true, nullable = false)
-    private String nameLocal;
-
     @ManyToMany(mappedBy = "subjects")
     private List<AcademicInfo> academicInfos;
 

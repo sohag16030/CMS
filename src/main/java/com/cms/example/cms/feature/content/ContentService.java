@@ -2,7 +2,7 @@ package com.cms.example.cms.feature.content;
 
 import com.cms.example.cms.dto.PaginatedContentResponse;
 import com.cms.example.cms.entities.Content;
-import com.cms.example.cms.feature.user.UserRepository;
+import com.cms.example.cms.feature.user.CmsUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ public class ContentService {
     private static final String UPLOAD_DIR = "J:\\Content\\";
 
     private final ContentRepository contentRepository;
-    private final UserRepository userRepository;
+    private final CmsUserRepository userRepository;
 
     public Content uploadContentToFileSystem(Long cmsUserId, MultipartFile file) {
         initiateDirectory();

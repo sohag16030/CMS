@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface UserRepository extends JpaRepository<CmsUser, Long> {
+public interface CmsUserRepository extends JpaRepository<CmsUser, Long> {
 
     @Query("SELECT u FROM CmsUser u " +
             "JOIN FETCH u.addresses a " +
@@ -31,4 +31,6 @@ public interface UserRepository extends JpaRepository<CmsUser, Long> {
     Page<CmsUser> findAll(Pageable pageable);
 
     Page<CmsUser> findByNameContaining(String name, Pageable pageable);
+
+    Optional<CmsUser> findByUserName(String username);
 }

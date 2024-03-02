@@ -25,13 +25,11 @@ public interface DistrictRepository extends JpaRepository<District, Long> {
             "WHERE " +
             "(:districtId IS NULL OR dis.districtId = :districtId) AND " +
             "(:name IS NULL OR LOWER(dis.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-            "(:nameLocal IS NULL OR LOWER(dis.nameLocal) LIKE LOWER(CONCAT('%', :nameLocal, '%'))) AND " +
             "(:active IS NULL OR dis.active = :active) AND " +
             "(:divisionId IS NULL OR div.divisionId = :divisionId)")
     Page<District> search(@Param("divisionId") Long divisionId,
                           @Param("districtId") Long districtId,
                           @Param("name") String name,
-                          @Param("nameLocal") String nameLocal,
                           @Param("active") Boolean active, Pageable pageable);
 }
 

@@ -23,7 +23,6 @@ public interface UpazilaRepository extends JpaRepository<Upazila, Long> {
             "WHERE " +
             "(:upazilaId IS NULL OR u.upazilaId = :upazilaId) AND " +
             "(:name IS NULL OR LOWER(u.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-            "(:nameLocal IS NULL OR LOWER(u.nameLocal) LIKE LOWER(CONCAT('%', :nameLocal, '%'))) AND " +
             "(:active IS NULL OR u.active = :active) AND " +
             "(:districtId IS NULL OR dis.districtId = :districtId) AND " +
             "(:divisionId IS NULL OR div.divisionId = :divisionId)")
@@ -31,7 +30,6 @@ public interface UpazilaRepository extends JpaRepository<Upazila, Long> {
                          @Param("districtId") Long districtId,
                          @Param("upazilaId") Long upazilaId,
                          @Param("name") String name,
-                         @Param("nameLocal") String nameLocal,
                          @Param("active") Boolean active, Pageable pageable);
 
 }
