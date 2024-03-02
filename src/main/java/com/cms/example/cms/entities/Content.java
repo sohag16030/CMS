@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -53,11 +54,11 @@ public class Content {
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "UPDATED_AT", nullable = false)
     @UpdateTimestamp
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @JsonIgnore
     public static Boolean isNonNull(Content userContent){

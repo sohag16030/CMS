@@ -4,6 +4,7 @@ import com.cms.example.cms.common.Routes;
 
 import com.cms.example.cms.entities.Content;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -54,13 +55,13 @@ public class ContentController {
         try {
             List<Content> contents = new ArrayList<>();
             for (MultipartFile file : files) {
-                Optional<Content> content = contentRepository.getContentByTitle(file.getOriginalFilename());
-                if (Objects.nonNull(content)) {
-                    Content contentUpdated = contentService.updateContent(cmsUserId,content.get().getContentId(),file);
-                    contents.add(contentUpdated);
+                Optional<Content> existingContent = contentRepository.getContentByTitleOfLoggedInUser(cmsUserId,file.getOriginalFilename());
+                if (existingContent.isPresent()) {
+                    Content contentUpdated = contentService.updateContent(cmsUserId,existingContent.get(),file);
+                    contents.add(contentService.getContentWithUserById(contentUpdated.getContentId()).get());
                 } else {
                     Content contentCreated = contentService.uploadContentToFileSystem(cmsUserId, file);
-                    contents.add(contentCreated);
+                    contents.add(contentService.getContentWithUserById(contentCreated.getContentId()).get());
                 }
             }
             return new ResponseEntity<>(contents, HttpStatus.OK);

@@ -19,5 +19,6 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
 
     Page<Content> findByTitleContaining(String title, Pageable pageable);
 
-    Optional<Content> getContentByTitle(String originalFilename);
+    @Query("SELECT con FROM Content con WHERE con.cmsUser.cmsUserId = :cmsUserId AND con.title = :title")
+    Optional<Content> getContentByTitleOfLoggedInUser(Long cmsUserId, String title);
 }
