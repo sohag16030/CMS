@@ -16,12 +16,12 @@ public final class Routes {
     public static final String CMS_USER_CREATE_ROUTE = "/api/cmsUser";
     public static final String CMS_USER_BY_ID_ROUTE = "/api/cmsUser/{userId}";
     public static final String CMS_USER_DELETE_BY_ID_ROUTE = "/api/cmsUser/{userId}";
-    public static final String CMS_USER_UPDATE_ROUTE = "/api/cmsUser/{cmsUserId}";
+    public static final String CMS_USER_UPDATE_BY_ID_ROUTE = "/api/cmsUser/{cmsUserId}";
     public static final String CMS_USER_LIST_ROUTE = "/api/cmsUsers";
 
     //USER_CONTENTS_UPLOAD_SERVICES_ROUTES
     public static final String CONTENT_UPLOAD_ROUTE = "/api/contents";
-    public static final String CONTENT_UPDATE_ROUTE = "/api/contents";
+    public static final String CONTENT_UPDATE_BY_ID_ROUTE = "/api/content/{contentId}";
     public static final String CONTENT_DOWNLOAD_BY_ID_ROUTE = "/api/content/download/{contentId}";
     public static final String CONTENT_BY_ID_ROUTE = "/api/content/{contentId}";
     public static final String CONTENT_LIST_ROUTE = "/api/contents";

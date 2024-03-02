@@ -50,21 +50,20 @@ public class ContentController {
         }
     }
 
-    @PutMapping(Routes.CONTENT_UPDATE_ROUTE)
-    public ResponseEntity<?> updateContent(@RequestParam("cmsUserId") Long cmsUserId, @RequestParam("contents") MultipartFile[] files) {
+    @PutMapping(Routes.CONTENT_UPDATE_BY_ID_ROUTE)
+    public ResponseEntity<?> updateContent(@PathVariable Long contentId, @RequestParam("content") MultipartFile file) {
         try {
-            List<Content> contents = new ArrayList<>();
-            for (MultipartFile file : files) {
-                Optional<Content> existingContent = contentRepository.getContentByTitleOfLoggedInUser(cmsUserId,file.getOriginalFilename());
-                if (existingContent.isPresent()) {
-                    Content contentUpdated = contentService.updateContent(cmsUserId,existingContent.get(),file);
-                    contents.add(contentService.getContentWithUserById(contentUpdated.getContentId()).get());
-                } else {
-                    Content contentCreated = contentService.uploadContentToFileSystem(cmsUserId, file);
-                    contents.add(contentService.getContentWithUserById(contentCreated.getContentId()).get());
-                }
+            Optional<Content> existingContent = Optional.of(contentRepository.getById(contentId));
+            Optional<Content> contentDetails;
+
+            if (existingContent.isPresent()) {
+                Content contentUpdated = contentService.updateContent(existingContent.get(), file);
+                contentDetails = contentService.getContentWithUserById(contentUpdated.getContentId());
+            } else {
+                // TODO : throw EntityNotFoundException
+                return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(contents, HttpStatus.OK);
+            return new ResponseEntity<>(contentDetails, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
         }

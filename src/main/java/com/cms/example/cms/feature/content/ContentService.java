@@ -29,12 +29,45 @@ public class ContentService {
     private final UserRepository userRepository;
 
     public Content uploadContentToFileSystem(Long cmsUserId, MultipartFile file) {
+        initiateDirectory();
+        StringBuilder filePathBuilder = getFilePathBuilder(cmsUserId, file);
+        StringBuilder rename = getTitle(cmsUserId, file);
+        fileStorageSave(file, filePathBuilder);
+
+        return contentRepository.save(Content.builder()
+                .title(rename.toString())
+                .type(file.getContentType())
+                .path(filePathBuilder.toString())
+                .cmsUser(userRepository.getOne(cmsUserId))
+                .isActive(true)
+                .build());
+    }
+
+    public Content updateContent(Content existingContent, MultipartFile file) {
+        initiateDirectory();
+        StringBuilder filePathBuilder = getFilePathBuilder(existingContent.getCmsUser().getCmsUserId(), file);
+        StringBuilder rename = getTitle(existingContent.getCmsUser().getCmsUserId(), file);
+        fileStorageSave(file, filePathBuilder);
+
+        existingContent.setContentId(existingContent.getContentId());
+        existingContent.setPath(filePathBuilder.toString());
+        existingContent.setTitle(rename.toString());
+
+        contentRepository.save(existingContent);
+
+        return existingContent;
+    }
+
+    private void initiateDirectory() {
         File directory = new File(UPLOAD_DIR);
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        String userIdWithTimestamp = getUserIdWithTimestamp(cmsUserId);
+    }
 
+    private StringBuilder getFilePathBuilder(Long cmsUserId, MultipartFile file) {
+
+        String userIdWithTimestamp = getUserIdWithTimestamp(cmsUserId);
         String fileNameWithoutExtension = getNameWithoutExtension(file.getOriginalFilename());
         String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
 
@@ -44,27 +77,29 @@ public class ContentService {
                 .append(fileNameWithoutExtension)
                 .append(userIdWithTimestamp)
                 .append(extension);
+        return filePathBuilder;
+    }
+
+    private StringBuilder getTitle(Long cmsUserId, MultipartFile file) {
+
+        String userIdWithTimestamp = getUserIdWithTimestamp(cmsUserId);
+        String fileNameWithoutExtension = getNameWithoutExtension(file.getOriginalFilename());
+        String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
 
         StringBuilder rename = new StringBuilder();
         rename
                 .append(fileNameWithoutExtension)
                 .append(userIdWithTimestamp)
                 .append(extension);
+        return rename;
+    }
 
-        String filePath = filePathBuilder.toString();
+    private void fileStorageSave(MultipartFile file, StringBuilder filePathBuilder) {
         try {
-            file.transferTo(new File(filePath));
+            file.transferTo(new File(filePathBuilder.toString()));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return contentRepository.save(Content.builder()
-                .title(rename.toString())
-                .type(file.getContentType())
-                .path(filePath)
-                .cmsUser(userRepository.getOne(cmsUserId))
-                .isActive(true)
-                .build());
     }
 
     public static String getNameWithoutExtension(String fileName) {
@@ -78,23 +113,14 @@ public class ContentService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
         String formattedTimestamp = timestamp.format(formatter);
 
-        String userIdWithTimestamp = "_" + cmsUserId + "_" + formattedTimestamp + ".";
-        return userIdWithTimestamp;
-    }
+        StringBuilder userIdWithTimestampBuilder = new StringBuilder();
+        userIdWithTimestampBuilder.append("_");
+        userIdWithTimestampBuilder.append(formattedTimestamp);
+        userIdWithTimestampBuilder.append("_");
+        userIdWithTimestampBuilder.append(cmsUserId);
+        userIdWithTimestampBuilder.append(".");
 
-    public Content updateContent(Long cmsUserId, Content existingContent, MultipartFile file) {
-        File directory = new File(UPLOAD_DIR);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-        String filePath = UPLOAD_DIR + File.separator + file.getOriginalFilename();
-        try {
-            file.transferTo(new File(filePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        existingContent.setPath(filePath);
-        return existingContent;
+        return userIdWithTimestampBuilder.toString();
     }
 
     public MediaType getContentTypeFromFileName(String fileName) {
