@@ -1,30 +1,17 @@
 package com.cms.example.cms.feature.content;
 
-import com.cms.example.cms.dto.PaginatedCmsUserResponse;
 import com.cms.example.cms.dto.PaginatedContentResponse;
-import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.Content;
-import com.cms.example.cms.feature.content.responseDto.ContentUploadResponse;
 import com.cms.example.cms.feature.user.UserRepository;
-import com.cms.example.cms.feature.content.exception.ContentStorageException;
-import com.cms.example.cms.feature.content.exception.ContentsNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Optional;
 
 @Service

@@ -30,7 +30,7 @@ public class UserController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @PutMapping(Routes.CMS_USER_UPDATE_BY_IDROUTE)
+    @PutMapping(Routes.CMS_USER_UPDATE_ROUTE)
     public ResponseEntity<?> updateCmsUser(@PathVariable Long cmsUserId, @RequestBody CmsUser sourceUser) {
         try {
             CmsUser user = userService.updateCmsUser(cmsUserId, sourceUser);

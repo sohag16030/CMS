@@ -2,8 +2,8 @@ package com.cms.example.cms.feature.content;
 
 import com.cms.example.cms.common.Routes;
 
+import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.Content;
-import com.cms.example.cms.feature.content.responseDto.ContentUploadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -29,15 +29,13 @@ public class ContentController {
     private final ContentRepository contentRepository ;
 
     @PostMapping(Routes.CONTENT_UPLOAD_ROUTE)
-    public ResponseEntity<ContentUploadResponse> uploadContent(@RequestParam("cmsUserId") Long cmsUserId, @RequestParam("contents") MultipartFile[] files) throws Exception {
+    public ResponseEntity<?> uploadContent(@RequestParam("cmsUserId") Long cmsUserId, @RequestParam("contents") MultipartFile[] files) throws Exception {
         List<Content> contents = new ArrayList<>();
-        ContentUploadResponse contentUploadResponse = new ContentUploadResponse();
         for (MultipartFile file : files) {
             Content content = contentService.uploadContentToFileSystem(file,cmsUserId);
             contents.add(content);
         }
-        contentUploadResponse.setContents(contents);
-        return new ResponseEntity<>(contentUploadResponse, HttpStatus.OK);
+        return new ResponseEntity<>(contents, HttpStatus.OK);
     }
 
     @GetMapping(Routes.CONTENT_BY_ID_ROUTE)
@@ -81,5 +79,19 @@ public class ContentController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(contentBytes);
+    }
+    @DeleteMapping(Routes.CONTENT_DELETE_BY_ID_ROUTE)
+    public ResponseEntity<?> deleteContentById(@PathVariable Long contentId) {
+        try {
+            contentRepository.deleteById(contentId);
+            Optional<Content> contentOptional = contentRepository.findById(contentId);
+            if (!contentOptional.isPresent()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete content");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete content. No records exists with Id :: " + contentId);
+        }
     }
 }
