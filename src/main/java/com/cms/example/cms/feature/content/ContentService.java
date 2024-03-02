@@ -23,7 +23,7 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final UserRepository userRepository;
 
-    public Content uploadContentToFileSystem(MultipartFile file, Long cmsUserId) throws Exception {
+    public Content uploadContentToFileSystem(Long cmsUserId,MultipartFile file) {
         File directory = new File(UPLOAD_DIR);
         if (!directory.exists()) {
             directory.mkdirs();
@@ -43,8 +43,11 @@ public class ContentService {
                 .isActive(true)
                 .build());
 
-        if (content != null) return content;
-        return null;
+        return content;
+    }
+
+    public Content updateContent(Long cmsUserId,Long contentId,MultipartFile file) {
+       return null;
     }
 
     public MediaType getContentTypeFromFileName(String fileName) {
@@ -85,4 +88,5 @@ public class ContentService {
                 .contentList(contents.getContent())
                 .build();
     }
+
 }

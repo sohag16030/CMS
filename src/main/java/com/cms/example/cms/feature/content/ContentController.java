@@ -2,7 +2,6 @@ package com.cms.example.cms.feature.content;
 
 import com.cms.example.cms.common.Routes;
 
-import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.Content;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -25,15 +24,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ContentController {
 
-    private final ContentService contentService ;
-    private final ContentRepository contentRepository ;
+    private final ContentService contentService;
+    private final ContentRepository contentRepository;
 
     @PostMapping(Routes.CONTENT_UPLOAD_ROUTE)
     public ResponseEntity<?> uploadContent(@RequestParam("cmsUserId") Long cmsUserId, @RequestParam("contents") MultipartFile[] files) throws Exception {
-        List<Content> contents = new ArrayList<>();
+        List<Optional<Content>> contents = new ArrayList<>();
         for (MultipartFile file : files) {
-            Content content = contentService.uploadContentToFileSystem(file,cmsUserId);
-            contents.add(content);
+            Content content = contentService.uploadContentToFileSystem(cmsUserId, file);
+            Optional<Content> getContent = contentService.getContentWithUserById(content.getContentId());
+            contents.add(getContent);
         }
         return new ResponseEntity<>(contents, HttpStatus.OK);
     }
@@ -46,6 +46,26 @@ public class ContentController {
         } else {
             // TODO : throw EntityNotFoundException
             return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping(Routes.CONTENT_UPDATE_ROUTE)
+    public ResponseEntity<?> updateContent(@RequestParam("cmsUserId") Long cmsUserId, @RequestParam("contents") MultipartFile[] files) {
+        try {
+            List<Content> contents = new ArrayList<>();
+            for (MultipartFile file : files) {
+                Optional<Content> content = contentRepository.getContentByTitle(file.getOriginalFilename());
+                if (Objects.nonNull(content)) {
+                    Content contentUpdated = contentService.updateContent(cmsUserId,content.get().getContentId(),file);
+                    contents.add(contentUpdated);
+                } else {
+                    Content contentCreated = contentService.uploadContentToFileSystem(cmsUserId, file);
+                    contents.add(contentCreated);
+                }
+            }
+            return new ResponseEntity<>(contents, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -80,6 +100,7 @@ public class ContentController {
                 .headers(headers)
                 .body(contentBytes);
     }
+
     @DeleteMapping(Routes.CONTENT_DELETE_BY_ID_ROUTE)
     public ResponseEntity<?> deleteContentById(@PathVariable Long contentId) {
         try {

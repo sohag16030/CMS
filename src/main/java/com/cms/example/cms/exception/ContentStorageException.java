@@ -1,4 +1,4 @@
-package com.cms.example.cms.feature.content.exception;
+package com.cms.example.cms.exception;
 
 public class ContentStorageException extends RuntimeException {
     public ContentStorageException(String message) {
