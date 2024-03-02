@@ -1,8 +1,6 @@
 package com.cms.example.cms.feature.academicInfo;
 
 import com.cms.example.cms.entities.AcademicInfo;
-import com.cms.example.cms.entities.District;
-import com.cms.example.cms.entities.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

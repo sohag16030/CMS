@@ -4,7 +4,6 @@ import com.cms.example.cms.common.Routes;
 
 import com.cms.example.cms.entities.Content;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
