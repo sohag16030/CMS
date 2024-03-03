@@ -2,19 +2,23 @@ package com.cms.example.cms.feature.content;
 
 import com.cms.example.cms.common.Routes;
 
+import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.Content;
+import com.cms.example.cms.feature.user.CmsUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,12 +30,16 @@ public class ContentController {
 
     private final ContentService contentService;
     private final ContentRepository contentRepository;
+    private final CmsUserService userService;
 
     @PostMapping(Routes.CONTENT_UPLOAD_ROUTE)
-    public ResponseEntity<?> uploadContent(@RequestParam("cmsUserId") Long cmsUserId, @RequestParam("contents") MultipartFile[] files) throws Exception {
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    public ResponseEntity<?> uploadContent(@RequestParam("contents") MultipartFile[] files, Principal principal) {
+
+        CmsUser loggedInUser = userService.getLoggedInUser(principal);
         List<Optional<Content>> contents = new ArrayList<>();
         for (MultipartFile file : files) {
-            Content content = contentService.uploadContentToFileSystem(cmsUserId, file);
+            Content content = contentService.uploadContentToFileSystem(loggedInUser.getCmsUserId(), file);
             Optional<Content> getContent = contentService.getContentWithUserById(content.getContentId());
             contents.add(getContent);
         }
@@ -39,7 +47,9 @@ public class ContentController {
     }
 
     @GetMapping(Routes.CONTENT_BY_ID_ROUTE)
-    public ResponseEntity<?> getContent(@PathVariable Long contentId) {
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    public ResponseEntity<?> getContent(@PathVariable Long contentId, Principal principal) {
+
         Optional<Content> content = contentService.getContentWithUserById(contentId);
         if (Objects.nonNull(content)) {
             return new ResponseEntity<>(content, HttpStatus.OK);
@@ -50,28 +60,36 @@ public class ContentController {
     }
 
     @PutMapping(Routes.CONTENT_UPDATE_BY_ID_ROUTE)
-    public ResponseEntity<?> updateContent(@PathVariable Long contentId, @RequestParam("content") MultipartFile file) {
-        try {
-            Optional<Content> existingContent = Optional.of(contentRepository.getById(contentId));
-            Optional<Content> contentDetails;
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    public ResponseEntity<?> updateContent(@PathVariable Long contentId, @RequestParam("content") MultipartFile file, Principal principal) {
 
-            if (existingContent.isPresent()) {
-                Content contentUpdated = contentService.updateContent(existingContent.get(), file);
-                contentDetails = contentService.getContentWithUserById(contentUpdated.getContentId());
-            } else {
-                // TODO : throw EntityNotFoundException
-                return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
+        CmsUser loggedInUser = userService.getLoggedInUser(principal);
+        if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId())) {
+            try {
+                Optional<Content> existingContent = Optional.of(contentRepository.getById(contentId));
+                Optional<Content> contentDetails = null;
+                if (existingContent.isPresent()) {
+                    Content contentUpdated = contentService.updateContent(existingContent.get(), file);
+                    contentDetails = contentService.getContentWithUserById(contentUpdated.getContentId());
+                } else {
+                    // TODO : throw EntityNotFoundException
+                    return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
+                }
+                return new ResponseEntity<>(contentDetails, HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(contentDetails, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
     }
 
     @GetMapping(Routes.CONTENT_LIST_ROUTE)
-    public ResponseEntity getListContents(
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
+    public ResponseEntity<?> getListContents(
             @RequestParam(required = false) String query,
             Pageable pageable) {
+
         if (query == null || query.isEmpty()) {
             return ResponseEntity.ok(contentService.getAllContents(pageable));
         }
@@ -79,7 +97,9 @@ public class ContentController {
     }
 
     @GetMapping(Routes.CONTENT_DOWNLOAD_BY_ID_ROUTE)
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<byte[]> downloadContent(@PathVariable Long contentId) throws IOException {
+
         Optional<Content> contentData = contentRepository.findById(contentId);
         if (!contentData.isPresent()) {
             return ResponseEntity.notFound().build();
@@ -101,7 +121,9 @@ public class ContentController {
     }
 
     @DeleteMapping(Routes.CONTENT_DELETE_BY_ID_ROUTE)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
     public ResponseEntity<?> deleteContentById(@PathVariable Long contentId) {
+
         try {
             contentRepository.deleteById(contentId);
             Optional<Content> contentOptional = contentRepository.findById(contentId);

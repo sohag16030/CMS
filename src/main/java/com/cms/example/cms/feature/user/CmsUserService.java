@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -158,7 +159,7 @@ public class CmsUserService {
     private Address modifyExistingAddress(Address updatedAddressSource, Long addressId, Map<Long, Address> addressesMap) {
         Address modifiedAddress = addressesMap.get(addressId);
         //update address
-        //modifiedAddress.setAddressId(addressId);
+        modifiedAddress.setAddressId(addressId);
         modifiedAddress.setAddressType(updatedAddressSource.getAddressType());
         if (updatedAddressSource.getDivision() != null) {
             modifiedAddress.setDivision(divisionRepository.getOne(updatedAddressSource.getDivision().getDivisionId()));
@@ -248,4 +249,13 @@ public class CmsUserService {
                 .build();
     }
 
+    public CmsUser getLoggedInUser(Principal principal) {
+        Optional<CmsUser> user = userRepository.findByUserName(principal.getName());
+        return user.orElse(null);
+    }
+    public boolean userValidity(Principal principal,Long userId) {
+        CmsUser loggedInUser = getLoggedInUser(principal);
+        if(loggedInUser.getCmsUserId().equals(userId)) return true;
+        else return false;
+    }
 }

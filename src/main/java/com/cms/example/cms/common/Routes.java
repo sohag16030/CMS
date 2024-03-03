@@ -27,6 +27,12 @@ public final class Routes {
     public static final String CONTENT_LIST_ROUTE = "/api/contents";
     public static final String CONTENT_DELETE_BY_ID_ROUTE = "/api/content/{contentId}";
 
+    //AUTH
+    public static final String USER_ACCESS_TOKEN = "/user/login";
+    public static final String USER_ACCESS_TOKEN_FROM_REFRESH_TOKEN = "/user/getAccessTokenFromRefreshToken";
+    public static final String USER_ROLE_ASSIGNMENT = "/user/access/{userId}/{userRole}";
+    public static final String USER_LOGOUT = "/user/logout";
+
 
 }
 

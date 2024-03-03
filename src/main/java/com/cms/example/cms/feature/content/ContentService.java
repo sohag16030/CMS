@@ -4,6 +4,7 @@ import com.cms.example.cms.dto.PaginatedContentResponse;
 import com.cms.example.cms.entities.Content;
 import com.cms.example.cms.feature.user.CmsUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -14,13 +15,15 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ContentService {
 
-    private static final String UPLOAD_DIR = "J:\\Content\\";
+    @Value("${content.upload.directory}")
+    private String uploadDirectory;
 
     private final ContentRepository contentRepository;
     private final CmsUserRepository userRepository;
@@ -56,7 +59,7 @@ public class ContentService {
     }
 
     private void initiateDirectory() {
-        File directory = new File(UPLOAD_DIR);
+        File directory = new File(uploadDirectory);
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -70,7 +73,7 @@ public class ContentService {
 
         StringBuilder filePathBuilder = new StringBuilder();
         filePathBuilder
-                .append(UPLOAD_DIR)
+                .append(uploadDirectory)
                 .append(fileNameWithoutExtension)
                 .append(userIdWithTimestamp)
                 .append(extension);
@@ -80,7 +83,7 @@ public class ContentService {
     private StringBuilder getTitle(Long cmsUserId, MultipartFile file) {
 
         String userIdWithTimestamp = getUserIdWithTimestamp(cmsUserId);
-        String fileNameWithoutExtension = getNameWithoutExtension(file.getOriginalFilename());
+        String fileNameWithoutExtension = getNameWithoutExtension(Objects.requireNonNull(file.getOriginalFilename()));
         String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
 
         StringBuilder rename = new StringBuilder();
@@ -139,8 +142,7 @@ public class ContentService {
     }
 
     public Optional<Content> getContentWithUserById(Long contentId) {
-        Optional<Content> content = contentRepository.findByIdWithDetails(contentId);
-        return content;
+        return contentRepository.findByIdWithDetails(contentId);
     }
 
     public PaginatedContentResponse getAllContents(Pageable pageable) {
@@ -159,4 +161,8 @@ public class ContentService {
                 .build();
     }
 
+    public boolean validateLoggedInUserIsOwnerOfTargetContent(Long contentId, Long cmsUserId) {
+        Optional<Content> content = contentRepository.findByIdWithDetails(contentId);
+        return content.filter(value -> Objects.equals(value.getCmsUser().getCmsUserId(), cmsUserId)).isPresent();
+    }
 }

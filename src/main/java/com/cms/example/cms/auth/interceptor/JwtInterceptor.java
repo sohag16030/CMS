@@ -3,20 +3,24 @@ package com.cms.example.cms.auth.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cms.example.cms.App;
 import com.cms.example.cms.auth.repository.BlackListedTokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 @RequiredArgsConstructor
 public class JwtInterceptor implements HandlerInterceptor {
+    private static final Logger logger = LogManager.getLogger(App.class);
 
     private final BlackListedTokenRepository blackListedTokenRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        System.out.println("Pre Handle method is Calling");
+        logger.info("Pre Handle method is Calling");
         String token = extractTokenFromHeader(request.getHeader("Authorization"));
         if (token == null || !validateToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

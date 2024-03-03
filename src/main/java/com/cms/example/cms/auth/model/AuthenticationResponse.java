@@ -10,9 +10,5 @@ import lombok.NoArgsConstructor;
 public class AuthenticationResponse {
     private String access_token;
     private String refresh_token;
-
-    public AuthenticationResponse(String access_token) {
-        this.access_token = access_token;
-    }
 }
 
