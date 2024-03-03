@@ -26,8 +26,7 @@ public class CmsUserController {
     private final CmsUserService userService;
     private final CmsUserRepository userRepository;
 
-    @PostMapping(Routes.CMS_USER_CREATE_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @PostMapping(Routes.CMS_USER_SIGN_UP_ROUTE)
     public ResponseEntity<CmsUser> createCmsUser(@RequestBody CmsUser cmsUser) {
         CmsUser createdUser = userService.saveCmsUser(cmsUser);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);

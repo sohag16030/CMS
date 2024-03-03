@@ -43,8 +43,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/user/login", "/user/getAccessTokenFromRefreshToken","/user/logout","/user/joinGroup").permitAll()
-                .and().authorizeRequests().antMatchers("/user/**").authenticated().and().httpBasic()
+                .authorizeRequests().antMatchers("/user/accessToken", "/user/getAccessTokenFromRefreshToken","/user/logout","/api/cmsUser").permitAll()
+                .and().authorizeRequests().antMatchers("/user/access/**","/api/**").authenticated().and().httpBasic()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

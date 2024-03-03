@@ -54,7 +54,7 @@ public class AuthController {
     private final CmsUserRepository userRepository;
 
 
-    @PostMapping(Routes.USER_ACCESS_TOKEN)
+    @PostMapping(Routes.USER_LOGIN)
     public ResponseEntity<AuthenticationResponse> generateToken(@RequestBody AuthenticationRequest authenticationRequest) {
 
         try {

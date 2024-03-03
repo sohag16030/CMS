@@ -15,6 +15,7 @@ import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.subject.SubjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -113,12 +114,15 @@ public class CmsUserService {
             throw new RuntimeException("User not found");
         }
         // Create a new object to hold only the properties want to copy
+        existingUser.setUserName(sourceUser.getUserName());
         existingUser.setMobileNumber(sourceUser.getMobileNumber());
         existingUser.setEmail(sourceUser.getEmail());
         existingUser.setName(sourceUser.getName());
         existingUser.setGender(sourceUser.getGender());
         existingUser.setUserStatus(sourceUser.getUserStatus());
         existingUser.setIsActive(sourceUser.getIsActive());
+
+        //BeanUtils.copyProperties(sourceUser,existingUser);
 
         // Update addresses
         updateAddresses(existingUser, sourceUser);
