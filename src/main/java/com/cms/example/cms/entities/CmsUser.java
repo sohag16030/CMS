@@ -3,6 +3,7 @@ package com.cms.example.cms.entities;
 import com.cms.example.cms.enums.Gender;
 import com.cms.example.cms.enums.UserStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,11 +41,13 @@ public class CmsUser {
     @Column(name = "USER_NAME", unique = true, nullable = false)
     private String userName;
 
+    @NotNull
     @Column(name = "PASSWORD", unique = true, nullable = false)
     private String password;
 
     @Column(name = "ROLES", unique = true, nullable = false)
     private String roles;
+
 
     @Column(name = "MOBILE_NUMBER", unique = true, nullable = false)
     private String mobileNumber;

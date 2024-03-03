@@ -22,7 +22,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         logger.info("Pre Handle method is Calling");
         String token = extractTokenFromHeader(request.getHeader("Authorization"));
-        if (token == null || !validateToken(token)) {
+        if (token == null || invalidToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
@@ -38,8 +38,8 @@ public class JwtInterceptor implements HandlerInterceptor {
         return header.substring(7);
     }
 
-    public boolean validateToken(String token) {
-        if (blackListedTokenRepository.findByAccessToken(token) == null) {
+    public boolean invalidToken(String token) {
+        if (blackListedTokenRepository.findByAccessToken(token) != null) {
             return true;
         } else return false;
     }
