@@ -1,4 +1,4 @@
-package com.cms.example.cms.dto;
+package com.cms.example.cms.dto.requestDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

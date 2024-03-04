@@ -1,6 +1,6 @@
 package com.cms.example.cms.feature.content;
 
-import com.cms.example.cms.dto.PaginatedContentResponse;
+import com.cms.example.cms.dto.paginatedResponseDto.PaginatedContentResponse;
 import com.cms.example.cms.entities.Content;
 import com.cms.example.cms.feature.user.CmsUserRepository;
 import lombok.RequiredArgsConstructor;

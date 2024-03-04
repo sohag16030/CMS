@@ -1,4 +1,4 @@
-package com.cms.example.cms.dto;
+package com.cms.example.cms.dto.paginatedResponseDto;
 
 import com.cms.example.cms.entities.CmsUser;
 import lombok.Builder;

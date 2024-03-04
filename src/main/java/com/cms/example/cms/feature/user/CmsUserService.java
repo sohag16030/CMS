@@ -1,6 +1,7 @@
 package com.cms.example.cms.feature.user;
 
-import com.cms.example.cms.dto.PaginatedCmsUserResponse;
+import com.cms.example.cms.dto.paginatedResponseDto.PaginatedCmsUserResponse;
+import com.cms.example.cms.dto.requestDto.CmsUserFilterDto;
 import com.cms.example.cms.entities.AcademicInfo;
 import com.cms.example.cms.entities.Address;
 import com.cms.example.cms.entities.CmsUser;
@@ -15,7 +16,6 @@ import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.subject.SubjectRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -237,16 +237,9 @@ public class CmsUserService {
         return  existingAcademicInfo;
     }
 
-    public PaginatedCmsUserResponse getAllUsers(Pageable pageable) {
-        Page<CmsUser> cmsUsers = userRepository.findAll(pageable);
-        return PaginatedCmsUserResponse.builder()
-                .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
-                .cmsUserList(cmsUsers.getContent())
-                .build();
-    }
-
-    public PaginatedCmsUserResponse filterUsers(String name, Pageable pageable) {
-        Page<CmsUser> cmsUsers = userRepository.findByNameContaining(name, pageable);
+    public PaginatedCmsUserResponse getAllUsersWithFilter(CmsUserFilterDto filter, Pageable pageable) {
+        Page<CmsUser> cmsUsers = userRepository.search(filter.getCmsUserId(),filter.getUserName(),filter.getRoles(),
+                filter.getMobileNumber(),filter.getEmail(),filter.getName(),filter.getGender(),filter.getUserStatus(),filter.getIsActive(), pageable);
         return PaginatedCmsUserResponse.builder()
                 .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
                 .cmsUserList(cmsUsers.getContent())

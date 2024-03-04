@@ -2,7 +2,6 @@ package com.cms.example.cms.entities;
 
 import com.cms.example.cms.enums.Gender;
 import com.cms.example.cms.enums.UserStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

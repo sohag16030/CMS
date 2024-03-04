@@ -1,15 +1,13 @@
 package com.cms.example.cms.feature.geo;
 
-import com.cms.example.cms.dto.PaginatedCmsUserResponse;
-import com.cms.example.cms.dto.PaginatedDistrictResponse;
-import com.cms.example.cms.dto.PaginatedDivisionResponse;
-import com.cms.example.cms.dto.PaginatedUpazilaResponse;
-import com.cms.example.cms.entities.CmsUser;
+import com.cms.example.cms.dto.paginatedResponseDto.PaginatedDistrictResponse;
+import com.cms.example.cms.dto.paginatedResponseDto.PaginatedDivisionResponse;
+import com.cms.example.cms.dto.paginatedResponseDto.PaginatedUpazilaResponse;
 import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.enums.EntityFetchType;
-import com.cms.example.cms.dto.GeoFilterDto;
+import com.cms.example.cms.dto.requestDto.GeoFilterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

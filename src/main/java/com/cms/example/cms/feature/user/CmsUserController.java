@@ -1,6 +1,9 @@
 package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.common.Routes;
+import com.cms.example.cms.dto.paginatedResponseDto.PaginatedCmsUserResponse;
+import com.cms.example.cms.dto.paginatedResponseDto.PaginatedDistrictResponse;
+import com.cms.example.cms.dto.requestDto.CmsUserFilterDto;
 import com.cms.example.cms.dto.responseDto.CustomErrorResponse;
 import com.cms.example.cms.entities.CmsUser;
 import lombok.RequiredArgsConstructor;
@@ -74,13 +77,12 @@ public class CmsUserController {
 
     @GetMapping(Routes.CMS_USER_LIST_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
-    public ResponseEntity<?> getAllCmsUsers(
-            @RequestParam(required = false) String query,
-            Pageable pageable) {
-        if (query == null || query.isEmpty()) {
-            return ResponseEntity.ok(userService.getAllUsers(pageable));
+    public ResponseEntity<?> getAllCmsUsers(CmsUserFilterDto filter, Pageable pageable) {
+        PaginatedCmsUserResponse paginatedCmsUserResponse = userService.getAllUsersWithFilter(filter,pageable);
+        if (paginatedCmsUserResponse == null) {
+            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok(userService.filterUsers(query, pageable));
+        return new ResponseEntity<>(paginatedCmsUserResponse, HttpStatus.OK);
 
     }
 
