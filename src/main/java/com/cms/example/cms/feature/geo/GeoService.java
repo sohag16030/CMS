@@ -7,7 +7,7 @@ import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.enums.EntityFetchType;
-import com.cms.example.cms.dto.requestDto.GeoFilterDto;
+import com.cms.example.cms.dto.listDataFilterRequestDto.GeoFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +43,7 @@ public class GeoService {
         } else return null;
     }
 
-    public PaginatedDivisionResponse getDivisionsByFilter(GeoFilterDto filter,Pageable pageable) {
+    public PaginatedDivisionResponse getDivisionsByFilter(GeoFilter filter, Pageable pageable) {
         Page<Division> divisions =  divisionRepository.search(filter.getDivisionId(), filter.getName(), filter.getActive(),pageable);
         return PaginatedDivisionResponse.builder()
                 .numberOfItems(divisions.getTotalElements()).numberOfPages(divisions.getTotalPages())
@@ -59,7 +59,7 @@ public class GeoService {
         else return null;
     }
 
-    public PaginatedDistrictResponse getDistrictsByFilter(GeoFilterDto filter,Pageable pageable) {
+    public PaginatedDistrictResponse getDistrictsByFilter(GeoFilter filter, Pageable pageable) {
         Page<District> districts =  districtRepository.search(filter.getDivisionId(),filter.getDistrictId(), filter.getName(), filter.getActive(),pageable);
         return PaginatedDistrictResponse.builder()
                 .numberOfItems(districts.getTotalElements()).numberOfPages(districts.getTotalPages())
@@ -75,7 +75,7 @@ public class GeoService {
         else return null;
     }
 
-    public PaginatedUpazilaResponse getUpazilaByFilter(GeoFilterDto filter,Pageable pageable) {
+    public PaginatedUpazilaResponse getUpazilaByFilter(GeoFilter filter, Pageable pageable) {
         Page<Upazila> upazilas =  upazilaRepository.search(filter.getDivisionId(),filter.getDistrictId(),filter.getUpazilaId(), filter.getName(), filter.getActive(),pageable);
         return PaginatedUpazilaResponse.builder()
                 .numberOfItems(upazilas.getTotalElements()).numberOfPages(upazilas.getTotalPages())

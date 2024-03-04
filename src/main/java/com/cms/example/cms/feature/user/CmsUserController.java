@@ -2,9 +2,7 @@ package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.common.Routes;
 import com.cms.example.cms.dto.paginatedResponseDto.PaginatedCmsUserResponse;
-import com.cms.example.cms.dto.paginatedResponseDto.PaginatedDistrictResponse;
-import com.cms.example.cms.dto.requestDto.CmsUserFilterDto;
-import com.cms.example.cms.dto.responseDto.CustomErrorResponse;
+import com.cms.example.cms.dto.listDataFilterRequestDto.CmsUserFilter;
 import com.cms.example.cms.entities.CmsUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
@@ -77,7 +74,7 @@ public class CmsUserController {
 
     @GetMapping(Routes.CMS_USER_LIST_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
-    public ResponseEntity<?> getAllCmsUsers(CmsUserFilterDto filter, Pageable pageable) {
+    public ResponseEntity<?> getAllCmsUsers(CmsUserFilter filter, Pageable pageable) {
         PaginatedCmsUserResponse paginatedCmsUserResponse = userService.getAllUsersWithFilter(filter,pageable);
         if (paginatedCmsUserResponse == null) {
             return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);

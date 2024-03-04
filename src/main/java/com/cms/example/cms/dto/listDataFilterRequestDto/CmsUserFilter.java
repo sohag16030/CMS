@@ -1,6 +1,4 @@
-package com.cms.example.cms.dto.requestDto;
-import com.cms.example.cms.enums.Gender;
-import com.cms.example.cms.enums.UserStatus;
+package com.cms.example.cms.dto.listDataFilterRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CmsUserFilterDto {
+public class CmsUserFilter {
     private Long cmsUserId;
     private String userName;
     private String roles;

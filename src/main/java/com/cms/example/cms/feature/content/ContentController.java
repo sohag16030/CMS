@@ -2,6 +2,9 @@ package com.cms.example.cms.feature.content;
 
 import com.cms.example.cms.common.Routes;
 
+import com.cms.example.cms.dto.listDataFilterRequestDto.ContentFilter;
+import com.cms.example.cms.dto.paginatedResponseDto.PaginatedCmsUserResponse;
+import com.cms.example.cms.dto.paginatedResponseDto.PaginatedContentResponse;
 import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.Content;
 import com.cms.example.cms.feature.user.CmsUserService;
@@ -85,14 +88,13 @@ public class ContentController {
 
     @GetMapping(Routes.CONTENT_LIST_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
-    public ResponseEntity<?> getListContents(
-            @RequestParam(required = false) String query,
-            Pageable pageable) {
+    public ResponseEntity<?> getListContents(ContentFilter filter, Pageable pageable) {
 
-        if (query == null || query.isEmpty()) {
-            return ResponseEntity.ok(contentService.getAllContents(pageable));
+        PaginatedContentResponse paginatedCmsUserResponse = contentService.getAllContentWithFilter(filter,pageable);
+        if (paginatedCmsUserResponse == null) {
+            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok(contentService.filterContents(query, pageable));
+        return new ResponseEntity<>(paginatedCmsUserResponse, HttpStatus.OK);
     }
 
     @GetMapping(Routes.CONTENT_DOWNLOAD_BY_ID_ROUTE)

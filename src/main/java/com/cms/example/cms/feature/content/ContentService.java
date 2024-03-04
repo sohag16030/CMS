@@ -1,5 +1,6 @@
 package com.cms.example.cms.feature.content;
 
+import com.cms.example.cms.dto.listDataFilterRequestDto.ContentFilter;
 import com.cms.example.cms.dto.paginatedResponseDto.PaginatedContentResponse;
 import com.cms.example.cms.entities.Content;
 import com.cms.example.cms.feature.user.CmsUserRepository;
@@ -145,16 +146,13 @@ public class ContentService {
         return contentRepository.findByIdWithDetails(contentId);
     }
 
-    public PaginatedContentResponse getAllContents(Pageable pageable) {
-        Page<Content> contents = contentRepository.findAll(pageable);
-        return PaginatedContentResponse.builder()
-                .numberOfItems(contents.getTotalElements()).numberOfPages(contents.getTotalPages())
-                .contentList(contents.getContent())
-                .build();
-    }
+    public PaginatedContentResponse getAllContentWithFilter(ContentFilter filter, Pageable pageable) {
+        Page<Content> contents = contentRepository.search(filter.getContentId(),filter.getTitle(),filter.getType(),filter.getPath(),
+                filter.getCmsUserFilterDto().getCmsUserId(),filter.getCmsUserFilterDto().getUserName(),filter.getCmsUserFilterDto().getRoles(),
+                filter.getCmsUserFilterDto().getMobileNumber(),filter.getCmsUserFilterDto().getEmail(), filter.getCmsUserFilterDto().getName(),
+                /*filter.getCmsUserFilterDto().getGender(),filter.getCmsUserFilterDto().getUserStatus(),*/filter.getCmsUserFilterDto().getIsActive(),
+                filter.getIsActive(),pageable);
 
-    public PaginatedContentResponse filterContents(String title, Pageable pageable) {
-        Page<Content> contents = contentRepository.findByTitleContaining(title, pageable);
         return PaginatedContentResponse.builder()
                 .numberOfItems(contents.getTotalElements()).numberOfPages(contents.getTotalPages())
                 .contentList(contents.getContent())

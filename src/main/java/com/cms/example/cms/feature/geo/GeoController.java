@@ -8,7 +8,7 @@ import com.cms.example.cms.entities.District;
 import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.enums.EntityFetchType;
-import com.cms.example.cms.dto.requestDto.GeoFilterDto;
+import com.cms.example.cms.dto.listDataFilterRequestDto.GeoFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,7 @@ public class GeoController {
 
     @GetMapping(Routes.DIVISION_LIST_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
-    public ResponseEntity<?> getAllDivisionsByFilter(GeoFilterDto filter, Pageable pageable) {
+    public ResponseEntity<?> getAllDivisionsByFilter(GeoFilter filter, Pageable pageable) {
         PaginatedDivisionResponse paginatedDivisionResponse = service.getDivisionsByFilter(filter,pageable);
         if (paginatedDivisionResponse == null) {
             return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
@@ -66,7 +66,7 @@ public class GeoController {
 
     @GetMapping(Routes.DISTRICT_LIST_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
-    public ResponseEntity<?> getAllDistrictsByFilter(GeoFilterDto filter, Pageable pageable) {
+    public ResponseEntity<?> getAllDistrictsByFilter(GeoFilter filter, Pageable pageable) {
 
         PaginatedDistrictResponse paginatedDistrictResponse = service.getDistrictsByFilter(filter,pageable);
         if (paginatedDistrictResponse == null) {
@@ -90,7 +90,7 @@ public class GeoController {
 
     @GetMapping(Routes.UPAZILA_LIST_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
-    public ResponseEntity<?> getAllUpazilasByFilter(GeoFilterDto filter,Pageable pageable) {
+    public ResponseEntity<?> getAllUpazilasByFilter(GeoFilter filter, Pageable pageable) {
 
         PaginatedUpazilaResponse paginatedUpazilaResponse = service.getUpazilaByFilter(filter,pageable);
         if (paginatedUpazilaResponse == null) {

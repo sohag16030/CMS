@@ -1,7 +1,7 @@
 package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.dto.paginatedResponseDto.PaginatedCmsUserResponse;
-import com.cms.example.cms.dto.requestDto.CmsUserFilterDto;
+import com.cms.example.cms.dto.listDataFilterRequestDto.CmsUserFilter;
 import com.cms.example.cms.entities.AcademicInfo;
 import com.cms.example.cms.entities.Address;
 import com.cms.example.cms.entities.CmsUser;
@@ -237,7 +237,7 @@ public class CmsUserService {
         return  existingAcademicInfo;
     }
 
-    public PaginatedCmsUserResponse getAllUsersWithFilter(CmsUserFilterDto filter, Pageable pageable) {
+    public PaginatedCmsUserResponse getAllUsersWithFilter(CmsUserFilter filter, Pageable pageable) {
         Page<CmsUser> cmsUsers = userRepository.search(filter.getCmsUserId(),filter.getUserName(),filter.getRoles(),
                 filter.getMobileNumber(),filter.getEmail(),filter.getName(),filter.getGender(),filter.getUserStatus(),filter.getIsActive(), pageable);
         return PaginatedCmsUserResponse.builder()
