@@ -43,7 +43,7 @@ public class CmsUserController {
                 return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
             }
         }else {
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 
@@ -59,7 +59,7 @@ public class CmsUserController {
                 return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
             }
         } else {
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 
@@ -76,7 +76,7 @@ public class CmsUserController {
     }
 
     @DeleteMapping(Routes.CMS_USER_DELETE_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_MODERATOR') or hasAnyAuthority('ROLE_MODERATOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteUserById(@PathVariable Long userId) {
         try {
             userRepository.deleteById(userId);

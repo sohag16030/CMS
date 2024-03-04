@@ -48,8 +48,7 @@ public class ContentController {
 
     @GetMapping(Routes.CONTENT_BY_ID_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
-    public ResponseEntity<?> getContent(@PathVariable Long contentId, Principal principal) {
-
+    public ResponseEntity<?> getContent(@PathVariable Long contentId) {
         Optional<Content> content = contentService.getContentWithUserById(contentId);
         if (Objects.nonNull(content)) {
             return new ResponseEntity<>(content, HttpStatus.OK);
@@ -80,12 +79,12 @@ public class ContentController {
                 return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
             }
         } else {
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 
     @GetMapping(Routes.CONTENT_LIST_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getListContents(
             @RequestParam(required = false) String query,
             Pageable pageable) {
@@ -121,19 +120,24 @@ public class ContentController {
     }
 
     @DeleteMapping(Routes.CONTENT_DELETE_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
-    public ResponseEntity<?> deleteContentById(@PathVariable Long contentId) {
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    public ResponseEntity<?> deleteContentById(@PathVariable Long contentId, Principal principal) {
+        CmsUser loggedInUser = userService.getLoggedInUser(principal);
+        if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId())) {
+            try {
+                contentRepository.deleteById(contentId);
+                Optional<Content> contentOptional = contentRepository.findById(contentId);
+                if (!contentOptional.isPresent()) {
+                    return ResponseEntity.noContent().build();
+                } else {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete content");
+                }
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete content. No records exists with Id :: " + contentId);
 
-        try {
-            contentRepository.deleteById(contentId);
-            Optional<Content> contentOptional = contentRepository.findById(contentId);
-            if (!contentOptional.isPresent()) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete content");
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete content. No records exists with Id :: " + contentId);
+        } else {
+            return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
         }
     }
 }
