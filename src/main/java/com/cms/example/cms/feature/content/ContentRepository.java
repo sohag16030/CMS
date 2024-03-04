@@ -17,8 +17,8 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
     @Query("SELECT con FROM Content con LEFT JOIN FETCH con.cmsUser WHERE con.contentId = :contentId")
     Optional<Content> findByIdWithDetails(Long contentId);
 
-    @Query("SELECT DISTINCT con FROM Content con " +
-            "JOIN con.cmsUser cms " +
+    @Query(value = "SELECT DISTINCT con FROM Content con " +
+            "JOIN FETCH con.cmsUser cms " +
             "WHERE " +
             "(:contentId IS NULL OR con.contentId = :contentId) AND " +
             "(:title IS NULL OR LOWER(con.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
@@ -33,7 +33,9 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
 //            "(:gender IS NULL OR LOWER(cms.gender) LIKE LOWER(CONCAT('%', :gender, '%'))) AND " +
 //            "(:userStatus IS NULL OR LOWER(cms.userStatus) LIKE LOWER(CONCAT('%', :userStatus, '%'))) AND " +
             "(:isUserActive IS NULL OR cms.isActive = :isUserActive) AND " +
-            "(:isActive IS NULL OR con.isActive = :isActive)")
+            "(:isActive IS NULL OR con.isActive = :isActive)",
+            countQuery = "SELECT COUNT(DISTINCT con) FROM Content con " +
+                    "JOIN con.cmsUser cms ")
     Page<Content> search(@Param("contentId") Long contentId,
                          @Param("title") String title,
                          @Param("type") String type,
