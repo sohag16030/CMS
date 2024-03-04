@@ -36,26 +36,26 @@ public class CmsUserController {
     @PutMapping(Routes.CMS_USER_UPDATE_BY_ID_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> updateCmsUser(@PathVariable Long cmsUserId, @RequestBody CmsUser sourceUser, Principal principal) {
-        if (userService.userValidity(principal,cmsUserId)) {
+        if (userService.userValidity(principal, cmsUserId)) {
             try {
                 CmsUser user = userService.updateCmsUser(cmsUserId, sourceUser);
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
             }
-        }else {
-            // return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
+        } else {
+            return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
 
             // Create a custom error response object
-            CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.FORBIDDEN, "Forbidden", Routes.CMS_USER_UPDATE_BY_ID_ROUTE +"/"+ cmsUserId);
-            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+//            CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.FORBIDDEN, "Forbidden", Routes.CMS_USER_UPDATE_BY_ID_ROUTE +"/"+ cmsUserId);
+//            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
     }
 
     @GetMapping(Routes.CMS_USER_BY_ID_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getUserById(@PathVariable Long userId, Principal principal) {
-        if (userService.userValidity(principal,userId)) {
+        if (userService.userValidity(principal, userId)) {
             CmsUser user = userService.getCmsUserById(userId);
             if (Objects.nonNull(user)) {
                 return new ResponseEntity<>(user, HttpStatus.OK);
