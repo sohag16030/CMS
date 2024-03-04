@@ -1,6 +1,7 @@
 package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.common.Routes;
+import com.cms.example.cms.dto.responseDto.CustomErrorResponse;
 import com.cms.example.cms.entities.CmsUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -43,12 +44,16 @@ public class CmsUserController {
                 return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
             }
         }else {
-            return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
+            // return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
+
+            // Create a custom error response object
+            CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.FORBIDDEN, "Forbidden", Routes.CMS_USER_UPDATE_BY_ID_ROUTE +"/"+ cmsUserId);
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
     }
 
     @GetMapping(Routes.CMS_USER_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getUserById(@PathVariable Long userId, Principal principal) {
         if (userService.userValidity(principal,userId)) {
             CmsUser user = userService.getCmsUserById(userId);
@@ -60,6 +65,10 @@ public class CmsUserController {
             }
         } else {
             return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
+
+            // Create a custom error response object
+//            CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.FORBIDDEN, "Forbidden", Routes.CMS_USER_UPDATE_BY_ID_ROUTE +"/"+ userId);
+//            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
     }
 

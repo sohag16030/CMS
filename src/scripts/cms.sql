@@ -71,6 +71,8 @@ CREATE TABLE BLACK_LISTED_TOKENS (
                                      BLACK_LISTED_TOKEN_ID BIGSERIAL PRIMARY KEY,
                                      ACCESS_TOKEN VARCHAR(255) NOT NULL,
                                      CMS_USER_ID BIGINT,
+                                     CREATED_AT TIMESTAMPTZ NOT NULL,
+
                                      CONSTRAINT BLACK_LISTED_TOKENS_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID)
 );
 
@@ -81,6 +83,8 @@ CREATE TABLE REFRESH_TOKEN (
                                REFRESH_TOKEN VARCHAR(255) NOT NULL,
                                EXPIRY_DATE TIMESTAMP WITH TIME ZONE NOT NULL,
                                CMS_USER_ID BIGINT,
+                               CREATED_AT TIMESTAMPTZ NOT NULL,
+
                                CONSTRAINT REFRESH_TOKEN_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID)
 );
 

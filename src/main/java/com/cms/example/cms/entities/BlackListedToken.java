@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -32,6 +34,10 @@ public class BlackListedToken {
 
     @Column(name = "ACCESS_TOKEN", nullable = false)
     private String accessToken;
+
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     @OneToOne(targetEntity = CmsUser.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name="CMS_USER_ID")

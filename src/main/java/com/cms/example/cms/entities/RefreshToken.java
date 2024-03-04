@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "REFRESH_TOKEN")
@@ -34,6 +36,10 @@ public class RefreshToken {
 
     @Column(name = "EXPIRY_DATE", nullable = false)
     private Instant expiryDate;
+
+    @Column(name = "CREATED_AT", nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     @OneToOne(targetEntity = CmsUser.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name="CMS_USER_ID")

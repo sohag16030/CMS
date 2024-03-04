@@ -259,7 +259,9 @@ public class CmsUserService {
     }
     public boolean userValidity(Principal principal,Long userId) {
         CmsUser loggedInUser = getLoggedInUser(principal);
-        if(loggedInUser.getCmsUserId().equals(userId)) return true;
-        else return false;
+        if(loggedInUser.getCmsUserId().equals(userId))
+            return true;
+        else
+            return false;
     }
 }
