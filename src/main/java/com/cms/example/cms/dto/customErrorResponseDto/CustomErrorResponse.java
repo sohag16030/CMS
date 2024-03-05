@@ -1,15 +1,12 @@
-package com.cms.example.cms.dto.responseDto;
+package com.cms.example.cms.dto.customErrorResponseDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter

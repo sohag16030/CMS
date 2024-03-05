@@ -22,12 +22,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter{
 
-
     private final CmsUserDetailsService groupUserDetailsService;
 
     private final JwtRequestFilter jwtRequestFilter;
-
-    private final JwtInterceptor  jwtInterceptor;
 
     @Override
     public int hashCode() {

@@ -16,6 +16,8 @@ import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.subject.SubjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class CmsUserService {
         cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
         populateAddress(cmsUser);
         populateAcademicInfo(cmsUser);
+
         cmsUser = userRepository.save(cmsUser);
         return getCmsUserById(cmsUser.getCmsUserId());
     }
@@ -105,9 +107,7 @@ public class CmsUserService {
         List<Long> academicInfoIds = cmsUsers.getAcademicInfos().stream().map(AcademicInfo::getAcademicInfoId).collect(Collectors.toList());
         academicInfoRepository.fetchSubjectsByAcademicInfoIdIn(academicInfoIds);
 
-        if (optionalCmsUser.isPresent()) {
-            return optionalCmsUser.get();
-        } else return null;
+        return optionalCmsUser.orElse(null);
     }
 
     @Transactional
