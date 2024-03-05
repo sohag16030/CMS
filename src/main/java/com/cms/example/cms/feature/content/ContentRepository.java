@@ -26,13 +26,6 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
             "(:path IS NULL OR LOWER(con.path) LIKE LOWER(CONCAT('%', :path, '%'))) AND " +
             "(:cmsUserId IS NULL OR cms.cmsUserId = :cmsUserId) AND " +
             "(:userName IS NULL OR LOWER(cms.userName) LIKE LOWER(CONCAT('%', :userName, '%'))) AND " +
-//            "(:roles IS NULL OR LOWER(cms.roles) LIKE LOWER(CONCAT('%', :roles, '%'))) AND " +
-//            "(:mobileNumber IS NULL OR LOWER(cms.mobileNumber) LIKE LOWER(CONCAT('%', :mobileNumber, '%'))) AND " +
-//            "(:email IS NULL OR LOWER(cms.email) LIKE LOWER(CONCAT('%', :email, '%'))) AND " +
-//            "(:name IS NULL OR LOWER(cms.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-////            "(:gender IS NULL OR LOWER(cms.gender) LIKE LOWER(CONCAT('%', :gender, '%'))) AND " +
-////            "(:userStatus IS NULL OR LOWER(cms.userStatus) LIKE LOWER(CONCAT('%', :userStatus, '%'))) AND " +
-//            "(:isUserActive IS NULL OR cms.isActive = :isUserActive) AND " +
             "(:isActive IS NULL OR con.isActive = :isActive)",
             countQuery = "SELECT COUNT(con) FROM Content con " +
                     "JOIN con.cmsUser cms ")
@@ -42,12 +35,5 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
                          @Param("path") String path,
                          @Param("cmsUserId") Long cmsUserId,
                          @Param("userName") String userName,
-//                         @Param("roles") String roles,
-//                         @Param("mobileNumber") String mobileNumber,
-//                         @Param("email") String email,
-//                         @Param("name") String name,
-//                         @Param("gender") String gender,
-//                         @Param("userStatus") String userStatus,
-                         //@Param("isUserActive") Boolean isUserActive,
                          @Param("isActive") Boolean isActive, Pageable pageable);
 }
