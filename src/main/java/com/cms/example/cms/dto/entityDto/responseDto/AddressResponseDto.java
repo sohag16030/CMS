@@ -1,6 +1,11 @@
 package com.cms.example.cms.dto.entityDto.responseDto;
 
+import com.cms.example.cms.dto.entityDto.requestDto.CmsUserRequestDto;
+import com.cms.example.cms.dto.entityDto.requestDto.DistrictRequestDto;
+import com.cms.example.cms.dto.entityDto.requestDto.UpazilaRequestDto;
+import com.cms.example.cms.entities.Division;
 import com.cms.example.cms.enums.AddressType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,26 +23,21 @@ public class AddressResponseDto {
 
     private AddressType addressType;
 
-    private Long divisionId;
+    private DivisionResponseDto division;
 
     @JsonIgnoreProperties(value = {"division"}, allowSetters = true)
-    private Long districtId;
+    private DistrictRequestDto district;
 
     @JsonIgnoreProperties(value = {"district"}, allowSetters = true)
-    private Long upazilaId;
+    private UpazilaResponseDto upazila;
 
-    private Long cmsUserId;
+    @JsonIgnore
+    private CmsUserResponseDto cmsUser;
 
     private Boolean isActive;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
-    private DivisionResponseDto division; // DTO for Division entity
-
-    private DistrictResponseDto district; // DTO for District entity
-
-    private UpazilaResponseDto upazila; // DTO for Upazila entity
 }
 

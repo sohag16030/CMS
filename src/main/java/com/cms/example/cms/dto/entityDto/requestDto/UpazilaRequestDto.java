@@ -32,7 +32,7 @@ public class UpazilaRequestDto {
 
     private Boolean active;
 
-    private DistrictRequestDto districtRequestDto;
+    private DistrictRequestDto district;
 
     private LocalDateTime createdAt;
 

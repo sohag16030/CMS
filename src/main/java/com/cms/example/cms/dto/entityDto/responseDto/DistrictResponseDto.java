@@ -37,10 +37,10 @@ public class DistrictResponseDto {
 
     private Boolean active;
 
-    private Division division;
+    private DivisionResponseDto division;
 
-    @JsonIgnoreProperties(value = {"districtResponseDto"}, allowSetters = true)
-    private List<UpazilaResponseDto> upazilaResponseDtoList;
+    @JsonIgnoreProperties(value = {"district"}, allowSetters = true)
+    private List<UpazilaResponseDto> upazilas;
 
     private LocalDateTime createdAt;
 

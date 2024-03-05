@@ -38,17 +38,17 @@ public class DistrictRequestDto {
 
     private Boolean active;
 
-    private Division division;
+    private DivisionRequestDto division;
 
-    @JsonIgnoreProperties(value = {"districtResponseDto"}, allowSetters = true)
-    private List<UpazilaResponseDto> upazilaResponseDtoList;
+    @JsonIgnoreProperties(value = {"district"}, allowSetters = true)
+    private List<UpazilaRequestDto> upazilas;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
     @JsonIgnore
-    public static Boolean isNonNull(DistrictRequestDto districtRequestDto){
-        return Objects.nonNull(districtRequestDto) && Objects.nonNull(districtRequestDto.getDistrictId());
+    public static Boolean isNonNull(DistrictRequestDto district){
+        return Objects.nonNull(district) && Objects.nonNull(district.getDistrictId());
     }
 }

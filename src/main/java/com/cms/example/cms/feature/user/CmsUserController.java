@@ -34,11 +34,11 @@ public class CmsUserController {
     private final ModelMapper modelMapper;
 
     @PostMapping(Routes.CMS_USER_SIGN_UP_ROUTE)
-    public ResponseEntity<CmsUser> createCmsUser(@RequestBody CmsUserRequestDto cmsUserRequestDto) {
+    public ResponseEntity<CmsUserResponseDto> createCmsUser(@RequestBody CmsUserRequestDto cmsUserRequestDto) {
         CmsUser cmsUser = objectMapper.convertValue(cmsUserRequestDto, CmsUser.class);
         CmsUser response =  userService.saveCmsUser(cmsUser);
-        //CmsUserResponseDto responseDto = modelMapper.map(cmsUser, CmsUserResponseDto.class);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        CmsUserResponseDto responseDto = modelMapper.map(response, CmsUserResponseDto.class);
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @PutMapping(Routes.CMS_USER_UPDATE_BY_ID_ROUTE)

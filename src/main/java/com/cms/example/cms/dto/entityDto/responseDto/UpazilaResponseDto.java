@@ -32,7 +32,7 @@ public class UpazilaResponseDto {
 
     private Boolean active;
 
-    private DistrictResponseDto districtResponseDto;
+    private DistrictResponseDto district;
 
     private LocalDateTime createdAt;
 
