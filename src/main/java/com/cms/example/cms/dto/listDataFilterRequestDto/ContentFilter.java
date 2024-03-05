@@ -15,6 +15,8 @@ public class ContentFilter {
     private String title;
     private String type;
     private String path;
-    private CmsUserFilter cmsUserFilterDto;
+    private Long cmsUserId;
+    private String userName;
+    //private CmsUserFilter cmsUserFilterDto;
     private Boolean isActive;
 }

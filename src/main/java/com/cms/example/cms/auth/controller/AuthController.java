@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.swing.text.html.Option;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -139,6 +140,7 @@ public class AuthController {
     }
 
     private CmsUser getLoggedInUser(Principal principal) {
-        return repository.findByUserName(principal.getName()).get();
+        Optional<CmsUser> user = repository.findByUserName(principal.getName());
+        return user.orElse(null);
     }
 }

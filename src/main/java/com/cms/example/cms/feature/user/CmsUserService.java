@@ -22,7 +22,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -256,5 +259,13 @@ public class CmsUserService {
             return true;
         else
             return false;
+    }
+    public boolean principalHasAdminRole(Principal principal) {
+        if (principal instanceof Authentication) {
+            Authentication authentication = (Authentication) principal;
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        return false;
     }
 }

@@ -5,6 +5,7 @@ import com.cms.example.cms.dto.paginatedResponseDto.PaginatedCmsUserResponse;
 import com.cms.example.cms.dto.listDataFilterRequestDto.CmsUserFilter;
 import com.cms.example.cms.entities.CmsUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class CmsUserController {
     @GetMapping(Routes.CMS_USER_BY_ID_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getUserById(@PathVariable Long userId, Principal principal) {
-        if (userService.userValidity(principal, userId)) {
+        if (userService.userValidity(principal, userId) || userService.principalHasAdminRole(principal)) {
             CmsUser user = userService.getCmsUserById(userId);
             if (Objects.nonNull(user)) {
                 return new ResponseEntity<>(user, HttpStatus.OK);
