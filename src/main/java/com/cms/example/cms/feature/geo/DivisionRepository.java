@@ -19,9 +19,9 @@ public interface DivisionRepository extends JpaRepository<Division, Long> {
     @Query("SELECT DISTINCT div FROM Division div " +
             "WHERE " +
             "(:divisionId IS NULL OR div.divisionId = :divisionId) AND " +
-            "(:name IS NULL OR LOWER(div.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
+            "(:divisionName IS NULL OR LOWER(div.name) LIKE LOWER(CONCAT('%', :divisionName, '%'))) AND " +
             "(:active IS NULL OR div.active = :active)")
     Page<Division> search(@Param("divisionId") Long divisionId,
-                          @Param("name") String name,
+                          @Param("divisionName") String divisionName,
                           @Param("active") Boolean active, Pageable pageable);
 }

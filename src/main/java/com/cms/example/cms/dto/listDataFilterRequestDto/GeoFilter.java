@@ -14,8 +14,9 @@ public class GeoFilter {
     private Long divisionId;
     private Long districtId;
     private Long upazilaId;
-    private String name;
-    private String nameLocal;
+    private String divisionName;
+    private String districtName;
+    private String upazilaName;
     private Boolean active;
 }
 

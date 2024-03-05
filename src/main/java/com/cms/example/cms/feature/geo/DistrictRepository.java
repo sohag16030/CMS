@@ -23,14 +23,16 @@ public interface DistrictRepository extends JpaRepository<District, Long> {
     @Query(value = "SELECT DISTINCT dis FROM District dis " +
             "JOIN FETCH dis.division div " +
             "WHERE " +
+            "(:divisionId IS NULL OR div.divisionId = :divisionId) AND " +
+            "(:divisionName IS NULL OR LOWER(div.name) LIKE LOWER(CONCAT('%', :divisionName, '%'))) AND " +
             "(:districtId IS NULL OR dis.districtId = :districtId) AND " +
-            "(:name IS NULL OR LOWER(dis.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-            "(:active IS NULL OR dis.active = :active) AND " +
-            "(:divisionId IS NULL OR div.divisionId = :divisionId)",
+            "(:districtName IS NULL OR LOWER(dis.name) LIKE LOWER(CONCAT('%', :districtName, '%'))) AND " +
+            "(:active IS NULL OR dis.active = :active)",
             countQuery = "SELECT COUNT(dis) FROM District dis")
     Page<District> search(@Param("divisionId") Long divisionId,
+                          @Param("divisionName") String divisionName,
                           @Param("districtId") Long districtId,
-                          @Param("name") String name,
+                          @Param("districtName") String districtName,
                           @Param("active") Boolean active, Pageable pageable);
 }
 
