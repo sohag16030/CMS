@@ -17,7 +17,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import java.util.Date;
+
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -37,9 +38,6 @@ public class Upazila {
     @Column(name = "NAME", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "NAME_LOCAL", unique = true, nullable = false)
-    private String nameLocal;
-
     @Column(name = "ACTIVE", nullable = false)
     private Boolean active;
 
@@ -49,11 +47,11 @@ public class Upazila {
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "UPDATED_AT", nullable = false)
     @UpdateTimestamp
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @JsonIgnore
     public static Boolean isNonNull(Upazila upazila){

@@ -10,6 +10,8 @@ public enum AcademicClass {
     SEVEN,
     EIGHT,
     NINE,
-    TEN
+    TEN,
+    ELEVEN,
+    TWELVE
 }
 
