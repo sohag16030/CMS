@@ -39,9 +39,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     }
 
     public boolean invalidToken(String token) {
-        if (blackListedTokenRepository.findByAccessToken(token) != null) {
-            return true;
-        } else return false;
+        return blackListedTokenRepository.findByAccessToken(token) != null;
     }
 
 }
