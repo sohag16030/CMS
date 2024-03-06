@@ -4,7 +4,6 @@ import com.cms.example.cms.common.Routes;
 import com.cms.example.cms.dto.paginatedResponseDto.PaginatedCmsUserResponse;
 import com.cms.example.cms.dto.listDataFilterRequestDto.CmsUserFilter;
 import com.cms.example.cms.entities.CmsUser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

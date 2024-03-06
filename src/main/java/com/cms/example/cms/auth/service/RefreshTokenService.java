@@ -4,7 +4,6 @@ import com.cms.example.cms.auth.repository.RefreshTokenRepository;
 import com.cms.example.cms.entities.RefreshToken;
 import com.cms.example.cms.feature.user.CmsUserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
