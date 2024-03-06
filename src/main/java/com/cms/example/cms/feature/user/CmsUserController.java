@@ -36,7 +36,7 @@ public class CmsUserController {
     @PutMapping(Routes.CMS_USER_UPDATE_BY_ID_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> updateCmsUser(@PathVariable Long cmsUserId, @RequestBody CmsUser sourceUser, Principal principal) {
-        if (userService.userValidity(principal, cmsUserId)) {
+        if (userService.loggedInUser(principal, cmsUserId)) {
             try {
                 CmsUser user = userService.updateCmsUser(cmsUserId, sourceUser);
                 return new ResponseEntity<>(user, HttpStatus.OK);
@@ -52,7 +52,7 @@ public class CmsUserController {
     @GetMapping(Routes.CMS_USER_BY_ID_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getUserById(@PathVariable Long userId, Principal principal) {
-        if (userService.userValidity(principal, userId) || userService.principalHasAdminRole(principal)) {
+        if (userService.loggedInUser(principal, userId) || userService.principalHasAdminRole(principal)) {
             CmsUser user = userService.getCmsUserById(userId);
             if (Objects.nonNull(user)) {
                 return new ResponseEntity<>(user, HttpStatus.OK);

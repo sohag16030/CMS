@@ -251,7 +251,7 @@ public class CmsUserService {
         Optional<CmsUser> user = userRepository.findByUserName(principal.getName());
         return user.orElse(null);
     }
-    public boolean userValidity(Principal principal,Long userId) {
+    public boolean loggedInUser(Principal principal,Long userId) {
         CmsUser loggedInUser = getLoggedInUser(principal);
         if(loggedInUser.getCmsUserId().equals(userId))
             return true;
