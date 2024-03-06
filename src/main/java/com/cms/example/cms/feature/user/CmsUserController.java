@@ -1,14 +1,11 @@
 package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.common.Routes;
-import com.cms.example.cms.dto.entityDto.requestDto.CmsUserRequestDto;
-import com.cms.example.cms.dto.entityDto.responseDto.CmsUserResponseDto;
 import com.cms.example.cms.dto.paginatedResponseDto.PaginatedCmsUserResponse;
 import com.cms.example.cms.dto.listDataFilterRequestDto.CmsUserFilter;
 import com.cms.example.cms.entities.CmsUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,15 +27,11 @@ import java.util.Optional;
 public class CmsUserController {
     private final CmsUserService userService;
     private final CmsUserRepository userRepository;
-    private final ObjectMapper objectMapper;
-    private final ModelMapper modelMapper;
 
     @PostMapping(Routes.CMS_USER_SIGN_UP_ROUTE)
-    public ResponseEntity<CmsUserResponseDto> createCmsUser(@RequestBody CmsUserRequestDto cmsUserRequestDto) {
-        CmsUser cmsUser = objectMapper.convertValue(cmsUserRequestDto, CmsUser.class);
+    public ResponseEntity<CmsUser> createCmsUser(@RequestBody CmsUser cmsUser) {
         CmsUser response =  userService.saveCmsUser(cmsUser);
-        CmsUserResponseDto responseDto = modelMapper.map(response, CmsUserResponseDto.class);
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping(Routes.CMS_USER_UPDATE_BY_ID_ROUTE)
@@ -54,9 +47,6 @@ public class CmsUserController {
         } else {
             return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
 
-            // Create a custom error response object
-//            CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.FORBIDDEN, "Forbidden", Routes.CMS_USER_UPDATE_BY_ID_ROUTE +"/"+ cmsUserId);
-//            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
     }
 
@@ -73,10 +63,6 @@ public class CmsUserController {
             }
         } else {
             return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
-
-            // Create a custom error response object
-//            CustomErrorResponse errorResponse = new CustomErrorResponse(HttpStatus.FORBIDDEN, "Forbidden", Routes.CMS_USER_UPDATE_BY_ID_ROUTE +"/"+ userId);
-//            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
     }
 
