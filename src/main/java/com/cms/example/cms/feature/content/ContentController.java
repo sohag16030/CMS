@@ -122,10 +122,10 @@ public class ContentController {
     }
 
     @DeleteMapping(Routes.CONTENT_DELETE_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteContentById(@PathVariable Long contentId, Principal principal) {
         CmsUser loggedInUser = userService.getLoggedInUser(principal);
-        if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId())) {
+        if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId()) || userService.principalHasAdminRole(principal)) {
             try {
                 contentRepository.deleteById(contentId);
                 Optional<Content> contentOptional = contentRepository.findById(contentId);

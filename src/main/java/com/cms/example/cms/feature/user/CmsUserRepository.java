@@ -25,7 +25,7 @@ public interface CmsUserRepository extends JpaRepository<CmsUser, Long> {
             "WHERE u.cmsUserId = :cmsUserId")
     Optional<CmsUser> fetchUserAddressInfoByUserId(@Param("cmsUserId") Long cmsUserId);
 
-    @Query("SELECT u FROM CmsUser u " +
+    @Query("SELECT DISTINCT u FROM CmsUser u " +
             "JOIN FETCH u.academicInfos a " +
             "JOIN a.subjects s " +
             "WHERE u.cmsUserId = :cmsUserId")
