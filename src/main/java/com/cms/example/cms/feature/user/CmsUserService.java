@@ -253,10 +253,7 @@ public class CmsUserService {
     }
     public boolean loggedInUser(Principal principal,Long userId) {
         CmsUser loggedInUser = getLoggedInUser(principal);
-        if(loggedInUser.getCmsUserId().equals(userId))
-            return true;
-        else
-            return false;
+        return loggedInUser.getCmsUserId().equals(userId);
     }
     public boolean principalHasAdminRole(Principal principal) {
         if (principal instanceof Authentication) {
