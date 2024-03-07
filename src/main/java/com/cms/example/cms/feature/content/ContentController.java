@@ -3,7 +3,6 @@ package com.cms.example.cms.feature.content;
 import com.cms.example.cms.common.Routes;
 
 import com.cms.example.cms.dto.listDataFilterRequestDto.ContentFilter;
-import com.cms.example.cms.dto.paginatedResponseDto.PaginatedCmsUserResponse;
 import com.cms.example.cms.dto.paginatedResponseDto.PaginatedContentResponse;
 import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.Content;

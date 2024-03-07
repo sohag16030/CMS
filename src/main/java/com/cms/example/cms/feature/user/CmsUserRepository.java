@@ -1,9 +1,6 @@
 package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.entities.CmsUser;
-import com.cms.example.cms.entities.Division;
-import com.cms.example.cms.enums.Gender;
-import com.cms.example.cms.enums.UserStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

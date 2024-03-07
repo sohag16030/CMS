@@ -1,6 +1,5 @@
 package com.cms.example.cms.feature.content;
 
-import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.Content;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
