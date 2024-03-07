@@ -3,6 +3,7 @@ package com.cms.example.cms.auth.controller;
 import com.cms.example.cms.auth.model.AuthenticationRequest;
 import com.cms.example.cms.auth.model.AuthenticationResponse;
 import com.cms.example.cms.auth.model.NewAccessTokenRequest;
+import com.cms.example.cms.auth.model.Role;
 import com.cms.example.cms.auth.repository.BlackListedTokenRepository;
 import com.cms.example.cms.auth.service.CmsUserDetailsService;
 import com.cms.example.cms.auth.service.RefreshTokenService;
@@ -21,9 +22,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -82,24 +83,26 @@ public class AuthController {
                 }).orElseThrow(() -> new RuntimeException("Refresh token is not in the database")); // Throw an exception if the refresh token is not found in the database
     }
 
-    @GetMapping(Routes.USER_ROLE_ASSIGNMENT)
+    @PutMapping(Routes.USER_ROLE_ASSIGNMENT)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
-    public ResponseEntity<?> giveAccessToUser(@PathVariable Long userId, @PathVariable String userRole, Principal principal) {
+    public ResponseEntity<?> giveAccessToUser(@PathVariable Long userId, @RequestBody Role newRole, Principal principal) {
 
         Optional<CmsUser> cmsUser = userRepository.findById(userId);
-        CmsUser user = new CmsUser();
+        CmsUser user;
         if (cmsUser.isPresent()) {
             user = cmsUser.get();
             List<String> activeRoles = groupUserDetailsService.getRolesByLoggedInUser(principal);
-            String newRole = "";
+            String updatedRoles = null;
+            if (!user.getRoles().contains(newRole.getNewRole())) {
+                updatedRoles = user.getRoles() + "," + newRole.getNewRole();
+            }
             try {
-                if (activeRoles.contains(userRole)) {
-                    if (!user.getRoles().contains(userRole)) {
-                        newRole = user.getRoles() + "," + userRole;
-                        user.setRoles(newRole);
-                    }
-                    //why is not working without saving.??
-                    userRepository.save(user);
+                if (activeRoles.contains("ROLE_ADMIN")) {
+                    user.setRoles(updatedRoles);
+                } else if (activeRoles.contains("ROLE_MODERATOR") && newRole.getNewRole().contains("ROLE_MODERATOR")) {
+                    user.setRoles(updatedRoles);
+                } else {
+                    return new ResponseEntity<>("forbidden", HttpStatus.FORBIDDEN);
                 }
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } catch (Exception e) {

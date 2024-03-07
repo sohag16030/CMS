@@ -30,7 +30,7 @@ public final class Routes {
     //AUTH
     public static final String USER_LOGIN = "/user/accessToken";
     public static final String USER_ACCESS_TOKEN_FROM_REFRESH_TOKEN = "/user/getAccessTokenFromRefreshToken";
-    public static final String USER_ROLE_ASSIGNMENT = "/user/access/{userId}/{userRole}";
+    public static final String USER_ROLE_ASSIGNMENT = "/user/{userId}/permission";
     public static final String USER_LOGOUT = "/user/logout";
 
 
