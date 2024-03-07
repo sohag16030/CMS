@@ -1,7 +1,6 @@
 package com.cms.example.cms.auth.config;
 
 import com.cms.example.cms.auth.filters.JwtRequestFilter;
-import com.cms.example.cms.auth.interceptor.JwtInterceptor;
 import com.cms.example.cms.auth.service.CmsUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
