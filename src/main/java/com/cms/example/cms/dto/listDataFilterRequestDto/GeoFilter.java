@@ -1,4 +1,4 @@
-package com.cms.example.cms.dto;
+package com.cms.example.cms.dto.listDataFilterRequestDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,13 +9,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeoFilterDto {
+public class GeoFilter {
 
     private Long divisionId;
     private Long districtId;
     private Long upazilaId;
-    private String name;
-    private String nameLocal;
+    private String divisionName;
+    private String districtName;
+    private String upazilaName;
     private Boolean active;
 }
 

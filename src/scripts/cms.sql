@@ -2,14 +2,12 @@
 CREATE TABLE DIVISION (
                           DIVISION_ID BIGSERIAL,
                           NAME VARCHAR(255) NOT NULL,
-                          NAME_LOCAL VARCHAR(255) NOT NULL,
                           ACTIVE BOOLEAN NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
                           UPDATED_AT TIMESTAMPTZ NOT NULL,
 
                           CONSTRAINT DIVISION_DIVISION_ID_PK PRIMARY KEY (DIVISION_ID),
                           CONSTRAINT DIVISION_NAME_UK UNIQUE (NAME),
-                          CONSTRAINT DIVISION_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
                           CONSTRAINT DIVISION_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE))
 );
 
@@ -17,7 +15,6 @@ CREATE TABLE DIVISION (
 CREATE TABLE DISTRICT (
                           DISTRICT_ID BIGSERIAL,
                           NAME VARCHAR(255) NOT NULL,
-                          NAME_LOCAL VARCHAR(255) NOT NULL,
                           ACTIVE BOOLEAN NOT NULL,
                           DIVISION_ID BIGINT NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
@@ -25,16 +22,15 @@ CREATE TABLE DISTRICT (
 
                           CONSTRAINT DISTRICT_DISTRICT_ID_PK PRIMARY KEY (DISTRICT_ID),
                           CONSTRAINT DISTRICT_NAME_UK UNIQUE (NAME),
-                          CONSTRAINT DISTRICT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
                           CONSTRAINT DISTRICT_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
                           CONSTRAINT DISTRICT_DIVISION_ID_FK FOREIGN KEY (DIVISION_ID) REFERENCES DIVISION(DIVISION_ID)
 );
+
 
 -- CREATE UPAZILA TABLE
 CREATE TABLE UPAZILA (
                          UPAZILA_ID BIGSERIAL,
                          NAME VARCHAR(255) NOT NULL,
-                         NAME_LOCAL VARCHAR(255) NOT NULL,
                          ACTIVE BOOLEAN NOT NULL,
                          DISTRICT_ID BIGINT,
                          CREATED_AT TIMESTAMPTZ NOT NULL,
@@ -42,19 +38,21 @@ CREATE TABLE UPAZILA (
 
                          CONSTRAINT UPAZILA_UPAZILA_ID_PK PRIMARY KEY (UPAZILA_ID),
                          CONSTRAINT UPAZILA_NAME_UK UNIQUE (NAME),
-                         CONSTRAINT UPAZILA_NAME_LOCAL_UK UNIQUE (NAME_LOCAL),
                          CONSTRAINT UPAZILA_ACTIVE_CHK CHECK (ACTIVE IN (TRUE, FALSE)),
                          CONSTRAINT UPAZILA_DISTRICT_ID_FK FOREIGN KEY (DISTRICT_ID) REFERENCES DISTRICT(DISTRICT_ID)
 );
 
--- Create CMS_USER table
+
+-- Create CMS_USER table                                                                                                                                        ('PERMANENT', 2, 4, 5, TRUE, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 CREATE TABLE CMS_USER (
                           CMS_USER_ID BIGSERIAL,
                           MOBILE_NUMBER VARCHAR(255) UNIQUE NOT NULL,
                           EMAIL VARCHAR(255) UNIQUE,
                           NAME VARCHAR(255) NOT NULL,
+                          USER_NAME VARCHAR(255) NOT NULL,
+                          PASSWORD VARCHAR(255) NOT NULL,
+                          ROLES VARCHAR(255) NOT NULL,
                           GENDER VARCHAR(255) NOT NULL,
-                          ADDRESS_ID BIGINT NOT NULL,
                           USER_STATUS VARCHAR(10) NOT NULL,
                           IS_ACTIVE BOOLEAN NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
@@ -67,6 +65,29 @@ CREATE TABLE CMS_USER (
                           CONSTRAINT CMS_USER_USER_STATUS_CHK CHECK (USER_STATUS IN ('ACTIVE', 'INACTIVE')),
                           CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE))
 );
+
+-- Create BLACK_LISTED_TOKENS table
+CREATE TABLE BLACK_LISTED_TOKENS (
+                                     BLACK_LISTED_TOKEN_ID BIGSERIAL PRIMARY KEY,
+                                     ACCESS_TOKEN VARCHAR(255) NOT NULL,
+                                     CMS_USER_ID BIGINT,
+                                     CREATED_AT TIMESTAMPTZ NOT NULL,
+
+                                     CONSTRAINT BLACK_LISTED_TOKENS_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID)
+);
+
+
+-- Create REFRESH_TOKEN table
+CREATE TABLE REFRESH_TOKEN (
+                               REFRESH_TOKEN_ID BIGSERIAL PRIMARY KEY,
+                               REFRESH_TOKEN VARCHAR(255) NOT NULL,
+                               EXPIRY_DATE TIMESTAMP WITH TIME ZONE NOT NULL,
+                               CMS_USER_ID BIGINT,
+                               CREATED_AT TIMESTAMPTZ NOT NULL,
+
+                               CONSTRAINT REFRESH_TOKEN_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID)
+);
+
 
 -- Create ADDRESS table
 CREATE TABLE ADDRESS (
@@ -88,19 +109,15 @@ CREATE TABLE ADDRESS (
                          CONSTRAINT ADDRESS_UPAZILA_ID_FK FOREIGN KEY (UPAZILA_ID) REFERENCES UPAZILA(UPAZILA_ID)
 );
 
-
-
 -- Create Subject table
 CREATE TABLE SUBJECT (
                          SUBJECT_ID BIGSERIAL,
                          SUBJECT_NAME VARCHAR(255)  NOT NULL,
-                         NAME_LOCAL VARCHAR(255)  NOT NULL,
                          CREATED_AT TIMESTAMPTZ NOT NULL,
                          UPDATED_AT TIMESTAMPTZ NOT NULL,
 
                          CONSTRAINT SUBJECT_SUBJECT_ID_PK PRIMARY KEY (SUBJECT_ID),
-                         CONSTRAINT SUBJECT_NAME_UK UNIQUE (SUBJECT_NAME),
-                         CONSTRAINT SUBJECT_NAME_LOCAL_UK UNIQUE (NAME_LOCAL)
+                         CONSTRAINT SUBJECT_NAME_UK UNIQUE (SUBJECT_NAME)
 );
 
 
@@ -127,13 +144,26 @@ CREATE TABLE ACADEMIC_INFO_SUBJECT (
                                        FOREIGN KEY (SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID)
 );
 
--- Create able STAR_RATING
-CREATE TABLE USER_RATING (
-                           USER_RATING_ID BIGSERIAL,
-                           STAR           VARCHAR(255) NOT NULL,
-                           RATING_TYPE    VARCHAR(255) NOT NULL,
-                           CONSTRAINT USER_RATING_USER_RATING_ID_PK PRIMARY KEY (USER_RATING_ID),
-                           CONSTRAINT USER_RATING_RATING_TYPE_CHK CHECK (RATING_TYPE IN ('DIAMOND', 'PLATINUM', 'GOLD', 'SILVER', 'BRONZE'))
-);
+-- -- Create able STAR_RATING
+-- CREATE TABLE CONTENT_RATING (
+--                            CONTENT_RATING_ID BIGSERIAL,
+--                            STAR           VARCHAR(255) NOT NULL,
+--                            RATING_TYPE    VARCHAR(255) NOT NULL,
+--                            CONSTRAINT USER_RATING_USER_RATING_ID_PK PRIMARY KEY (CONTENT_RATING_ID),
+--                            CONSTRAINT USER_RATING_RATING_TYPE_CHK CHECK (RATING_TYPE IN ('DIAMOND', 'PLATINUM', 'GOLD', 'SILVER', 'BRONZE'))
+-- );
 
-ALTER TABLE CMS_USER ADD COLUMN USER_RATING BIGSERIAL;
+-- Create USER_CONTENT table
+CREATE TABLE CONTENT (
+                         CONTENT_ID BIGSERIAL,
+                         TITLE VARCHAR(50) NOT NULL,
+                         TYPE VARCHAR(50) NOT NULL,
+                         PATH VARCHAR(255) NOT NULL,
+                         CMS_USER_ID BIGINT NOT NULL,
+                         IS_ACTIVE BOOLEAN NOT NULL,
+                         CREATED_AT TIMESTAMPTZ NOT NULL,
+                         UPDATED_AT TIMESTAMPTZ NOT NULL,
+
+                         CONSTRAINT CONTENT_CONTENT_ID_PK PRIMARY KEY (CONTENT_ID),
+                         CONSTRAINT CONTENT_CMS_USER_ID_FK FOREIGN KEY (CMS_USER_ID) REFERENCES CMS_USER(CMS_USER_ID)
+);

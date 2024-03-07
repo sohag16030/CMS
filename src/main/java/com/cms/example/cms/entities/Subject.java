@@ -1,12 +1,6 @@
 package com.cms.example.cms.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +8,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import java.util.Date;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 @Builder
 @Entity
@@ -33,18 +36,19 @@ public class Subject {
     @Column(name = "SUBJECT_NAME", unique = true, nullable = false)
     private String name;
 
-
-    @Column(name = "NAME_LOCAL", unique = true, nullable = false)
-    private String nameLocal;
-
     @ManyToMany(mappedBy = "subjects")
     private List<AcademicInfo> academicInfos;
 
     @Column(name = "CREATED_AT", nullable = false)
     @CreationTimestamp
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "UPDATED_AT", nullable = false)
     @UpdateTimestamp
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
+
+    @JsonIgnore
+    public static Boolean isNonNull(Subject subject){
+        return Objects.nonNull(subject) && Objects.nonNull(subject.getSubjectId());
+    }
 }
