@@ -21,7 +21,7 @@ public interface DistrictRepository extends JpaRepository<District, Long> {
     List<District> fetchUpazilaByDistrictIdIn(@Param("districtsIds") List<Long> districtsIds);
 
     @Query(value = "SELECT DISTINCT dis FROM District dis " +
-            "JOIN FETCH dis.division div " +
+            "JOIN  dis.division div " +
             "WHERE " +
             "(:divisionId IS NULL OR div.divisionId = :divisionId) AND " +
             "(:divisionName IS NULL OR LOWER(div.name) LIKE LOWER(CONCAT('%', :divisionName, '%'))) AND " +

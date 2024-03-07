@@ -13,11 +13,11 @@ import java.util.Optional;
 @Repository
 public interface ContentRepository extends JpaRepository<Content, Long> {
 
-    @Query("SELECT con FROM Content con LEFT JOIN FETCH con.cmsUser WHERE con.contentId = :contentId")
+    @Query("SELECT con FROM Content con LEFT JOIN con.cmsUser WHERE con.contentId = :contentId")
     Optional<Content> findByIdWithDetails(Long contentId);
 
     @Query(value = "SELECT DISTINCT con FROM Content con " +
-            "JOIN FETCH con.cmsUser cms " +
+            "JOIN con.cmsUser cms " +
             "WHERE " +
             "(:contentId IS NULL OR con.contentId = :contentId) AND " +
             "(:title IS NULL OR LOWER(con.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +

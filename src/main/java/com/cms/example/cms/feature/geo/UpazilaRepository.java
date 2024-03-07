@@ -17,8 +17,8 @@ public interface UpazilaRepository extends JpaRepository<Upazila, Long> {
     Optional<Upazila> findByIdWithDetails(@Param("upazilaId") Long upazilaId);
 
     @Query(value = "SELECT DISTINCT u FROM Upazila u " +
-            "JOIN FETCH u.district dis " +
-            "JOIN FETCH dis.division div " +
+            "JOIN u.district dis " +
+            "JOIN dis.division div " +
             "WHERE " +
             "(:upazilaId IS NULL OR u.upazilaId = :upazilaId) AND " +
             "(:upazilaName IS NULL OR LOWER(u.name) LIKE LOWER(CONCAT('%', :upazilaName, '%'))) AND " +
