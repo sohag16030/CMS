@@ -2,12 +2,14 @@ package com.cms.example.cms.feature.content;
 
 import com.cms.example.cms.common.Routes;
 
+import com.cms.example.cms.dto.entityResponseDto.ContentResponse;
 import com.cms.example.cms.dto.listDataFilterRequestDto.ContentFilter;
 import com.cms.example.cms.dto.paginatedResponseDto.PaginatedContentResponse;
 import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.Content;
 import com.cms.example.cms.feature.user.CmsUserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,11 +35,11 @@ public class ContentController {
     private final ContentService contentService;
     private final ContentRepository contentRepository;
     private final CmsUserService userService;
+    private final ModelMapper modelMapper;
 
     @PostMapping(Routes.CONTENT_UPLOAD_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> uploadContent(@RequestParam("contents") MultipartFile[] files, Principal principal) {
-
         CmsUser loggedInUser = userService.getLoggedInUser(principal);
         List<Optional<Content>> contents = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -51,11 +53,14 @@ public class ContentController {
     @GetMapping(Routes.CONTENT_BY_ID_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getContent(@PathVariable Long contentId) {
-        Optional<Content> content = contentService.getContentWithUserById(contentId);
-        if (Objects.nonNull(content)) {
-            return new ResponseEntity<>(content, HttpStatus.OK);
+        Optional<Content> contentOptional = contentService.getContentWithUserById(contentId);
+
+        if (contentOptional.isPresent()) {
+            Content content = contentOptional.get();
+            ContentResponse response = modelMapper.map(content, ContentResponse.class);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            // TODO : throw EntityNotFoundException
+            // TODO: throw EntityNotFoundException
             return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
     }
@@ -63,7 +68,6 @@ public class ContentController {
     @PutMapping(Routes.CONTENT_UPDATE_BY_ID_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> updateContent(@PathVariable Long contentId, @RequestParam("content") MultipartFile file, Principal principal) {
-
         CmsUser loggedInUser = userService.getLoggedInUser(principal);
         if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId())) {
             try {
@@ -88,7 +92,6 @@ public class ContentController {
     @GetMapping(Routes.CONTENT_LIST_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getListContents(ContentFilter filter, Pageable pageable) {
-
         PaginatedContentResponse paginatedCmsUserResponse = contentService.getAllContentWithFilter(filter,pageable);
         if (paginatedCmsUserResponse == null) {
             return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);

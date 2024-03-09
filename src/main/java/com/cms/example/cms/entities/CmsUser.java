@@ -2,7 +2,8 @@ package com.cms.example.cms.entities;
 
 import com.cms.example.cms.enums.Gender;
 import com.cms.example.cms.enums.UserStatus;
-import com.sun.istack.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,13 +41,11 @@ public class CmsUser {
     @Column(name = "USER_NAME", unique = true, nullable = false)
     private String userName;
 
-    @NotNull
     @Column(name = "PASSWORD", unique = true, nullable = false)
     private String password;
 
     @Column(name = "ROLES", unique = true, nullable = false)
     private String roles;
-
 
     @Column(name = "MOBILE_NUMBER", unique = true, nullable = false)
     private String mobileNumber;
@@ -67,6 +66,18 @@ public class CmsUser {
     @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AcademicInfo> academicInfos;
 
+    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<RefreshToken> refreshTokens;
+
+    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<BlackListedToken> blackListedTokens;
+
+    @OneToMany(mappedBy = "cmsUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Content> contents;
+
     @Column(name = "USER_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
@@ -81,5 +92,12 @@ public class CmsUser {
     @Column(name = "UPDATED_AT", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @JsonIgnore
+    @JsonProperty(value = "password")
+    public String getPassword() {
+        return password;
+    }
+
 }
 

@@ -76,7 +76,7 @@ public class AuthController {
 
         return refreshTokenService.findByToken(refreshTokenRequest.getRefreshToken()) // Find the refresh token in the database
                 .map(refreshTokenService::verifyExpiration) // Verify if the refresh token has expired
-                .map(RefreshToken::getUserInfo) // Extract the token from the RefreshToken object
+                .map(RefreshToken::getCmsUser) // Extract the token from the RefreshToken object
                 .map(userInfo -> {
                     String accessToken = jwtTokenUtil.generateToken(userInfo.getUserName());// Generate a new access token using the user information
                     return ResponseEntity.ok(new AuthenticationResponse(accessToken, refreshTokenRequest.getRefreshToken())); // Return a ResponseEntity with the new access token and the refresh token
@@ -128,7 +128,7 @@ public class AuthController {
             blackListedToken.setAccessToken(token);
 
             CmsUser user = getLoggedInUser(principal);
-            blackListedToken.setUserInfo(user);
+            blackListedToken.setCmsUser(user);
 
             // Add the token to the blacklist
             blackListedTokenRepository.save(blackListedToken);

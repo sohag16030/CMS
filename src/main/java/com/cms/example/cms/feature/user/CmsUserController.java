@@ -29,7 +29,7 @@ public class CmsUserController {
 
     @PostMapping(Routes.CMS_USER_SIGN_UP_ROUTE)
     public ResponseEntity<CmsUser> createCmsUser(@RequestBody CmsUser cmsUser) {
-        CmsUser response =  userService.saveCmsUser(cmsUser);
+        CmsUser response = userService.saveCmsUser(cmsUser);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -45,7 +45,6 @@ public class CmsUserController {
             }
         } else {
             return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
-
         }
     }
 
@@ -68,7 +67,7 @@ public class CmsUserController {
     @GetMapping(Routes.CMS_USER_LIST_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
     public ResponseEntity<?> getAllCmsUsers(CmsUserFilter filter, Pageable pageable) {
-        PaginatedCmsUserResponse paginatedCmsUserResponse = userService.getAllUsersWithFilter(filter,pageable);
+        PaginatedCmsUserResponse paginatedCmsUserResponse = userService.getAllUsersWithFilter(filter, pageable);
         if (paginatedCmsUserResponse == null) {
             return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
@@ -77,18 +76,21 @@ public class CmsUserController {
     }
 
     @DeleteMapping(Routes.CMS_USER_DELETE_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteUserById(@PathVariable Long userId) {
-        try {
-            userRepository.deleteById(userId);
-            Optional<CmsUser> userOptional = userRepository.findById(userId);
-            if (!userOptional.isPresent()) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user");
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
+    public ResponseEntity<?> deleteUserById(@PathVariable Long userId, Principal principal) {
+        if (userService.loggedInUser(principal, userId)) {
+            try {
+                userRepository.deleteById(userId);
+                Optional<CmsUser> userOptional = userRepository.findById(userId);
+                if (!userOptional.isPresent()) {
+                    return ResponseEntity.noContent().build();
+                } else {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user");
+                }
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user. No records exists with Id :: " + userId);
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user. No records exists with Id :: " + userId);
         }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user. No records exists with Id :: " + userId);
     }
 }

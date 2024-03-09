@@ -15,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
@@ -39,9 +41,10 @@ public class BlackListedToken {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToOne(targetEntity = CmsUser.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name="CMS_USER_ID")
-    private CmsUser userInfo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CMS_USER_ID", nullable = false)
+    @JsonIgnore
+    private CmsUser cmsUser;
 
     @JsonIgnore
     public static Boolean isNonNull(BlackListedToken token) {
