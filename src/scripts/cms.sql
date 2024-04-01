@@ -53,7 +53,6 @@ CREATE TABLE CMS_USER (
                           PASSWORD VARCHAR(255) NOT NULL,
                           ROLES VARCHAR(255) NOT NULL,
                           GENDER VARCHAR(255) NOT NULL,
-                          USER_STATUS VARCHAR(10) NOT NULL,
                           IS_ACTIVE BOOLEAN NOT NULL,
                           CREATED_AT TIMESTAMPTZ NOT NULL,
                           UPDATED_AT TIMESTAMPTZ NOT NULL,
@@ -62,7 +61,6 @@ CREATE TABLE CMS_USER (
                           CONSTRAINT CMS_USER_MOBILE_NUMBER_UK UNIQUE (MOBILE_NUMBER),
                           CONSTRAINT CMS_USER_EMAIL_UK UNIQUE (EMAIL),
                           CONSTRAINT CMS_USER_GENDER_CHK CHECK (GENDER IN ('MALE', 'FEMALE', 'OTHER')),
-                          CONSTRAINT CMS_USER_USER_STATUS_CHK CHECK (USER_STATUS IN ('ACTIVE', 'INACTIVE')),
                           CONSTRAINT CMS_USER_IS_ACTIVE_CHK CHECK (IS_ACTIVE IN (TRUE, FALSE))
 );
 

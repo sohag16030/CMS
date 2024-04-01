@@ -78,10 +78,6 @@ public class CmsUser {
     @JsonIgnore
     private List<Content> contents;
 
-    @Column(name = "USER_STATUS", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserStatus userStatus;
-
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean isActive;
 
