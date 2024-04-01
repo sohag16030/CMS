@@ -37,7 +37,6 @@ public interface CmsUserRepository extends JpaRepository<CmsUser, Long> {
             "(:email IS NULL OR LOWER(cms.email) LIKE LOWER(CONCAT('%', :email, '%'))) AND " +
             "(:name IS NULL OR LOWER(cms.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
             "(:gender IS NULL OR LOWER(cms.gender) LIKE LOWER(CONCAT('%', :gender, '%'))) AND " +
-            "(:userStatus IS NULL OR LOWER(cms.userStatus) LIKE LOWER(CONCAT('%', :userStatus, '%'))) AND " +
             "(:isActive IS NULL OR cms.isActive = :isActive)")
     Page<CmsUser> search(@Param("cmsUserId") Long cmsUserId,
                           @Param("userName") String userName,
@@ -46,7 +45,6 @@ public interface CmsUserRepository extends JpaRepository<CmsUser, Long> {
                           @Param("email") String email,
                           @Param("name") String name,
                           @Param("gender") String gender,
-                          @Param("userStatus") String userStatus,
                           @Param("isActive") Boolean isActive, Pageable pageable);
 
     Optional<CmsUser> findByUserName(String username);

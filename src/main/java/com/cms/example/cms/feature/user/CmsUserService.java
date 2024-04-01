@@ -53,6 +53,7 @@ public class CmsUserService {
     public CmsUser saveCmsUser(CmsUser cmsUser) {
         cmsUser.setRoles(DEFAULT_ROLE);
         cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
+        cmsUser.setIsActive(true);
         //populateAddress(cmsUser);
         //populateAcademicInfo(cmsUser);
 
@@ -121,7 +122,6 @@ public class CmsUserService {
         existingUser.setEmail(sourceUser.getEmail());
         existingUser.setName(sourceUser.getName());
         existingUser.setGender(sourceUser.getGender());
-        existingUser.setUserStatus(sourceUser.getUserStatus());
         existingUser.setIsActive(sourceUser.getIsActive());
 
         //BeanUtils.copyProperties(sourceUser,existingUser);
@@ -241,7 +241,7 @@ public class CmsUserService {
 
     public PaginatedCmsUserResponse getAllUsersWithFilter(CmsUserFilter filter, Pageable pageable) {
         Page<CmsUser> cmsUsers = userRepository.search(filter.getCmsUserId(),filter.getUserName(),filter.getRoles(),
-                filter.getMobileNumber(),filter.getEmail(),filter.getName(),filter.getGender(),filter.getUserStatus(),filter.getIsActive(), pageable);
+                filter.getMobileNumber(),filter.getEmail(),filter.getName(),filter.getGender(), filter.getIsActive(), pageable);
         return PaginatedCmsUserResponse.builder()
                 .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
                 .cmsUserList(cmsUsers.getContent())
