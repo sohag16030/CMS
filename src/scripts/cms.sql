@@ -93,7 +93,7 @@ CREATE TABLE REFRESH_TOKEN (
 CREATE TABLE ADDRESS (
                          ADDRESS_ID BIGSERIAL,
                          ADDRESS_TYPE VARCHAR(50) NOT NULL,
-                         CMS_USER_ID BIGINT NOT NULL,
+                         CMS_USER_ID BIGINT,
                          DIVISION_ID BIGINT NOT NULL,
                          DISTRICT_ID BIGINT NOT NULL,
                          UPAZILA_ID BIGINT NOT NULL,
@@ -127,7 +127,7 @@ CREATE TABLE ACADEMIC_INFO (
                                ACADEMIC_LEVEL VARCHAR(255) NOT NULL,
                                GRADE DOUBLE PRECISION NOT NULL,
                                CLASS VARCHAR(255) NOT NULL,
-                               CMS_USER_ID BIGINT NOT NULL, -- Add CMS_USER_ID column
+                               CMS_USER_ID BIGINT, -- Add CMS_USER_ID column
                                CREATED_AT TIMESTAMPTZ NOT NULL,
                                UPDATED_AT TIMESTAMPTZ NOT NULL,
 
@@ -159,7 +159,7 @@ CREATE TABLE CONTENT (
                          TITLE VARCHAR(50) NOT NULL,
                          TYPE VARCHAR(50) NOT NULL,
                          PATH VARCHAR(255) NOT NULL,
-                         CMS_USER_ID BIGINT NOT NULL,
+                         CMS_USER_ID BIGINT,
                          IS_ACTIVE BOOLEAN NOT NULL,
                          CREATED_AT TIMESTAMPTZ NOT NULL,
                          UPDATED_AT TIMESTAMPTZ NOT NULL,

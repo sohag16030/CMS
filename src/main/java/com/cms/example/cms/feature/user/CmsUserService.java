@@ -53,11 +53,12 @@ public class CmsUserService {
     public CmsUser saveCmsUser(CmsUser cmsUser) {
         cmsUser.setRoles(DEFAULT_ROLE);
         cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
-        populateAddress(cmsUser);
-        populateAcademicInfo(cmsUser);
+        //populateAddress(cmsUser);
+        //populateAcademicInfo(cmsUser);
 
         cmsUser = userRepository.save(cmsUser);
-        return getCmsUserById(cmsUser.getCmsUserId());
+        return cmsUser;
+       // return getCmsUserById(cmsUser.getCmsUserId());
     }
 
     private void populateAddress(CmsUser cmsUser) {

@@ -44,7 +44,7 @@ public class RefreshToken {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CMS_USER_ID", nullable = false)
+    @JoinColumn(name = "CMS_USER_ID")
     @JsonIgnore
     private CmsUser cmsUser;
 }
