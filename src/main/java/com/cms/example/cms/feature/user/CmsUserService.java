@@ -52,6 +52,7 @@ public class CmsUserService {
     @Transactional
     public CmsUser saveCmsUser(CmsUser cmsUser) {
         cmsUser.setRoles(DEFAULT_ROLE);
+        cmsUser.setPassword(cmsUser.getPassword());
 //        cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
         cmsUser.setIsActive(true);
         //populateAddress(cmsUser);
