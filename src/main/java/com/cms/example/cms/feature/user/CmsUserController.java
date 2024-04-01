@@ -34,7 +34,7 @@ public class CmsUserController {
     }
 
     @PutMapping(Routes.CMS_USER_UPDATE_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> updateCmsUser(@PathVariable Long cmsUserId, @RequestBody CmsUser sourceUser, Principal principal) {
         if (userService.loggedInUser(principal, cmsUserId)) {
             try {
@@ -49,7 +49,7 @@ public class CmsUserController {
     }
 
     @GetMapping(Routes.CMS_USER_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getUserById(@PathVariable Long userId, Principal principal) {
         if (userService.loggedInUser(principal, userId) || userService.principalHasAdminRole(principal)) {
             CmsUser user = userService.getCmsUserById(userId);
@@ -65,7 +65,7 @@ public class CmsUserController {
     }
 
     @GetMapping(Routes.CMS_USER_LIST_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
     public ResponseEntity<?> getAllCmsUsers(CmsUserFilter filter, Pageable pageable) {
         PaginatedCmsUserResponse paginatedCmsUserResponse = userService.getAllUsersWithFilter(filter, pageable);
         if (paginatedCmsUserResponse == null) {
@@ -76,7 +76,7 @@ public class CmsUserController {
     }
 
     @DeleteMapping(Routes.CMS_USER_DELETE_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> deleteUserById(@PathVariable Long userId, Principal principal) {
         if (userService.loggedInUser(principal, userId)) {
             try {
