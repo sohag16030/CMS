@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +30,7 @@ public class GeoController {
     private final GeoService service;
 
     @GetMapping(Routes.DIVISION_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
     public ResponseEntity<?> getDivisionById(@PathVariable Long divisionId,
                                              @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
         Division division = service.getDivisionById(divisionId, fetchType);
@@ -44,7 +44,7 @@ public class GeoController {
     }
 
     @GetMapping(Routes.DIVISION_LIST_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
     public ResponseEntity<?> getAllDivisionsByFilter(GeoFilter filter, Pageable pageable) {
         PaginatedDivisionResponse paginatedDivisionResponse = service.getDivisionsByFilter(filter,pageable);
         if (paginatedDivisionResponse == null) {
@@ -54,7 +54,7 @@ public class GeoController {
     }
 
     @GetMapping(Routes.DISTRICT_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
     public ResponseEntity<?> getDistrictById(@PathVariable Long districtId,
                                              @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
         District district = service.getDistrictById(districtId, fetchType);
@@ -67,7 +67,7 @@ public class GeoController {
     }
 
     @GetMapping(Routes.DISTRICT_LIST_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
     public ResponseEntity<?> getAllDistrictsByFilter(GeoFilter filter, Pageable pageable) {
 
         PaginatedDistrictResponse paginatedDistrictResponse = service.getDistrictsByFilter(filter,pageable);
@@ -78,7 +78,7 @@ public class GeoController {
     }
 
     @GetMapping(Routes.UPAZILA_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
     public ResponseEntity<?> getUpazilaById(@PathVariable Long upazilaId,
                                             @RequestParam(defaultValue = "NO_FETCH") EntityFetchType fetchType) {
         Upazila upazila = service.getUpazilaById(upazilaId, fetchType);
@@ -91,7 +91,7 @@ public class GeoController {
     }
 
     @GetMapping(Routes.UPAZILA_LIST_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
     public ResponseEntity<?> getAllUpazilasByFilter(GeoFilter filter, Pageable pageable) {
 
         PaginatedUpazilaResponse paginatedUpazilaResponse = service.getUpazilaByFilter(filter,pageable);

@@ -15,7 +15,6 @@ public class JwtTokenServiceInterceptorAppConfig extends WebMvcConfigurerAdapter
 //    @Override
 //    public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(jwtInterceptor)
-////                .excludePathPatterns("/users/accessToken","/users/getAccessTokenFromRefreshToken","/api/cmsUsers");
-//                .excludePathPatterns("/users/**","/api/**");
+//                .excludePathPatterns("/users/accessToken","/users/getAccessTokenFromRefreshToken","/api/cmsUsers");
 //    }
 }

@@ -15,7 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,7 +38,7 @@ public class ContentController {
     private final ModelMapper modelMapper;
 
     @PostMapping(Routes.CONTENT_UPLOAD_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> uploadContent(@RequestParam("contents") MultipartFile[] files, Principal principal) {
         CmsUser loggedInUser = userService.getLoggedInUser(principal);
         List<Optional<Content>> contents = new ArrayList<>();
@@ -51,7 +51,7 @@ public class ContentController {
     }
 
     @GetMapping(Routes.CONTENT_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getContent(@PathVariable Long contentId) {
         Optional<Content> contentOptional = contentService.getContentWithUserById(contentId);
 
@@ -66,7 +66,7 @@ public class ContentController {
     }
 
     @PutMapping(Routes.CONTENT_UPDATE_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> updateContent(@PathVariable Long contentId, @RequestParam("content") MultipartFile file, Principal principal) {
         CmsUser loggedInUser = userService.getLoggedInUser(principal);
         if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId())) {
@@ -90,7 +90,7 @@ public class ContentController {
     }
 
     @GetMapping(Routes.CONTENT_LIST_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getListContents(ContentFilter filter, Pageable pageable) {
         PaginatedContentResponse paginatedCmsUserResponse = contentService.getAllContentWithFilter(filter,pageable);
         if (paginatedCmsUserResponse == null) {
@@ -100,7 +100,7 @@ public class ContentController {
     }
 
     @GetMapping(Routes.CONTENT_DOWNLOAD_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<byte[]> downloadContent(@PathVariable Long contentId) throws IOException {
 
         Optional<Content> contentData = contentRepository.findById(contentId);
@@ -124,10 +124,10 @@ public class ContentController {
     }
 
     @DeleteMapping(Routes.CONTENT_DELETE_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteContentById(@PathVariable Long contentId, Principal principal) {
         CmsUser loggedInUser = userService.getLoggedInUser(principal);
-        if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId()) || userService.principalHasAdminRole(principal)) {
+//        if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId()) || userService.principalHasAdminRole(principal)) {
             try {
                 contentRepository.deleteById(contentId);
                 Optional<Content> contentOptional = contentRepository.findById(contentId);
@@ -140,8 +140,8 @@ public class ContentController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete content. No records exists with Id :: " + contentId);
 
             }
-        } else {
-            return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
-        }
+//        } else {
+//            return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
+//        }
     }
 }
