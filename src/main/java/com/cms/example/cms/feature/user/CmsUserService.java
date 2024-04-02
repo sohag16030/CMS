@@ -80,11 +80,13 @@ public class CmsUserService {
     }
 
     public CmsUser getCmsUserById(Long cmsUserId) {
+        //Optional<CmsUser> optionalCmsUser = userRepository.findById(cmsUserId);
         Optional<CmsUser> optionalCmsUser = userRepository.fetchUserAddressInfoByUserId(cmsUserId);
         CmsUser cmsUsers = userRepository.fetchAcademicInfoByUserId(cmsUserId);
 
         List<Long> academicInfoIds = cmsUsers.getAcademicInfos().stream().map(AcademicInfo::getAcademicInfoId).collect(Collectors.toList());
         academicInfoRepository.fetchSubjectsByAcademicInfoIdIn(academicInfoIds);
+
 
         return optionalCmsUser.orElse(null);
     }
@@ -108,7 +110,7 @@ public class CmsUserService {
         // Update addresses
         updateAddresses(existingUser, sourceUser);
 
-        // Update academicInfos
+        //Update academicInfos
         updateAcademicInfos(existingUser, sourceUser);
 
         return getCmsUserById(cmsUserId);

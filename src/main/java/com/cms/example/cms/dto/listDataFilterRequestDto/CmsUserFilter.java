@@ -1,4 +1,5 @@
 package com.cms.example.cms.dto.listDataFilterRequestDto;
+import com.cms.example.cms.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class CmsUserFilter {
     private String mobileNumber;
     private String email;
     private String name;
-    private String gender;
+    private Gender gender;
     private String userStatus;
     private Boolean isActive;
 }
