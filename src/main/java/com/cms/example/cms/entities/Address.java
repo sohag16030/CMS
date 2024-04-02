@@ -58,7 +58,6 @@ public class Address {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID")
-    @JsonIgnore
     private CmsUser cmsUser;
 
     @Column(name = "IS_ACTIVE", nullable = false)

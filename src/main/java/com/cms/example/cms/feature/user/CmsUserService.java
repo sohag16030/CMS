@@ -55,32 +55,10 @@ public class CmsUserService {
         cmsUser.setPassword(cmsUser.getPassword());
 //        cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
         cmsUser.setIsActive(true);
-        //populateAddress(cmsUser);
-        //populateAcademicInfo(cmsUser);
-
         cmsUser = userRepository.save(cmsUser);
         return cmsUser;
        // return getCmsUserById(cmsUser.getCmsUserId());
     }
-
-    private void populateAddress(CmsUser cmsUser) {
-        if (CollectionUtils.isEmpty(cmsUser.getAddresses())) return;
-        cmsUser.getAddresses().forEach(address -> {
-            if (Division.isNonNull(address.getDivision())) {
-                address.setDivision(divisionRepository.getOne(address.getDivision().getDivisionId()));
-            }
-
-            if (District.isNonNull(address.getDistrict())) {
-                address.setDistrict(districtRepository.getOne(address.getDistrict().getDistrictId()));
-            }
-
-            if (Upazila.isNonNull(address.getUpazila())) {
-                address.setUpazila(upazilaRepository.getOne(address.getUpazila().getUpazilaId()));
-            }
-            address.setCmsUser(cmsUser);
-        });
-    }
-
     private void populateAcademicInfo(CmsUser cmsUser) {
         if (CollectionUtils.isEmpty(cmsUser.getAcademicInfos())) return;
         cmsUser.getAcademicInfos().forEach(academicInfo -> {

@@ -13,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -95,5 +96,9 @@ public class CmsUser {
         return password;
     }
 
+    @JsonIgnore
+    public static Boolean isNonNull(CmsUser cmsUser){
+        return Objects.nonNull(cmsUser) && Objects.nonNull(cmsUser.getCmsUserId());
+    }
 }
 
