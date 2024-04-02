@@ -1,6 +1,7 @@
 package com.cms.example.cms.feature.user;
 
 import com.cms.example.cms.entities.CmsUser;
+import com.cms.example.cms.enums.Gender;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,16 +37,16 @@ public interface CmsUserRepository extends JpaRepository<CmsUser, Long> {
             "(:mobileNumber IS NULL OR LOWER(cms.mobileNumber) LIKE LOWER(CONCAT('%', :mobileNumber, '%'))) AND " +
             "(:email IS NULL OR LOWER(cms.email) LIKE LOWER(CONCAT('%', :email, '%'))) AND " +
             "(:name IS NULL OR LOWER(cms.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-            "(:gender IS NULL OR LOWER(cms.gender) LIKE LOWER(CONCAT('%', :gender, '%'))) AND " +
+            "(:gender IS NULL OR cms.gender = :gender) AND " +
             "(:isActive IS NULL OR cms.isActive = :isActive)")
     Page<CmsUser> search(@Param("cmsUserId") Long cmsUserId,
-                          @Param("userName") String userName,
-                          @Param("roles") String roles,
-                          @Param("mobileNumber") String mobileNumber,
-                          @Param("email") String email,
-                          @Param("name") String name,
-                          @Param("gender") String gender,
-                          @Param("isActive") Boolean isActive, Pageable pageable);
+                         @Param("userName") String userName,
+                         @Param("roles") String roles,
+                         @Param("mobileNumber") String mobileNumber,
+                         @Param("email") String email,
+                         @Param("name") String name,
+                         @Param("gender") Gender gender,
+                         @Param("isActive") Boolean isActive, Pageable pageable);
 
     Optional<CmsUser> findByUserName(String username);
 }
