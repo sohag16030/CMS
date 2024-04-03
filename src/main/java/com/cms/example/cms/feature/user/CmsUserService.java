@@ -80,8 +80,12 @@ public class CmsUserService {
         academicInfo.getSubjects().clear();
         academicInfo.setSubjects(subjectList);
     }
-
     public CmsUser getCmsUserById(Long cmsUserId) {
+        Optional<CmsUser> optionalCmsUser = userRepository.findById(cmsUserId);
+        return optionalCmsUser.orElse(null);
+    }
+
+    public CmsUser getCmsUserDetailsById(Long cmsUserId) {
 
         Optional<CmsUser> optionalCmsUser = userRepository.findById(cmsUserId);
 
@@ -113,7 +117,7 @@ public class CmsUserService {
         existingUser.setIsActive(sourceUser.getIsActive());
 
         //Update academicInfos
-        updateAcademicInfos(existingUser, sourceUser);
+        //updateAcademicInfos(existingUser, sourceUser);
 
         return getCmsUserById(cmsUserId);
     }

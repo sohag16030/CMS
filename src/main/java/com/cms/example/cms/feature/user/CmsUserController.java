@@ -54,7 +54,7 @@ public class CmsUserController {
 //    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getUserById(@PathVariable Long userId, Principal principal) {
 //        if (userService.loggedInUser(principal, userId) || userService.principalHasAdminRole(principal)) {
-            CmsUser user = userService.getCmsUserById(userId);
+            CmsUser user = userService.getCmsUserDetailsById(userId);
             if (Objects.nonNull(user)) {
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } else {
