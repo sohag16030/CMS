@@ -17,16 +17,4 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
     @Query("SELECT a FROM Address a WHERE a.cmsUser.cmsUserId = :cmsUserId")
     List<Address> findByCmsUserId(@Param("cmsUserId") Long cmsUserId);
-
-    @Query("SELECT addr FROM Address addr " +
-            "WHERE " +
-            "(:divisionName IS NULL OR addr.division.name LIKE CONCAT('%', :divisionName, '%')) AND " +
-            "(:districtName IS NULL OR addr.district.name LIKE CONCAT('%', :districtName, '%')) AND " +
-            "(:upazilaName IS NULL OR addr.upazila.name LIKE CONCAT('%', :upazilaName, '%')) AND " +
-            "(:isActive IS NULL OR addr.isActive = :isActive)")
-    Page<Address> search(@Param("divisionName") String divisionName,
-                         @Param("districtName") String districtName,
-                         @Param("upazilaName") String upazilaName,
-                         @Param("isActive") Boolean isActive,
-                         Pageable pageable);
 }

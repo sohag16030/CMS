@@ -38,16 +38,6 @@ public class AddressController {
     }
 
 
-        @GetMapping(Routes.ADDRESS_LIST_ROUTE) // Define the route for getting a list of addresses
-    public ResponseEntity<?> getAllAddresses(AddressFilter filter, Pageable pageable) {
-        PaginatedAddressResponse paginatedAddressResponse = addressService.getAllAddressesWithFilter(filter, pageable);
-        if (paginatedAddressResponse == null) {
-            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(paginatedAddressResponse, HttpStatus.OK);
-    }
-
-
     @DeleteMapping(Routes.ADDRESS_DELETE_BY_ID_ROUTE)
     public ResponseEntity<?> deleteAddressById(@PathVariable Long addressId) {
         try {
