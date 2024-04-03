@@ -133,5 +133,12 @@ public class AddressService {
     public void deleteAddressById(Long addressId) {
         addressRepository.deleteById(addressId);
     }
-
+    public PaginatedAddressResponse getAllAddressesWithFilter(AddressFilter filter, Pageable pageable) {
+        Page<Address> addresses = addressRepository.search(filter.getDivisionName(), filter.getDistrictName(), filter.getUpazilaName(), filter.getIsActive(), pageable);
+        return PaginatedAddressResponse.builder()
+                .numberOfItems(addresses.getTotalElements())
+                .numberOfPages(addresses.getTotalPages())
+                .addressList(addresses.getContent())
+                .build();
+    }
 }
