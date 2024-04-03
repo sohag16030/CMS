@@ -29,6 +29,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -57,8 +58,9 @@ public class CmsUserService {
         cmsUser.setIsActive(true);
         cmsUser = userRepository.save(cmsUser);
         return cmsUser;
-       // return getCmsUserById(cmsUser.getCmsUserId());
+        // return getCmsUserById(cmsUser.getCmsUserId());
     }
+
     private void populateAcademicInfo(CmsUser cmsUser) {
         if (CollectionUtils.isEmpty(cmsUser.getAcademicInfos())) return;
         cmsUser.getAcademicInfos().forEach(academicInfo -> {
@@ -80,12 +82,20 @@ public class CmsUserService {
     }
 
     public CmsUser getCmsUserById(Long cmsUserId) {
-        //Optional<CmsUser> optionalCmsUser = userRepository.findById(cmsUserId);
-        Optional<CmsUser> optionalCmsUser = userRepository.fetchUserAddressInfoByUserId(cmsUserId);
-        CmsUser cmsUsers = userRepository.fetchAcademicInfoByUserId(cmsUserId);
 
-        List<Long> academicInfoIds = cmsUsers.getAcademicInfos().stream().map(AcademicInfo::getAcademicInfoId).collect(Collectors.toList());
-        academicInfoRepository.fetchSubjectsByAcademicInfoIdIn(academicInfoIds);
+        Optional<CmsUser> optionalCmsUser = userRepository.findById(cmsUserId);
+
+        //addresses load
+         userRepository.fetchUserAddressInfoByUserId(cmsUserId);
+//        List<Long> addressInfoIds = cmsUser.get().getAddresses().stream().map(Address::getAddressId).collect(Collectors.toList());
+//        academicInfoRepository.fetchSubjectsByAcademicInfoIdIn(academicInfoIds);
+
+        //academic info loading
+        CmsUser cmsUsers = userRepository.fetchAcademicInfoByUserId(cmsUserId);
+        if (Objects.nonNull(cmsUsers)) {
+            List<Long> academicInfoIds = cmsUsers.getAcademicInfos().stream().map(AcademicInfo::getAcademicInfoId).collect(Collectors.toList());
+            if (!academicInfoIds.isEmpty()) academicInfoRepository.fetchSubjectsByAcademicInfoIdIn(academicInfoIds);
+        }
 
 
         return optionalCmsUser.orElse(null);
@@ -189,7 +199,7 @@ public class CmsUserService {
 
             if (existingAcademicInfo != null) {
                 // modify existing academic info
-                AcademicInfo modifiedExistingAcademicInfo = modifyExistingAcademicInfo( updatedAcademicInfo, existingAcademicInfo);
+                AcademicInfo modifiedExistingAcademicInfo = modifyExistingAcademicInfo(updatedAcademicInfo, existingAcademicInfo);
                 updatedAcademicInfos.add(modifiedExistingAcademicInfo);
             } else {
                 //need to add new academic info
@@ -217,12 +227,12 @@ public class CmsUserService {
         }
         existingAcademicInfo.getSubjects().clear();
         existingAcademicInfo.setSubjects(updatedSubjects);
-        return  existingAcademicInfo;
+        return existingAcademicInfo;
     }
 
     public PaginatedCmsUserResponse getAllUsersWithFilter(CmsUserFilter filter, Pageable pageable) {
-        Page<CmsUser> cmsUsers = userRepository.search(filter.getCmsUserId(),filter.getUserName(),filter.getRoles(),
-                filter.getMobileNumber(),filter.getEmail(),filter.getName(),filter.getGender(), filter.getIsActive(), pageable);
+        Page<CmsUser> cmsUsers = userRepository.search(filter.getCmsUserId(), filter.getUserName(), filter.getRoles(),
+                filter.getMobileNumber(), filter.getEmail(), filter.getName(), filter.getGender(), filter.getIsActive(), pageable);
         return PaginatedCmsUserResponse.builder()
                 .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
                 .cmsUserList(cmsUsers.getContent())
@@ -233,7 +243,8 @@ public class CmsUserService {
         Optional<CmsUser> user = userRepository.findByUserName(principal.getName());
         return user.orElse(null);
     }
-    public boolean loggedInUser(Principal principal,Long userId) {
+
+    public boolean loggedInUser(Principal principal, Long userId) {
         CmsUser loggedInUser = getLoggedInUser(principal);
         return loggedInUser.getCmsUserId().equals(userId);
     }
