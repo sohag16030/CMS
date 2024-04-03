@@ -1,5 +1,7 @@
 package com.cms.example.cms.feature.address;
 
+import com.cms.example.cms.dto.listDataFilterRequestDto.AddressFilter;
+import com.cms.example.cms.dto.paginatedResponseDto.PaginatedAddressResponse;
 import com.cms.example.cms.entities.Address;
 import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.District;
@@ -11,6 +13,8 @@ import com.cms.example.cms.feature.geo.UpazilaRepository;
 import com.cms.example.cms.feature.subject.SubjectRepository;
 import com.cms.example.cms.feature.user.CmsUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -126,10 +130,17 @@ public class AddressService {
         return modifiedAddress;
     }
 
-    public Address getAddressById(Long addressId) {
-        return null;
+    public void deleteAddressById(Long addressId) {
+        addressRepository.deleteById(addressId);
     }
 
-    public void deleteAddressById(Long addressId) {
+    public PaginatedAddressResponse getAllAddressesWithFilter(AddressFilter filter, Pageable pageable) {
+        Page<Address> addresses = addressRepository.search(filter.getDivisionName(), filter.getDistrictName(), filter.getUpazilaName(), filter.getIsActive(), pageable);
+        return PaginatedAddressResponse.builder()
+                .numberOfItems(addresses.getTotalElements())
+                .numberOfPages(addresses.getTotalPages())
+                .addressList(addresses.getContent())
+                .build();
     }
+
 }

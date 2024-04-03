@@ -17,6 +17,5 @@ public class CmsUserFilter {
     private String email;
     private String name;
     private Gender gender;
-    private String userStatus;
     private Boolean isActive;
 }
