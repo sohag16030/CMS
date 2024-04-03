@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,21 +20,31 @@ public class AddressController {
     private final AddressService addressService;
 
     @PostMapping(Routes.ADDRESS_CREATE_ROUTE)
-    public ResponseEntity<?> createAddress(@RequestBody List<Address> address) {
-        List<Address> createdAddress = addressService.saveAddresses(address);
+    public ResponseEntity<?> createAddress(@RequestBody Address address) {
+        Address createdAddress = addressService.saveAddress(address.getCmsUser().getCmsUserId(), address);
         return new ResponseEntity<>(createdAddress, HttpStatus.CREATED);
     }
 
     @PutMapping(Routes.ADDRESS_UPDATE_BY_ID_ROUTE)
-    public ResponseEntity<?> updateAddress(@PathVariable Long userId, @RequestBody List<Address> updatedAddressList) {
+    public ResponseEntity<?> updateAddress(@PathVariable Long userId, @RequestBody Address updatedAddress) {
         try {
             //need to pass the loggedIn user Id for save the address against the loggedIn user
-            List<Address> address = addressService.updateAddress(userId,updatedAddressList);
+            Address address = addressService.updateAddress(userId,updatedAddress);
             return new ResponseEntity<>(address, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping(Routes.ADDRESS_BY_ID_ROUTE) // Define the route for getting an address by ID
+    public ResponseEntity<?> getAddressById(@PathVariable Long addressId) {
+        Address address = addressService.getAddressById(addressId);
+        if (address == null) {
+            return new ResponseEntity<>("ADDRESS NOT FOUND", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(address, HttpStatus.OK);
+    }
+
     @GetMapping(Routes.ADDRESS_LIST_ROUTE) // Define the route for getting a list of addresses
     public ResponseEntity<?> getAllAddresses(AddressFilter filter, Pageable pageable) {
         PaginatedAddressResponse paginatedAddressResponse = addressService.getAllAddressesWithFilter(filter, pageable);

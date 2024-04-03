@@ -1,6 +1,7 @@
 package com.cms.example.cms.feature.address;
 
 import com.cms.example.cms.entities.Address;
+import com.cms.example.cms.entities.CmsUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,14 +10,16 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
-    @Query("SELECT a FROM Address a  WHERE a.addressId IN :addressIds")
-    List<Address> fetchAddressesInfoByAddressIdsIn(@Param("addressIds") List<Long> addressIds);
-
-    @Query("SELECT a FROM Address a WHERE a.cmsUser.cmsUserId = :cmsUserId")
-    List<Address> findByCmsUserId(@Param("cmsUserId") Long cmsUserId);
+    @Query("SELECT u FROM Address u " +
+            "JOIN FETCH u.division " +
+            "JOIN FETCH u.district " +
+            "JOIN FETCH u.upazila " +
+            "WHERE u.addressId = :addressId")
+    Optional<Address> fetchAddressInfoByAddressId(@Param("addressId") Long addressId);
 
     @Query(value = "SELECT addr FROM Address addr " +
             "JOIN FETCH addr.division div " +

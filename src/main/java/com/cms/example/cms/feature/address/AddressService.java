@@ -10,20 +10,13 @@ import com.cms.example.cms.entities.Upazila;
 import com.cms.example.cms.feature.geo.DistrictRepository;
 import com.cms.example.cms.feature.geo.DivisionRepository;
 import com.cms.example.cms.feature.geo.UpazilaRepository;
-import com.cms.example.cms.feature.subject.SubjectRepository;
 import com.cms.example.cms.feature.user.CmsUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,20 +30,10 @@ public class AddressService {
     private final UpazilaRepository upazilaRepository;
 
     @Transactional
-    public List<Address> saveAddresses(List<Address> addresses) {
-        List<Address> savedAddresses = new ArrayList<>();
-        //Long loggedInUserId = getLoggedInUserId();
-        for (Address address : addresses) {
-            Address savedAddress = saveAddress(address.getCmsUser().getCmsUserId(), address);
-            savedAddresses.add(savedAddress);
-        }
-        return savedAddresses;
-    }
-
-    @Transactional
     public Address saveAddress(Long loggedInUserId, Address address) {
         Address populatedAddress = populateAddress(loggedInUserId, address);
-        return addressRepository.save(populatedAddress);
+        Address savedAddress = addressRepository.save(populatedAddress);
+        return getAddressById(savedAddress.getAddressId());
     }
 
     private Address populateAddress(Long loggedInUserId, Address address) {
@@ -68,71 +51,41 @@ public class AddressService {
         if (CmsUser.isNonNull(address.getCmsUser())) {
             address.setCmsUser(userRepository.getOne(loggedInUserId));
         }
-        return address;
+        return  address;
     }
 
     @Transactional
-    public List<Address> updateAddress(Long loggedInUserId, List<Address> updatedAddressList) {
-
-        List<Long> addressIds = updatedAddressList.stream().map(Address::getAddressId).collect(Collectors.toList());
-
-        List<Address> getAddressesInfoByIds = addressRepository.fetchAddressesInfoByAddressIdsIn(addressIds);
-
-        Map<Long, Address> addressesMap = getAddressesInfoByIds.stream()
-                .collect(Collectors.toMap(Address::getAddressId, Function.identity()));
-
-        List<Address> existingAddresses = addressRepository.findByCmsUserId(loggedInUserId);
-        List<Long> existingAddressIds = existingAddresses.stream()
-                .map(Address::getAddressId)
-                .collect(Collectors.toList());
-
-        for (Long existingAddressId : existingAddressIds) {
-            if (!addressesMap.containsKey(existingAddressId)) {
-                //delete it from db
-                addressRepository.deleteById(existingAddressId);
-            }
-        }
-
-        List<Address> updatedAddresses = new ArrayList<>();
-
-        for (Address updatedAddressSource : updatedAddressList) {
-            Long addressId = updatedAddressSource.getAddressId();
-            if (addressesMap.containsKey(addressId)) {
-                // modify existing addresses
-                Address modifiedAddress = modifyExistingAddress(updatedAddressSource, addressId, addressesMap);
-                updatedAddresses.add(modifiedAddress);
-            } else {
-                // new address should be added with existing addresses
-                Address newAddress = populateAddress(updatedAddressSource.getCmsUser().getCmsUserId(), updatedAddressSource);
-                updatedAddresses.add(newAddress);
-                addressRepository.save(newAddress);
-            }
-        }
-        return updatedAddresses;
+    public Address updateAddress(Long loggedInUserId, Address addressSource) {
+        Address existingAddress = addressRepository.getOne(addressSource.getAddressId());
+        //need to update the existing address
+        addressSource = modifyExistingAddress(existingAddress, addressSource);
+        return getAddressById(addressSource.getAddressId());
     }
 
-    private Address modifyExistingAddress(Address updatedAddressSource, Long
-            addressId, Map<Long, Address> addressesMap) {
-        Address modifiedAddress = addressesMap.get(addressId);
+    private Address modifyExistingAddress(Address existingAddress, Address updatedAddressSource) {
         //update address
-        modifiedAddress.setAddressId(addressId);
-        modifiedAddress.setAddressType(updatedAddressSource.getAddressType());
+        existingAddress.setAddressType(updatedAddressSource.getAddressType());
         if (updatedAddressSource.getDivision() != null) {
-            modifiedAddress.setDivision(divisionRepository.getOne(updatedAddressSource.getDivision().getDivisionId()));
+            existingAddress.setDivision(divisionRepository.getOne(updatedAddressSource.getDivision().getDivisionId()));
         }
         if (updatedAddressSource.getDistrict() != null) {
-            modifiedAddress.setDistrict(districtRepository.getOne(updatedAddressSource.getDistrict().getDistrictId()));
+            existingAddress.setDistrict(districtRepository.getOne(updatedAddressSource.getDistrict().getDistrictId()));
         }
         if (updatedAddressSource.getUpazila() != null) {
-            modifiedAddress.setUpazila(upazilaRepository.getOne(updatedAddressSource.getUpazila().getUpazilaId()));
+            existingAddress.setUpazila(upazilaRepository.getOne(updatedAddressSource.getUpazila().getUpazilaId()));
         }
-        modifiedAddress.setIsActive(updatedAddressSource.getIsActive());
-        return modifiedAddress;
+        existingAddress.setIsActive(updatedAddressSource.getIsActive());
+        return existingAddress;
+    }
+
+    public Address getAddressById(Long addressId) {
+        return addressRepository.fetchAddressInfoByAddressId(addressId).orElse(null);
     }
 
     public void deleteAddressById(Long addressId) {
         addressRepository.deleteById(addressId);
     }
+
     public PaginatedAddressResponse getAllAddressesWithFilter(AddressFilter filter, Pageable pageable) {
         Page<Address> addresses = addressRepository.search(filter.getDivisionName(), filter.getDistrictName(), filter.getUpazilaName(), filter.getIsActive(), pageable);
         return PaginatedAddressResponse.builder()
