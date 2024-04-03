@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -17,20 +18,22 @@ public class AddressController {
     private final AddressService addressService;
 
     @PostMapping(Routes.ADDRESS_CREATE_ROUTE)
-    public ResponseEntity<Address> createAddress(@RequestBody Address address) {
-        Address createdAddress = addressService.saveAddress(address);
+    public ResponseEntity<?> createAddress(@RequestBody List<Address> address) {
+        List<Address> createdAddress = addressService.saveAddresses(address);
         return new ResponseEntity<>(createdAddress, HttpStatus.CREATED);
     }
 
     @PutMapping(Routes.ADDRESS_UPDATE_BY_ID_ROUTE)
-    public ResponseEntity<?> updateAddress(@PathVariable Long addressId, @RequestBody Address updatedAddress) {
+    public ResponseEntity<?> updateAddress(@PathVariable Long userId, @RequestBody List<Address> updatedAddressList) {
         try {
-            Address address = addressService.updateAddress(addressId, updatedAddress);
+            //need to pass the loggedIn user Id for save the address against the loggedIn user
+            List<Address> address = addressService.updateAddress(userId,updatedAddressList);
             return new ResponseEntity<>(address, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
         }
     }
+
 
     //    @GetMapping(Routes.ADDRESS_LIST_ROUTE) // Define the route for getting a list of addresses
 //    public ResponseEntity<?> getAllAddresses(AddressFilter filter, Pageable pageable) {

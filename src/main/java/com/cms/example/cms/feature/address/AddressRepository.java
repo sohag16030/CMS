@@ -12,4 +12,7 @@ import java.util.List;
 public interface AddressRepository extends JpaRepository<Address, Long> {
     @Query("SELECT a FROM Address a  WHERE a.addressId IN :addressIds")
     List<Address> fetchAddressesInfoByAddressIdsIn(@Param("addressIds") List<Long> addressIds);
+
+    @Query("SELECT a FROM Address a WHERE a.cmsUser.cmsUserId = :cmsUserId")
+    List<Address> findByCmsUserId(@Param("cmsUserId") Long cmsUserId);
 }
