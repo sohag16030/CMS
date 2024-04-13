@@ -29,10 +29,10 @@ public class AddressController {
     }
 
     @PutMapping(Routes.ADDRESS_UPDATE_BY_ID_ROUTE)
-    public ResponseEntity<?> updateAddress(@PathVariable Long userId, @RequestBody Address updatedAddress) {
+    public ResponseEntity<?> updateAddress(@PathVariable Long addressId, @RequestBody Address updatedAddress) {
         try {
             //need to pass the loggedIn user Id for save the address against the loggedIn user
-            Address address = addressService.updateAddress(userId,updatedAddress);
+            Address address = addressService.updateAddress(addressId,updatedAddress);
             return new ResponseEntity<>(address, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);

@@ -114,7 +114,7 @@ public class CmsUserService {
         existingUser.setEmail(sourceUser.getEmail());
         existingUser.setName(sourceUser.getName());
         existingUser.setGender(sourceUser.getGender());
-        existingUser.setIsActive(sourceUser.getIsActive());
+        existingUser.setIsActive(true);
 
         //Update academicInfos
         //updateAcademicInfos(existingUser, sourceUser);

@@ -55,8 +55,8 @@ public class AddressService {
     }
 
     @Transactional
-    public Address updateAddress(Long loggedInUserId, Address addressSource) {
-        Address existingAddress = addressRepository.getOne(addressSource.getAddressId());
+    public Address updateAddress(Long addressId, Address addressSource) {
+        Address existingAddress = addressRepository.getOne(addressId);
         //need to update the existing address
         addressSource = modifyExistingAddress(existingAddress, addressSource);
         return getAddressById(addressSource.getAddressId());
@@ -74,7 +74,7 @@ public class AddressService {
         if (updatedAddressSource.getUpazila() != null) {
             existingAddress.setUpazila(upazilaRepository.getOne(updatedAddressSource.getUpazila().getUpazilaId()));
         }
-        existingAddress.setIsActive(updatedAddressSource.getIsActive());
+        existingAddress.setIsActive(true);
         return existingAddress;
     }
 

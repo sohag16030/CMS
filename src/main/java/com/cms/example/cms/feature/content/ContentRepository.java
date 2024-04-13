@@ -17,7 +17,7 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
     Optional<Content> findByIdWithDetails(Long contentId);
 
     @Query(value = "SELECT DISTINCT con FROM Content con " +
-            "JOIN con.cmsUser cms " +
+            "JOIN FETCH con.cmsUser cms " +
             "WHERE " +
             "(:contentId IS NULL OR con.contentId = :contentId) AND " +
             "(:title IS NULL OR LOWER(con.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +

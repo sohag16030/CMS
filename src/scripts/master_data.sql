@@ -41,7 +41,7 @@ INSERT INTO SUBJECT (SUBJECT_NAME, CREATED_AT, UPDATED_AT) VALUES
 --     ('***', 'GOLD'),
 --     ('****', 'PLATINUM'),
 --     ('*****', 'DIAMOND');
-INSERT INTO cms_user (mobile_number, email, name, user_name, password, roles, gender, is_active, created_at, updated_at) VALUES
+-- INSERT INTO cms_user (mobile_number, email, name, user_name, password, roles, gender, is_active, created_at, updated_at) VALUES
                                                                                                                              ('01712345678', 'rafi_rahman@example.com', 'Rafi Rahman', 'rafi_rahman', 'password', 'user', 'MALE', true, current_timestamp, current_timestamp),
                                                                                                                              ('01823456789', 'rahia_islam@example.com', 'Rahia Islam', 'rahia_islam', 'password', 'admin', 'FEMALE', true, current_timestamp, current_timestamp),
                                                                                                                              ('01634567890', 'anwar_ali@example.com', 'Anwar Ali', 'anwar_ali', 'password', 'user', 'MALE', true, current_timestamp, current_timestamp),

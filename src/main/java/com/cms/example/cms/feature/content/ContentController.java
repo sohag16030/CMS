@@ -39,11 +39,11 @@ public class ContentController {
 
     @PostMapping(Routes.CONTENT_UPLOAD_ROUTE)
 //    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
-    public ResponseEntity<?> uploadContent(@RequestParam("contents") MultipartFile[] files, Principal principal) {
-        CmsUser loggedInUser = userService.getLoggedInUser(principal);
+    public ResponseEntity<?> uploadContent(@PathVariable Long userId,@RequestParam("contents") MultipartFile[] files) {
+       //CmsUser loggedInUser = userService.getLoggedInUser(principal);
         List<Optional<Content>> contents = new ArrayList<>();
         for (MultipartFile file : files) {
-            Content content = contentService.uploadContentToFileSystem(loggedInUser.getCmsUserId(), file);
+            Content content = contentService.uploadContentToFileSystem(userId, file);
             Optional<Content> getContent = contentService.getContentWithUserById(content.getContentId());
             contents.add(getContent);
         }
