@@ -11,6 +11,7 @@ import com.cms.example.cms.feature.user.CmsUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -116,7 +117,9 @@ public class ContentController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(contentType);
-        headers.setContentDispositionFormData("attachment", content.getTitle());
+        headers.setContentDisposition(
+                ContentDisposition.attachment().filename(content.getTitle()).build()
+        );
 
         return ResponseEntity.ok()
                 .headers(headers)
@@ -125,8 +128,8 @@ public class ContentController {
 
     @DeleteMapping(Routes.CONTENT_DELETE_BY_ID_ROUTE)
 //    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteContentById(@PathVariable Long contentId, Principal principal) {
-        CmsUser loggedInUser = userService.getLoggedInUser(principal);
+    public ResponseEntity<?> deleteContentById(@PathVariable Long contentId) {
+        //CmsUser loggedInUser = userService.getLoggedInUser(principal);
 //        if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId()) || userService.principalHasAdminRole(principal)) {
             try {
                 contentRepository.deleteById(contentId);
