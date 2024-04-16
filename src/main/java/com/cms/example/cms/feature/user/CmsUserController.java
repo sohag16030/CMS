@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,7 +67,7 @@ public class CmsUserController {
     }
 
     @GetMapping(Routes.CMS_USER_LIST_ROUTE)
-//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_MODERATOR')")
     public ResponseEntity<?> getAllCmsUsers(CmsUserFilter filter, Pageable pageable) {
         PaginatedCmsUserResponse paginatedCmsUserResponse = userService.getAllUsersWithFilter(filter, pageable);
         if (paginatedCmsUserResponse == null) {
