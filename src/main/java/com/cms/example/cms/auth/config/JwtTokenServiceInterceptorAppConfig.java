@@ -11,10 +11,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @RequiredArgsConstructor
 public class JwtTokenServiceInterceptorAppConfig extends WebMvcConfigurerAdapter {
 
-    private final JwtInterceptor jwtInterceptor;
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtInterceptor)
-                .excludePathPatterns("/users/accessToken","/users/getAccessTokenFromRefreshToken","/api/cmsUsers");
-    }
+//    private final JwtInterceptor jwtInterceptor;
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(jwtInterceptor)
+//                .excludePathPatterns("/users/accessToken","/users/getAccessTokenFromRefreshToken","/api/cmsUsers");
+//    }
 }

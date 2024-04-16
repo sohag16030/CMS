@@ -14,33 +14,33 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 @RequiredArgsConstructor
 public class JwtInterceptor implements HandlerInterceptor {
-    private static final Logger logger = LogManager.getLogger(App.class);
-
-    private final BlackListedTokenRepository blackListedTokenRepository;
-
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        logger.info("Pre Handle method is Calling");
-        String token = extractTokenFromHeader(request.getHeader("Authorization"));
-        if (token == null || invalidToken(token)) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false;
-        }
-        return true;
-    }
-
-    private String extractTokenFromHeader(String header) {
-        // Check if the header is null or does not start with "Bearer "
-        if (header == null || !header.startsWith("Bearer ")) {
-            return null;
-        }
-        // Extract and return the token
-        return header.substring(7);
-    }
-
-    public boolean invalidToken(String token) {
-        return blackListedTokenRepository.findByAccessToken(token) != null;
-    }
+//    private static final Logger logger = LogManager.getLogger(App.class);
+//
+//    private final BlackListedTokenRepository blackListedTokenRepository;
+//
+//    @Override
+//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+//        logger.info("Pre Handle method is Calling");
+//        String token = extractTokenFromHeader(request.getHeader("Authorization"));
+//        if (token == null || invalidToken(token)) {
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    private String extractTokenFromHeader(String header) {
+//        // Check if the header is null or does not start with "Bearer "
+//        if (header == null || !header.startsWith("Bearer ")) {
+//            return null;
+//        }
+//        // Extract and return the token
+//        return header.substring(7);
+//    }
+//
+//    public boolean invalidToken(String token) {
+//        return blackListedTokenRepository.findByAccessToken(token) != null;
+//    }
 
 }
 
