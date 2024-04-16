@@ -18,13 +18,13 @@ import com.cms.example.cms.feature.subject.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,15 +46,15 @@ public class CmsUserService {
     private final SubjectRepository subjectRepository;
     private final AcademicInfoRepository academicInfoRepository;
     private final AddressRepository addressRepository;
-//    private final BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public static final String DEFAULT_ROLE = "ROLE_USER";
 
     @Transactional
     public CmsUser saveCmsUser(CmsUser cmsUser) {
         cmsUser.setRoles(DEFAULT_ROLE);
-        cmsUser.setPassword(cmsUser.getPassword());
-//        cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
+//      cmsUser.setPassword(cmsUser.getPassword());
+        cmsUser.setPassword(passwordEncoder.encode(cmsUser.getPassword()));
         cmsUser.setIsActive(true);
         cmsUser = userRepository.save(cmsUser);
         return cmsUser;
