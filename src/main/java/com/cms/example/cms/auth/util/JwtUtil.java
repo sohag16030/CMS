@@ -11,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -25,14 +27,16 @@ public class JwtUtil {
 
     public String generateToken(String username) {
         Optional<CmsUser> cmsUser = userRepository.findByUserName(username);
+        List<String> roleList = Arrays.asList(cmsUser.get().getRoles().split(","));
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationMs);
 
         return Jwts.builder()
+                .setSubject(username)
                 .claim("userId", cmsUser.get().getCmsUserId())
                 .claim("username", username)
-                .claim("roles", cmsUser.get().getRoles())
+                .claim("roles",roleList)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)

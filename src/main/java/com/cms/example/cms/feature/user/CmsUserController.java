@@ -51,7 +51,7 @@ public class CmsUserController {
     }
 
     @GetMapping(Routes.CMS_USER_BY_ID_ROUTE)
-//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getUserById(@PathVariable Long userId, Principal principal) {
 //        if (userService.loggedInUser(principal, userId) || userService.principalHasAdminRole(principal)) {
             CmsUser user = userService.getCmsUserDetailsById(userId);
