@@ -7,6 +7,7 @@ import com.cms.example.cms.dto.listDataFilterRequestDto.ContentFilter;
 import com.cms.example.cms.dto.paginatedResponseDto.PaginatedContentResponse;
 import com.cms.example.cms.entities.CmsUser;
 import com.cms.example.cms.entities.Content;
+import com.cms.example.cms.feature.user.CmsUserRepository;
 import com.cms.example.cms.feature.user.CmsUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -16,7 +17,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,12 +40,12 @@ public class ContentController {
     private final ContentService contentService;
     private final ContentRepository contentRepository;
     private final CmsUserService userService;
+    private final CmsUserRepository userRepository;
     private final ModelMapper modelMapper;
 
     @PostMapping(Routes.CONTENT_UPLOAD_ROUTE)
-//    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
-    public ResponseEntity<?> uploadContent(@PathVariable Long userId,@RequestParam("contents") MultipartFile[] files) {
-       //CmsUser loggedInUser = userService.getLoggedInUser(principal);
+    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> uploadContent(@PathVariable Long userId, @RequestParam("contents") MultipartFile[] files) {
         List<Optional<Content>> contents = new ArrayList<>();
         for (MultipartFile file : files) {
             Content content = contentService.uploadContentToFileSystem(userId, file);
@@ -52,7 +56,7 @@ public class ContentController {
     }
 
     @GetMapping(Routes.CONTENT_BY_ID_ROUTE)
-//    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> getContent(@PathVariable Long contentId) {
         Optional<Content> contentOptional = contentService.getContentWithUserById(contentId);
 
@@ -67,7 +71,7 @@ public class ContentController {
     }
 
     @PutMapping(Routes.CONTENT_UPDATE_BY_ID_ROUTE)
-//    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateContent(@PathVariable Long contentId, @RequestParam("content") MultipartFile file, Principal principal) {
         CmsUser loggedInUser = userService.getLoggedInUser(principal);
         if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId())) {
@@ -91,9 +95,21 @@ public class ContentController {
     }
 
     @GetMapping(Routes.CONTENT_LIST_ROUTE)
-//    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> getListContents(ContentFilter filter, Pageable pageable) {
-        PaginatedContentResponse paginatedCmsUserResponse = contentService.getAllContentWithFilter(filter,pageable);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        CmsUser cmsUser = userRepository.getByUserName(username);
+        String roles = authentication.getAuthorities().toString();
+        PaginatedContentResponse paginatedCmsUserResponse = null;
+
+        if (roles.contains("ROLE_ADMIN")) {
+            paginatedCmsUserResponse = contentService.getAllContentWithFilter(filter, pageable);
+        } else {
+            filter.setCmsUserId(cmsUser.getCmsUserId());
+            paginatedCmsUserResponse = contentService.getAllContentWithFilter(filter, pageable);
+        }
+
         if (paginatedCmsUserResponse == null) {
             return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
         }
@@ -101,7 +117,7 @@ public class ContentController {
     }
 
     @GetMapping(Routes.CONTENT_DOWNLOAD_BY_ID_ROUTE)
-//    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<byte[]> downloadContent(@PathVariable Long contentId) throws IOException {
 
         Optional<Content> contentData = contentRepository.findById(contentId);
@@ -127,24 +143,19 @@ public class ContentController {
     }
 
     @DeleteMapping(Routes.CONTENT_DELETE_BY_ID_ROUTE)
-//    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteContentById(@PathVariable Long contentId) {
-        //CmsUser loggedInUser = userService.getLoggedInUser(principal);
-//        if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId()) || userService.principalHasAdminRole(principal)) {
-            try {
-                contentRepository.deleteById(contentId);
-                Optional<Content> contentOptional = contentRepository.findById(contentId);
-                if (!contentOptional.isPresent()) {
-                    return ResponseEntity.noContent().build();
-                } else {
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete content");
-                }
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete content. No records exists with Id :: " + contentId);
-
+        try {
+            contentRepository.deleteById(contentId);
+            Optional<Content> contentOptional = contentRepository.findById(contentId);
+            if (!contentOptional.isPresent()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete content");
             }
-//        } else {
-//            return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
-//        }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete content. No records exists with Id :: " + contentId);
+
+        }
     }
 }

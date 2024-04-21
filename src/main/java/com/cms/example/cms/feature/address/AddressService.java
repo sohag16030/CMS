@@ -87,7 +87,7 @@ public class AddressService {
     }
 
     public PaginatedAddressResponse getAllAddressesWithFilter(AddressFilter filter, Pageable pageable) {
-        Page<Address> addresses = addressRepository.search(filter.getDivisionName(), filter.getDistrictName(), filter.getUpazilaName(), filter.getIsActive(), pageable);
+        Page<Address> addresses = addressRepository.search(filter.getCmsUserId(), filter.getDivisionName(), filter.getDistrictName(), filter.getUpazilaName(), filter.getIsActive(), pageable);
         return PaginatedAddressResponse.builder()
                 .numberOfItems(addresses.getTotalElements())
                 .numberOfPages(addresses.getTotalPages())

@@ -49,4 +49,6 @@ public interface CmsUserRepository extends JpaRepository<CmsUser, Long> {
                          @Param("isActive") Boolean isActive, Pageable pageable);
 
     Optional<CmsUser> findByUserName(String username);
+
+    CmsUser getByUserName(String username);
 }
