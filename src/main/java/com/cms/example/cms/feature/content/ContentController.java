@@ -71,10 +71,8 @@ public class ContentController {
     }
 
     @PutMapping(Routes.CONTENT_UPDATE_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> updateContent(@PathVariable Long contentId, @RequestParam("content") MultipartFile file) {
-//        CmsUser loggedInUser = userService.getLoggedInUser(principal);
-//        if (contentService.validateLoggedInUserIsOwnerOfTargetContent(contentId, loggedInUser.getCmsUserId())) {
+//    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> updateContent(@PathVariable Long contentId, @RequestParam("contents") MultipartFile file) {
             try {
                 Optional<Content> existingContent = Optional.of(contentRepository.getById(contentId));
                 Optional<Content> contentDetails = null;
@@ -89,9 +87,6 @@ public class ContentController {
             } catch (Exception e) {
                 return new ResponseEntity<>("UPDATE FAILED", HttpStatus.NOT_FOUND);
             }
-//        } else {
-//            return new ResponseEntity<>("Forbidden", HttpStatus.FORBIDDEN);
-//        }
     }
 
     @GetMapping(Routes.CONTENT_LIST_ROUTE)
