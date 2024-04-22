@@ -11,11 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContentFilter {
-    private Long contentId;
+//    private String searchValue;
+//    private Long contentId;
     private String title;
-    private String type;
-    private String path;
+//    private String type;
+//    private String path;
     private Long cmsUserId;
-    private String userName;
-    private Boolean isActive;
+//    private String userName;
+//    private Boolean isActive;
 }

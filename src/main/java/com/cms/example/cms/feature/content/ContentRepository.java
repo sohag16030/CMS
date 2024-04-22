@@ -19,20 +19,13 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
     @Query(value = "SELECT DISTINCT con FROM Content con " +
             "JOIN FETCH con.cmsUser cms " +
             "WHERE " +
-            "(:contentId IS NULL OR con.contentId = :contentId) AND " +
-            "(:title IS NULL OR LOWER(con.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
-            "(:type IS NULL OR LOWER(con.type) LIKE LOWER(CONCAT('%', :type, '%'))) AND " +
-            "(:path IS NULL OR LOWER(con.path) LIKE LOWER(CONCAT('%', :path, '%'))) AND " +
-            "(:cmsUserId IS NULL OR cms.cmsUserId = :cmsUserId) AND " +
-            "(:userName IS NULL OR LOWER(cms.userName) LIKE LOWER(CONCAT('%', :userName, '%'))) AND " +
-            "(:isActive IS NULL OR con.isActive = :isActive)",
+            "(:title IS NULL OR " + // Check if searchValue is null
+            "LOWER(con.title) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check title
+            "LOWER(con.type) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check type
+            "LOWER(con.path) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check path
+            "LOWER(cms.userName) LIKE LOWER(CONCAT('%', :title, '%')))", // Check userName
             countQuery = "SELECT COUNT(con) FROM Content con " +
                     "JOIN con.cmsUser cms ")
-    Page<Content> search(@Param("contentId") Long contentId,
-                         @Param("title") String title,
-                         @Param("type") String type,
-                         @Param("path") String path,
-                         @Param("cmsUserId") Long cmsUserId,
-                         @Param("userName") String userName,
-                         @Param("isActive") Boolean isActive, Pageable pageable);
+    Page<Content> search(@Param("title") String title, Pageable pageable);
+
 }

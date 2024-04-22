@@ -147,8 +147,7 @@ public class ContentService {
     }
 
     public PaginatedContentResponse getAllContentWithFilter(ContentFilter filter, Pageable pageable) {
-        Page<Content> contents = contentRepository.search(filter.getContentId(),filter.getTitle(),filter.getType(),filter.getPath(),
-                filter.getCmsUserId(),filter.getUserName(), filter.getIsActive(),pageable);
+        Page<Content> contents = contentRepository.search(filter.getTitle(),pageable);
 
         return PaginatedContentResponse.builder()
                 .numberOfItems(contents.getTotalElements()).numberOfPages(contents.getTotalPages())
