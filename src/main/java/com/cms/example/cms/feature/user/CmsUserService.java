@@ -165,7 +165,7 @@ public class CmsUserService {
     }
 
     public PaginatedCmsUserResponse getAllUsersWithFilter(CmsUserFilter filter, Pageable pageable) {
-        Page<CmsUser> cmsUsers = userRepository.search(filter.getEmail(),pageable);
+        Page<CmsUser> cmsUsers = userRepository.search(filter.getEmail(), pageable);
         return PaginatedCmsUserResponse.builder()
                 .numberOfItems(cmsUsers.getTotalElements()).numberOfPages(cmsUsers.getTotalPages())
                 .cmsUserList(cmsUsers.getContent())
