@@ -32,9 +32,9 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
             "LOWER(div.name) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
             "LOWER(dis.name) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
             "LOWER(upa.name) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
-            "LOWER(cms.name) LIKE LOWER(CONCAT('%', :searchText, '%'))) AND " + // Check userName
             "LOWER(addr.addressType) = LOWER(:searchText) OR " +
-            "(:cmsUserId IS NULL OR cms.cmsUserId = :cmsUserId)", // Filter by cmsUserId
+            "LOWER(cms.name) LIKE LOWER(CONCAT('%', :searchText, '%'))) AND " +
+            "(:cmsUserId IS NULL OR cms.cmsUserId = :cmsUserId)",
             countQuery = "SELECT COUNT(addr) FROM Address addr")
     Page<Address> search(@Param("searchText") String searchText, @Param("cmsUserId") Long cmsUserId, Pageable pageable);
 
