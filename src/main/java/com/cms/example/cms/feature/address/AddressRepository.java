@@ -31,23 +31,8 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
             "(:searchText IS NULL OR " +
             "LOWER(div.name) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
             "LOWER(dis.name) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
-            "LOWER(upa.name) LIKE LOWER(CONCAT('%', :searchText, '%')))",
+            "LOWER(upa.name) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
+            "LOWER(addr.addressType) = LOWER(:searchText))",
             countQuery = "SELECT COUNT(addr) FROM Address addr")
     Page<Address> search(@Param("searchText") String searchText, Pageable pageable);
-
-//    @Query(value = "SELECT DISTINCT con FROM Content con " +
-//            "JOIN FETCH con.cmsUser cms " +
-//            "WHERE " +
-//            "(:title IS NULL OR " + // Check if searchValue is null
-//            "LOWER(con.title) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check title
-//            "LOWER(con.type) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check type
-//            "LOWER(con.path) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check path
-//            "LOWER(cms.userName) LIKE LOWER(CONCAT('%', :title, '%')))", // Check userName
-//            countQuery = "SELECT COUNT(con) FROM Content con " +
-//                    "JOIN con.cmsUser cms ")
-//    Page<Content> search(@Param("title") String title, Pageable pageable);
-
-
-
-
 }

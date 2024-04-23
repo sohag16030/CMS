@@ -38,8 +38,9 @@ public interface CmsUserRepository extends JpaRepository<CmsUser, Long> {
             "LOWER(cms.mobileNumber) LIKE LOWER(CONCAT('%', :email, '%')) OR " +
             "LOWER(cms.email) LIKE LOWER(CONCAT('%', :email, '%')) OR " +
             "LOWER(cms.name) LIKE LOWER(CONCAT('%', :email, '%')) OR " +
-            "LOWER(cms.gender) LIKE LOWER(CONCAT('%', :email, '%')))")
+            "LOWER(cms.gender) = LOWER(:email))")
     Page<CmsUser> search(@Param("email") String email, Pageable pageable);
+
     Optional<CmsUser> findByUserName(String username);
 
     CmsUser getByUserName(String username);
