@@ -1,6 +1,7 @@
 package com.cms.example.cms.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,7 +46,7 @@ public class Content {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID")
-    @JsonIgnore
+    @JsonIgnoreProperties(value = {"addresses","academicInfos"}, allowSetters = true)
     private CmsUser cmsUser;
 
     @Column(name = "IS_ACTIVE", nullable = false)

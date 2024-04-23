@@ -59,7 +59,7 @@ public class Address {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CMS_USER_ID")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonIgnoreProperties(value = {"addresses","academicInfos"}, allowSetters = true)
     private CmsUser cmsUser;
 
     @Column(name = "IS_ACTIVE", nullable = false)
