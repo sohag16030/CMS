@@ -83,7 +83,7 @@ public class AddressService {
     }
 
     public PaginatedAddressResponse getAllAddressesWithFilter(AddressFilter filter, Pageable pageable) {
-        Page<Address> addresses = addressRepository.search(filter.getSearchText(), pageable);
+        Page<Address> addresses = addressRepository.search(filter.getSearchText(),filter.getCmsUserId(), pageable);
         return PaginatedAddressResponse.builder()
                 .numberOfItems(addresses.getTotalElements())
                 .numberOfPages(addresses.getTotalPages())

@@ -23,9 +23,10 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
             "LOWER(con.title) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check title
             "LOWER(con.type) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check type
             "LOWER(con.path) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check path
-            "LOWER(cms.userName) LIKE LOWER(CONCAT('%', :title, '%')))", // Check userName
+            "LOWER(cms.userName) LIKE LOWER(CONCAT('%', :title, '%'))) AND " + // Check userName
+            "(:cmsUserId IS NULL OR cms.cmsUserId = :cmsUserId)", // Filter by cmsUserId
             countQuery = "SELECT COUNT(con) FROM Content con " +
                     "JOIN con.cmsUser cms ")
-    Page<Content> search(@Param("title") String title, Pageable pageable);
+    Page<Content> search(@Param("title") String title, @Param("cmsUserId") Long cmsUserId, Pageable pageable);
 
 }
