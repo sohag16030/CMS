@@ -11,9 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AddressFilter {
     private Long cmsUserId;
-    private String divisionName;
-    private String districtName;
-    private String upazilaName;
-    private Boolean isActive;
+    private String searchText;
 }
 

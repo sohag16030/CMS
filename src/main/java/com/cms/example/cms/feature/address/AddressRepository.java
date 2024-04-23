@@ -2,6 +2,7 @@ package com.cms.example.cms.feature.address;
 
 import com.cms.example.cms.entities.Address;
 import com.cms.example.cms.entities.CmsUser;
+import com.cms.example.cms.entities.Content;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,17 +28,26 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
             "JOIN FETCH addr.district dis " +
             "JOIN FETCH addr.upazila upa " +
             "WHERE " +
-            "(:cmsUserId IS NULL OR cms.cmsUserId = :cmsUserId) AND " +
-            "(:divisionName IS NULL OR div.name LIKE CONCAT('%', :divisionName, '%')) AND " +
-            "(:districtName IS NULL OR dis.name LIKE CONCAT('%', :districtName, '%')) AND " +
-            "(:upazilaName IS NULL OR upa.name LIKE CONCAT('%', :upazilaName, '%')) AND " +
-            "(:isActive IS NULL OR addr.isActive = :isActive)",
+            "(:searchText IS NULL OR " +
+            "LOWER(div.name) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
+            "LOWER(dis.name) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
+            "LOWER(upa.name) LIKE LOWER(CONCAT('%', :searchText, '%')))",
             countQuery = "SELECT COUNT(addr) FROM Address addr")
-    Page<Address> search(@Param("cmsUserId") Long cmsUserId,
-                         @Param("divisionName") String divisionName,
-                         @Param("districtName") String districtName,
-                         @Param("upazilaName") String upazilaName,
-                         @Param("isActive") Boolean isActive,
-                         Pageable pageable);
+    Page<Address> search(@Param("searchText") String searchText, Pageable pageable);
+
+//    @Query(value = "SELECT DISTINCT con FROM Content con " +
+//            "JOIN FETCH con.cmsUser cms " +
+//            "WHERE " +
+//            "(:title IS NULL OR " + // Check if searchValue is null
+//            "LOWER(con.title) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check title
+//            "LOWER(con.type) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check type
+//            "LOWER(con.path) LIKE LOWER(CONCAT('%', :title, '%')) OR " + // Check path
+//            "LOWER(cms.userName) LIKE LOWER(CONCAT('%', :title, '%')))", // Check userName
+//            countQuery = "SELECT COUNT(con) FROM Content con " +
+//                    "JOIN con.cmsUser cms ")
+//    Page<Content> search(@Param("title") String title, Pageable pageable);
+
+
+
 
 }
