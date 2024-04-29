@@ -131,6 +131,7 @@ public class ContentController {
         headers.setContentDisposition(
                 ContentDisposition.attachment().filename(content.getTitle()).build()
         );
+        headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Content-Disposition");
 
         return ResponseEntity.ok()
                 .headers(headers)
