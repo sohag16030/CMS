@@ -78,7 +78,7 @@ public class CmsUserController {
     }
 
     @DeleteMapping(Routes.CMS_USER_DELETE_BY_ID_ROUTE)
-//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> deleteUserById(@PathVariable Long userId, Principal principal) {
 //        if (userService.loggedInUser(principal, userId)) {
             try {

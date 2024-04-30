@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +29,14 @@ public class AddressController {
     private final CmsUserRepository userRepository;
 
     @PostMapping(Routes.ADDRESS_CREATE_ROUTE)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> createAddress(@RequestBody Address address) {
         Address createdAddress = addressService.saveAddress(address.getCmsUser().getCmsUserId(), address);
         return new ResponseEntity<>(createdAddress, HttpStatus.CREATED);
     }
 
     @PutMapping(Routes.ADDRESS_UPDATE_BY_ID_ROUTE)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> updateAddress(@PathVariable Long addressId, @RequestBody Address updatedAddress) {
         try {
             //need to pass the loggedIn user Id for save the address against the loggedIn user
@@ -44,7 +47,8 @@ public class AddressController {
         }
     }
 
-    @GetMapping(Routes.ADDRESS_BY_ID_ROUTE) // Define the route for getting an address by ID
+    @GetMapping(Routes.ADDRESS_BY_ID_ROUTE)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getAddressById(@PathVariable Long addressId) {
         Address address = addressService.getAddressById(addressId);
         if (address == null) {
@@ -54,6 +58,7 @@ public class AddressController {
     }
 
     @GetMapping(Routes.ADDRESS_LIST_ROUTE)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> getAllAddresses(AddressFilter filter, Pageable pageable) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -74,7 +79,27 @@ public class AddressController {
         return new ResponseEntity<>(paginatedAddressResponse, HttpStatus.OK);
     }
 
+    @GetMapping(Routes.ADDRESS_LIST_ROUTE_FOR_USER_DETAILS)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
+    public ResponseEntity<?> getAllAddressesForUserDetails(AddressFilter filter, Pageable pageable) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        CmsUser cmsUser = userRepository.getByUserName(username);
+        String roles = authentication.getAuthorities().toString();
+        PaginatedAddressResponse paginatedAddressResponse = null;
+
+        filter.setCmsUserId(cmsUser.getCmsUserId());
+        paginatedAddressResponse = addressService.getAllAddressesWithFilter(filter, pageable);
+
+        if (paginatedAddressResponse == null) {
+            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(paginatedAddressResponse, HttpStatus.OK);
+    }
+
     @DeleteMapping(Routes.ADDRESS_DELETE_BY_ID_ROUTE)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> deleteAddressById(@PathVariable Long addressId) {
 
         Optional<Address> optionalAddress = addressRepository.findById(addressId);

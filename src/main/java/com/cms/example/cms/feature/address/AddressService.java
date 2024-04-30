@@ -33,7 +33,7 @@ public class AddressService {
     public Address saveAddress(Long loggedInUserId, Address address) {
         Address populatedAddress = populateAddress(loggedInUserId, address);
         Address savedAddress = addressRepository.save(populatedAddress);
-        return getAddressById(savedAddress.getAddressId());
+        return savedAddress;
     }
 
     private Address populateAddress(Long loggedInUserId, Address address) {
