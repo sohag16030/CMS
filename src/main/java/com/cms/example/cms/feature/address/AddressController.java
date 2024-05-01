@@ -59,7 +59,7 @@ public class AddressController {
 
     @GetMapping(Routes.ADDRESS_LIST_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
-    public ResponseEntity<?> getAllAddresses(AddressFilter filter, Pageable pageable) {
+    public ResponseEntity<?> getAllAddresses(AddressFilter filter, Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean userDetails) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -81,20 +81,16 @@ public class AddressController {
 
     @GetMapping(Routes.ADDRESS_LIST_ROUTE_FOR_USER_DETAILS)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
-    public ResponseEntity<?> getAllAddressesForUserDetails(AddressFilter filter, Pageable pageable) {
+    public ResponseEntity<?> getAllAddresses(AddressFilter filter, Pageable pageable) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         CmsUser cmsUser = userRepository.getByUserName(username);
-        String roles = authentication.getAuthorities().toString();
         PaginatedAddressResponse paginatedAddressResponse = null;
 
         filter.setCmsUserId(cmsUser.getCmsUserId());
         paginatedAddressResponse = addressService.getAllAddressesWithFilter(filter, pageable);
 
-        if (paginatedAddressResponse == null) {
-            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(paginatedAddressResponse, HttpStatus.OK);
     }
 
