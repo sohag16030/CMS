@@ -25,7 +25,7 @@ public final class Routes {
     public static final String ADDRESS_DELETE_BY_ID_ROUTE = "/api/addresses/{addressId}"; // Route for deleting an address by ID
     public static final String ADDRESS_UPDATE_BY_ID_ROUTE = "/api/addresses/{addressId}"; // Route for updating an address by ID
     public static final String ADDRESS_LIST_ROUTE = "/api/addresses"; // Route for getting a list of addresses
-    public static final String ADDRESS_LIST_ROUTE_FOR_USER_DETAILS = "/api/userDetails/addresses";
+    public static final String ADDRESS_LIST_ROUTE_FOR_USER_DETAILS = "/api/addresses/cmsUserDetails/{cmsUserId}";
 
     //USER_CONTENTS_UPLOAD_SERVICES_ROUTES
     public static final String CONTENT_UPLOAD_ROUTE = "/api/contents/{userId}";

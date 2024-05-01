@@ -81,14 +81,11 @@ public class AddressController {
 
     @GetMapping(Routes.ADDRESS_LIST_ROUTE_FOR_USER_DETAILS)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
-    public ResponseEntity<?> getAllAddresses(AddressFilter filter, Pageable pageable) {
+    public ResponseEntity<?> getAllAddresses(@PathVariable Long cmsUserId,AddressFilter filter, Pageable pageable) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        CmsUser cmsUser = userRepository.getByUserName(username);
         PaginatedAddressResponse paginatedAddressResponse = null;
 
-        filter.setCmsUserId(cmsUser.getCmsUserId());
+        filter.setCmsUserId(cmsUserId);
         paginatedAddressResponse = addressService.getAllAddressesWithFilter(filter, pageable);
 
         return new ResponseEntity<>(paginatedAddressResponse, HttpStatus.OK);
