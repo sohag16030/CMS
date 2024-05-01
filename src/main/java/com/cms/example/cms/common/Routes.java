@@ -33,6 +33,7 @@ public final class Routes {
     public static final String CONTENT_DOWNLOAD_BY_ID_ROUTE = "/api/contents/download/{contentId}";
     public static final String CONTENT_BY_ID_ROUTE = "/api/contents/{contentId}";
     public static final String CONTENT_LIST_ROUTE = "/api/contents";
+    public static final String CONTENT_LIST_ROUTE_BY_USER = "/api/contents/user";
     public static final String CONTENT_DELETE_BY_ID_ROUTE = "/api/contents/{contentId}";
 
     //AUTH

@@ -89,6 +89,18 @@ public class ContentController {
             }
     }
 
+    @GetMapping(Routes.CONTENT_LIST_ROUTE_BY_USER)
+    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> getListContentsByUser(ContentFilter filter, Pageable pageable) {
+        PaginatedContentResponse paginatedCmsUserResponse = null;
+        paginatedCmsUserResponse = contentService.getAllContentWithFilter(filter, pageable);
+
+        if (paginatedCmsUserResponse == null) {
+            return new ResponseEntity<>("DATA NOT FOUND", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(paginatedCmsUserResponse, HttpStatus.OK);
+    }
+
     @GetMapping(Routes.CONTENT_LIST_ROUTE)
     @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> getListContents(ContentFilter filter, Pageable pageable) {
