@@ -39,7 +39,6 @@ public class ContentController {
 
     private final ContentService contentService;
     private final ContentRepository contentRepository;
-    private final CmsUserService userService;
     private final CmsUserRepository userRepository;
     private final ModelMapper modelMapper;
 
@@ -71,7 +70,7 @@ public class ContentController {
     }
 
     @PutMapping(Routes.CONTENT_UPDATE_BY_ID_ROUTE)
-//    @PreAuthorize("hasAnyAuthority('ROLE_USER') or hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> updateContent(@PathVariable Long contentId, @RequestParam("contents") MultipartFile file) {
             try {
                 Optional<Content> existingContent = Optional.of(contentRepository.getById(contentId));

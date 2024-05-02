@@ -36,7 +36,7 @@ public class AddressController {
     }
 
     @PutMapping(Routes.ADDRESS_UPDATE_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> updateAddress(@PathVariable Long addressId, @RequestBody Address updatedAddress) {
         try {
             //need to pass the loggedIn user Id for save the address against the loggedIn user
