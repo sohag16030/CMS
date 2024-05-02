@@ -36,7 +36,7 @@ public class CmsUserController {
     }
 
     @PutMapping(Routes.CMS_USER_UPDATE_BY_ID_ROUTE)
-    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_USER')")
     public ResponseEntity<?> updateCmsUser(@PathVariable Long cmsUserId, @RequestBody CmsUser sourceUser, Principal principal) {
 //        if (userService.loggedInUser(principal, cmsUserId)) {
             try {
